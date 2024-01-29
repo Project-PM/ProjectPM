@@ -37,10 +37,6 @@ public class SceneModuleSystemManager : Singleton<SceneModuleSystemManager>
 
     protected override void OnAwakeInstance()
     {
-        currentSceneModule = UnityEngine.Object.FindObjectOfType<SceneModule>();
-        if (currentSceneModule != null)
-            currentSceneModule.OnEnter(currentParam);
-
         behaviour.onFixedUpdate += FixedUpdate;
         behaviour.onUpdate += Update;
         behaviour.onLateUpdate += LateUpdate;

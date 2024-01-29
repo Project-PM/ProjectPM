@@ -61,7 +61,7 @@ public abstract class MonoSystem : ScriptableObject
 
     }
 
-    public virtual void OnEnter()
+    public virtual void OnEnter(SceneModuleParam sceneModuleParam)
     {
 
     }

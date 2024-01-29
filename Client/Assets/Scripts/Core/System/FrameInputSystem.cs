@@ -11,7 +11,6 @@ public enum ENUM_ATTACK_KEY
 	NONE = 0, // 공격 안함
 	ATTACK, // 일반 공격
 	SKILL, // 스킬
-	ULTIMATE, // 궁극기
 	MAX 
 }
 
@@ -69,29 +68,17 @@ public class DashInputData : PressInputData
 	}
 }
 
-public class GuardInputData : PressInputData
+public class REQ_FRAME_INPUT
 {
-	public GuardInputData(bool isPress, int frameCount) : base(isPress, frameCount)
-	{
-	}
-}
+	public readonly Vector2 moveVec;
+	public readonly ENUM_ATTACK_KEY pressedAttackKey;
+	public readonly bool isDash;
 
-public class REQ_FRAME_INPUT : IPacket
-{
-	public REQ_FRAME_INPUT(Vector2 moveVec, ENUM_ATTACK_KEY pressedAttackKey, bool isDash, bool isGuard, int targetFrameCount) 
+	public REQ_FRAME_INPUT(Vector2 moveVec, ENUM_ATTACK_KEY pressedAttackKey, bool isDash, int targetFrameCount) 
 	{
-	}
-
-	public ushort Protocol => throw new NotImplementedException();
-
-	public void Read(ArraySegment<byte> segment)
-	{
-		throw new NotImplementedException();
-	}
-
-	public ArraySegment<byte> Write()
-	{
-		throw new NotImplementedException();
+		this.moveVec = moveVec;
+		this.pressedAttackKey = pressedAttackKey;
+		this.isDash = isDash;
 	}
 }
 
@@ -107,7 +94,7 @@ public class FrameInputSystem : MonoSystem
 
 	private Queue<FrameInputData> inputDataQueue = new Queue<FrameInputData>();
 
-	public override void OnEnter()
+	public override void OnEnter(SceneModuleParam param)
 	{
 		SceneModuleSystemManager.Instance.onSceneChanged += SetJoystick;
 		SetJoystick();
@@ -142,12 +129,6 @@ public class FrameInputSystem : MonoSystem
 		inputDataQueue.Enqueue(inputData);
 	}
 
-	public void OnGuardInputChanged(bool isPress, int frameCount)
-	{
-		var inputData = new GuardInputData(isPress, frameCount);
-		inputDataQueue.Enqueue(inputData);
-	}
-
 	public void OnAttackInputChanged(ENUM_ATTACK_KEY key, bool isAttack, int frameCount)
 	{
 		var inputData = new AttackInputData(key, isAttack, frameCount);
@@ -161,9 +142,9 @@ public class FrameInputSystem : MonoSystem
 	/// <param name="targetFrameCount"></param>
 	/// <returns></returns>
 	/// 
-	public void SendPacket()
+	public REQ_FRAME_INPUT MakeFakePacket()
 	{
-		var packet = MakeFrameInputPacket(Time.frameCount);
+		return MakeFrameInputPacket(Time.frameCount);
 	}
 
 	private REQ_FRAME_INPUT MakeFrameInputPacket(int targetFrameCount)
@@ -171,7 +152,6 @@ public class FrameInputSystem : MonoSystem
 		Vector2 moveVec = Vector2.zero;
 		ENUM_ATTACK_KEY pressedAttackKey = ENUM_ATTACK_KEY.MAX;
 		bool isDash = false;
-		bool isGuard = false;
 
 		while (inputDataQueue.TryDequeue(out var result))
 		{
@@ -190,13 +170,9 @@ public class FrameInputSystem : MonoSystem
 			{
 				isDash = jumpInputResult.isPress;
 			}
-			else if (result is GuardInputData guardInputData)
-			{
-				isGuard = guardInputData.isPress;
-			}
 		}
 
-		return new REQ_FRAME_INPUT(moveVec, pressedAttackKey, isDash, isGuard, targetFrameCount);
+		return new REQ_FRAME_INPUT(moveVec, pressedAttackKey, isDash, targetFrameCount);
 	}
 
 	private float SnapFloat(Vector2 input, float value, AxisOptions snapAxis)

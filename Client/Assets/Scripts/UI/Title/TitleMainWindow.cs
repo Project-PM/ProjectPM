@@ -13,6 +13,6 @@ public class TitleMainWindow : UIMainWindow
 
 	public void OnClickSetting()
 	{
-		uiSystem.OpenPopupAsync<SettingPopup>().Forget();
+		system.OpenPopupAsync<SettingPopup>().Forget();
 	}
 }

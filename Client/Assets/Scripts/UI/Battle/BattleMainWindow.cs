@@ -6,4 +6,11 @@ public class BattleMainWindow : UIMainWindow
 {
 	[SerializeField] private VariableJoystick joystick;
 
+	protected override void Reset()
+	{
+		base.Reset();
+
+		joystick = GetComponentInChildren<VariableJoystick>();
+	}
+
 }

@@ -5,15 +5,15 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(Canvas))]
 [RequireComponent(typeof(CanvasScaler))]
-public class UIWindow : MonoBehaviour
+public class UIWindow : MonoComponent<PrefabLinkedUISystem>
 {
-	[SerializeField] protected PrefabLinkedUISystem uiSystem = null;
     [SerializeField] private Canvas canvas;
     [SerializeField] private CanvasScaler scaler;
 
-    private void Reset()
+    protected override void Reset()
 	{
-        uiSystem = AssetLoadHelper.GetSystemAsset<PrefabLinkedUISystem>();
+		base.Reset();
+
         canvas = GetComponent<Canvas>();
 		scaler = GetComponent<CanvasScaler>();
 

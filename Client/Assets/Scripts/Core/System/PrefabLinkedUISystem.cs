@@ -24,18 +24,20 @@ public class PrefabLinkedUISystem : MonoSystem
         resourceSystem = AssetLoadHelper.GetSystemAsset<AddressableResourceSystem>();
     }
 
-    public override void OnEnter()
+    public override void OnEnter(SceneModuleParam param)
 	{
-		FindMainWindow(SceneModuleSystemManager.Instance.CurrentSceneType);
-		SceneModuleSystemManager.Instance.onSceneChanged += FindMainWindow;
+		SetMainWindow(SceneModuleSystemManager.Instance.CurrentSceneType);
 	}
 
-    public override void OnExit()
+	public override void OnUpdate(int deltaFrameCount, float deltaTime)
 	{
-		SceneModuleSystemManager.Instance.onSceneChanged -= FindMainWindow;
+		base.OnUpdate(deltaFrameCount, deltaTime);
+
+		currentMainWindow.OnUpdate(deltaFrameCount, deltaTime);
 	}
 
-	private void FindMainWindow(SceneType type)
+
+	private void SetMainWindow(SceneType type)
 	{
 		currentMainWindow = UnityEngine.Object.FindObjectOfType<UIMainWindow>();
 		if(currentMainWindow != null)
@@ -52,6 +54,11 @@ public class PrefabLinkedUISystem : MonoSystem
 		{
 			Debug.LogError($"{type} 씬에 Event System이 존재하지 않습니다.");
 		}
+	}
+
+	public TWindow GetMainWindow<TWindow>() where TWindow : UIMainWindow
+	{
+		return currentMainWindow as TWindow;
 	}
 
 	private void ReleasePopups(SceneType type)
