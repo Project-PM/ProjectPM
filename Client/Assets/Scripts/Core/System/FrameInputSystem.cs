@@ -95,13 +95,13 @@ public class REQ_FRAME_INPUT
 
 public class FrameInputSystem : MonoSystem
 {
-	public static float MoveThreshold { get; private set; } = 1;
-    public static JoystickType JoystickType { get; private set; } = JoystickType.Fixed;
-    public static float HandleRange { get; private set; } = 1;
-    public static float DeadZone { get; private set; } = 0;
-    public static AxisOptions AxisOptions { get; private set; } = AxisOptions.Both;
-    public static bool SnapX { get; private set; } = true;
-	public static bool SnapY { get; private set; } = true;
+	public float MoveThreshold { get; private set; } = 1;
+    public JoystickType JoystickType { get; private set; } = JoystickType.Fixed;
+    public float HandleRange { get; private set; } = 1;
+    public float DeadZone { get; private set; } = 0;
+    public AxisOptions AxisOptions { get; private set; } = AxisOptions.Both;
+    public bool SnapX { get; private set; } = true;
+	public bool SnapY { get; private set; } = true;
 
 	private Queue<FrameInputData> inputDataQueue = new Queue<FrameInputData>();
 	private REQ_FRAME_INPUT currentFrameInput = null;

@@ -44,12 +44,12 @@ public class Joystick : InputKeyComponent
         
         System.OnMoveInputChanged(input, Time.frameCount);  
 
-		handle.anchoredPosition = input * radius * FrameInputSystem.HandleRange;
+		handle.anchoredPosition = input * radius * System.HandleRange;
     }
 
     protected virtual void HandleInput(float magnitude, Vector2 normalised, Vector2 radius, Camera cam)
     {
-        if (magnitude > FrameInputSystem.DeadZone)
+        if (magnitude > System.DeadZone)
         {
             if (magnitude > 1)
             {
@@ -64,9 +64,9 @@ public class Joystick : InputKeyComponent
 
     private void FormatInput()
     {
-        if (FrameInputSystem.AxisOptions == AxisOptions.Horizontal)
+        if (System.AxisOptions == AxisOptions.Horizontal)
             input = new Vector2(input.x, 0f);
-        else if (FrameInputSystem.AxisOptions == AxisOptions.Vertical)
+        else if (System.AxisOptions == AxisOptions.Vertical)
             input = new Vector2(0f, input.y);
     }
 

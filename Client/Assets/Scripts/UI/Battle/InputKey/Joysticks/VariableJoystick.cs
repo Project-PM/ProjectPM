@@ -46,9 +46,9 @@ public class VariableJoystick : Joystick
 
     protected override void HandleInput(float magnitude, Vector2 normalised, Vector2 radius, Camera cam)
     {
-        if (joystickType == JoystickType.Dynamic && magnitude > FrameInputSystem.MoveThreshold)
+        if (joystickType == JoystickType.Dynamic && magnitude > System.MoveThreshold)
         {
-            Vector2 difference = normalised * (magnitude - FrameInputSystem.MoveThreshold) * radius;
+            Vector2 difference = normalised * (magnitude - System.MoveThreshold) * radius;
             background.anchoredPosition += difference;
         }
         base.HandleInput(magnitude, normalised, radius, cam);

@@ -17,7 +17,6 @@ public class PlayerGroundCheckComponent : MonoBehaviour
 	private float _fallTimeoutDelta = 0.0f;
 
 	private float _terminalVelocity = 1.0f;
-	private float _ternimalMinVelocity = -1.0f;
 
 	private float JumpTimeout = 0.50f;
 	private float FallTimeout = 0.15f;

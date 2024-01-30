@@ -4,17 +4,13 @@ using UnityEngine;
 
 public class DebugSystem : MonoSystem
 {
-    [SerializeField] private PlayerComponent playerComponent = null;
-
-    protected override void OnReset()
-    {
-        playerComponent = FindObjectOfType<PlayerComponent>();
-    }
+    private PlayerComponent playerComponent = null;
 
     public override void OnEnter()
     {
         base.OnEnter();
 
-        playerComponent.Initialize(1000);
+		playerComponent = FindObjectOfType<PlayerComponent>();
+		playerComponent.SetPlayerId(1000);
     }
 }

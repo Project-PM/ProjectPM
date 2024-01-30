@@ -18,11 +18,8 @@ public class SessionHelper
 	{
 		switch(sessionType)
 		{
-			case SessionType.Match:
-				return ProtocolType.Tcp;
-
 			case SessionType.Battle:
-				return ProtocolType.Udp;
+				return ProtocolType.Tcp;
 		}
 
 		return ProtocolType.Tcp;
@@ -34,9 +31,6 @@ public class SessionHelper
         {
             case SessionType.Battle:
                 return 7777;
-
-            case SessionType.Match:
-                return 7778;
         }
 
         return 7777;
@@ -61,12 +55,12 @@ public class SessionSystem : MonoSystem
         base.OnEnter();
 
         connector = new SessionConnector(SessionHelper.GetProtocolType(sessionType), reconnectCount);
-		InGamePacketManager.Instance._eventHandler += OnReceivePacket;
+		BattlePacketManager.Instance._eventHandler += OnReceivePacket;
 	}
 
 	public override void OnExit()
 	{
-		InGamePacketManager.Instance._eventHandler -= OnReceivePacket;
+		BattlePacketManager.Instance._eventHandler -= OnReceivePacket;
 
 		base.OnExit();
 	}

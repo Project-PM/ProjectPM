@@ -21,9 +21,4 @@ public abstract class MonoComponent<TSystem> : MonoBehaviour where TSystem : Mon
 			return system;
 		}
 	}
-
-	protected virtual void Reset()
-	{
-		
-	}
 }

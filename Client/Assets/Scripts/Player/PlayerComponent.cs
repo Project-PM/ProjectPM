@@ -8,7 +8,7 @@ public class PlayerComponent : MonoBehaviour
 
     private int playerId = -1;
 
-    public void Initialize(int playerId)
+    public void SetPlayerId(int playerId)
     {
         this.playerId = playerId;
 

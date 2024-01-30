@@ -59,8 +59,8 @@ namespace PacketGenerator
 
 		private static string GetFilePrefix(string pdlPath)
 		{
-			if (pdlPath.Contains("INGAME"))
-				return "InGame";
+			if (pdlPath.Contains("BATTLE"))
+				return "Battle";
 			else if (pdlPath.Contains("ROOM"))
 				return "Room";
 

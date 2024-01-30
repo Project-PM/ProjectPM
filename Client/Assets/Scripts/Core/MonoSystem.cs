@@ -28,16 +28,6 @@ public static class AssetLoadHelper
 
 public abstract class MonoSystem : ScriptableObject
 {
-    private void Reset()
-    {
-        OnReset();
-    }
-
-    protected virtual void OnReset()
-    {
-
-    }
-
     public virtual void OnEnter()
     {
 

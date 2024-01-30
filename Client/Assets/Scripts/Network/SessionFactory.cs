@@ -5,8 +5,7 @@ using ServerCore;
 
 public enum SessionType
 {
-    Match = 0,
-    Battle = 1,
+    Battle = 0,
 }
 
 public class SessionFactory : Singleton<SessionFactory>
@@ -33,7 +32,7 @@ public class SessionFactory : Singleton<SessionFactory>
         switch (type)
         {
             case SessionType.Battle:
-                return new InGameSession((int)type);
+                return new BattleSession((int)type);
         }
 
         return null;
