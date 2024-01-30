@@ -15,7 +15,7 @@ public class SpawnSystem : SyncSystem
 	{
 		base.OnEnter();
 
-		sessionSystem.TryConnect();
+		// sessionSystem.TryConnect();
 	}
 
 	public override void OnReceive(IPacket packet)
