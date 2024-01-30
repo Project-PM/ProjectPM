@@ -25,7 +25,7 @@ public class SyncSystem : MonoSystem, IPacketReceiver
 		sessionSystem.Send(packet);
 	}
 
-	public void OnReceive(IPacket packet)
+	public virtual void OnReceive(IPacket packet)
 	{
 		
 	}

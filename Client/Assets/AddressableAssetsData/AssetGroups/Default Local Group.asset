@@ -62,28 +62,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dba4f0b71c56f5c42bbe02bfdd306272
-    m_Address: Assets/Bundle/System/ScriptParsingSystemAsset.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cb02330b6794c954ca2bfc135feb6ac2
-    m_Address: Assets/Bundle/System/PhysicsSystemAsset.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ba7c83978fc9e444d9ad6565cdb655ad
-    m_Address: Assets/Bundle/System/PhysicsGravitySubSystemAsset.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d328ad139b7832040bc80682bbfa9bd1
     m_Address: Assets/Bundle/System/FrameInputSystemAsset.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bca2213f93713d64fbdea0c92a750d2d
-    m_Address: Assets/Bundle/System/AddressableResourceSystemAsset.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

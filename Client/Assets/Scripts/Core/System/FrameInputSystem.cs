@@ -11,6 +11,7 @@ public enum ENUM_ATTACK_KEY
 	NONE = 0, // 공격 안함
 	ATTACK, // 일반 공격
 	SKILL, // 스킬
+	ULTIMATE, // 궁극기
 	MAX 
 }
 
@@ -61,24 +62,32 @@ public abstract class PressInputData : FrameInputData
 	}
 }
 
-public class DashInputData : PressInputData
+public class GuardInputData : PressInputData
 {
-	public DashInputData(bool isPress, int frameCount) : base(isPress, frameCount)
+	public GuardInputData(bool isPress, int frameCount) : base(isPress, frameCount)
 	{
 	}
 }
+
+public class JumpInputData : PressInputData
+{
+    public JumpInputData(bool isPress, int frameCount) : base(isPress, frameCount)
+    {
+    }
+}
+
 
 public class REQ_FRAME_INPUT
 {
 	public readonly Vector2 moveVec;
 	public readonly ENUM_ATTACK_KEY pressedAttackKey;
-	public readonly bool isDash;
+	public readonly bool isGuard;
 
 	public REQ_FRAME_INPUT(Vector2 moveVec, ENUM_ATTACK_KEY pressedAttackKey, bool isDash, int targetFrameCount) 
 	{
 		this.moveVec = moveVec;
 		this.pressedAttackKey = pressedAttackKey;
-		this.isDash = isDash;
+		this.isGuard = isDash;
 	}
 }
 
@@ -122,9 +131,9 @@ public class FrameInputSystem : MonoSystem
 		inputDataQueue.Enqueue(inputData);
 	}
 
-	public void OnDashInputChanged(bool isPress, int frameCount)
+	public void OnGuardInputChanged(bool isPress, int frameCount)
 	{
-		var inputData = new DashInputData(isPress, frameCount);
+		var inputData = new GuardInputData(isPress, frameCount);
 		inputDataQueue.Enqueue(inputData);
 	}
 
@@ -134,14 +143,20 @@ public class FrameInputSystem : MonoSystem
 		inputDataQueue.Enqueue(inputData);
 	}
 
-	/// <summary>
-	/// 여기를 바로 REQ로 보낸다.
-	/// RES로 받은 Output 데이터를 캐릭터에게 보냅니다.
-	/// </summary>
-	/// <param name="targetFrameCount"></param>
-	/// <returns></returns>
-	/// 
-	public REQ_FRAME_INPUT MakeFakePacket()
+    public void OnJumpInputChanged(bool isPress, int frameCount)
+    {
+        var inputData = new JumpInputData(isPress, frameCount);
+        inputDataQueue.Enqueue(inputData);
+    }
+
+    /// <summary>
+    /// 여기를 바로 REQ로 보낸다.
+    /// RES로 받은 Output 데이터를 캐릭터에게 보냅니다.
+    /// </summary>
+    /// <param name="targetFrameCount"></param>
+    /// <returns></returns>
+    /// 
+    public REQ_FRAME_INPUT MakeFakePacket()
 	{
 		return MakeFrameInputPacket(Time.frameCount);
 	}

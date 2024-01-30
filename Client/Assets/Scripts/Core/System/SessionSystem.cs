@@ -12,30 +12,55 @@ public interface IPacketReceiver
 	void OnReceive(IPacket packet);
 }
 
+public class SessionHelper
+{
+	public static ProtocolType GetProtocolType(SessionType sessionType)
+	{
+		switch(sessionType)
+		{
+			case SessionType.Match:
+				return ProtocolType.Tcp;
+
+			case SessionType.Battle:
+				return ProtocolType.Udp;
+		}
+
+		return ProtocolType.Tcp;
+	}
+
+    public static int GetPortNumber(SessionType type)
+    {
+        switch (type)
+        {
+            case SessionType.Battle:
+                return 7777;
+
+            case SessionType.Match:
+                return 7778;
+        }
+
+        return 7777;
+    }
+}
+
 public class SessionSystem : MonoSystem
 {
-	// 세션 타입 대응 필요
-	private PacketSession packetSession = null;
+    [SerializeField] private SessionType sessionType;
+    [SerializeField] private int reconnectCount = 5;
+
+    private PacketSession packetSession = null;
 
 	private SessionConnector connector = null;
 	private PacketQueue packetQueue = new PacketQueue();
 
 	private List<IPacketReceiver> packetReceivers = new();
 	private Queue<IPacketReceiver> pendingPacketReceiverQueue = new();
-
-
-	[SerializeField] private SessionType sessionType;
 	
-	// 이 타입 시리얼라이즈 잘 안됨 왜 이러지
-	[SerializeField] private ProtocolType protocolType = ProtocolType.Tcp;
-
-	[SerializeField] private int reconnectCount = 5;
-
     public override void OnEnter()
     {
         base.OnEnter();
 
-        connector = new SessionConnector(ProtocolType.Tcp, reconnectCount);
+        connector = new SessionConnector(SessionHelper.GetProtocolType(sessionType), reconnectCount);
 		InGamePacketManager.Instance._eventHandler += OnReceivePacket;
 	}
 
@@ -118,7 +143,7 @@ public class SessionSystem : MonoSystem
 
 	public bool TryConnect()
 	{
-		var endPoint = GetMyEndPoint(GetPortNumber(sessionType));
+		var endPoint = GetMyEndPoint(SessionHelper.GetPortNumber(sessionType));
 		if (endPoint == null)
 			return false;
 
@@ -166,20 +191,5 @@ public class SessionSystem : MonoSystem
 		return new IPEndPoint(ipAddress, portNumber);
 	}
 
-	private int GetPortNumber(SessionType type)
-	{
-		switch(type)
-		{
-			case SessionType.Login:
-				return 7776;
 
-			case SessionType.InGame:
-				return 7777;
-
-			case SessionType.Room:
-				return 7778;
-		}
-
-		return 7777;
-	}
 }
