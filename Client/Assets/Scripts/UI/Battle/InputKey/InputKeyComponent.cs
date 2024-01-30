@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 public class InputKeyComponent : MonoComponent<FrameInputSystem>, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-	[SerializeField] protected FrameInputSystem inputSystem = null;
 	protected bool isPressed = false;
 
     public virtual void OnDrag(PointerEventData eventData)
