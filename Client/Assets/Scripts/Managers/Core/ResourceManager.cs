@@ -31,9 +31,6 @@ public class ResourceManager
 
         // Addressables.Instantiate 으로 사용하면 해제도 어드레서블 클래스로 해제해주어야 함
 
-        if (pooling)
-            return Managers.Pool.Pop(prefab);
-
         GameObject go = Object.Instantiate(prefab, parent);
         go.name = prefab.name;
 
@@ -43,9 +40,6 @@ public class ResourceManager
     public void Destroy(GameObject go)
     {
         if (go == null)
-            return;
-
-        if (Managers.Pool.Push(go))
             return;
 
         Object.Destroy(go);

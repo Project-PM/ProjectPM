@@ -12,22 +12,6 @@ public static class Define
         Battle,
     }
 
-    public enum EUIEvent
-    {
-        Click,
-        PointerDown,
-        PointerUp,
-        Drag,
-    }
-
-
-    public enum ESound
-    {
-        Bgm,
-        Effect,
-        Max,
-    }
-
     public enum ELayer
     {
         Default = 0,
@@ -39,8 +23,6 @@ public static class Define
         Ground = 6,
     }
 
-    public const int CAMERA_PROJECTION_SIZE = 12;
-
     // HARD CODING
-    // public const float NAME = 100000;
+
 }

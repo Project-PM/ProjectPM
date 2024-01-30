@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerEx
 {
-    public BaseScene CurrentScene { get { return GameObject.FindObjectOfType<BaseScene>(); } }
-
     public void LoadScene(Define.EScene type)
     {
         //Managers.Clear();
