@@ -6,9 +6,9 @@ public class SyncSystem : MonoSystem, IPacketReceiver
 {
 	[SerializeField] private SessionSystem sessionSystem = null;
 
-	public override void OnEnter(SceneModuleParam param)
+	public override void OnEnter()
 	{
-		base.OnEnter(param);
+		base.OnEnter();
 
 		sessionSystem.RegisterPacketReceiver(this);
 	}

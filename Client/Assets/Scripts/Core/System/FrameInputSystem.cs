@@ -85,22 +85,21 @@ public class REQ_FRAME_INPUT
 public class FrameInputSystem : MonoSystem
 {
 	public static float MoveThreshold { get; private set; } = 1;
-	public static JoystickType JoystickType { get; private set; } = JoystickType.Fixed;
-	public static float HandleRange { get; private set; } = 1;
-	public static float DeadZone { get; private set; } = 0;
-	public static AxisOptions AxisOptions { get; private set; } = AxisOptions.Both;
-	public static bool SnapX { get; private set; } = true;
+    public static JoystickType JoystickType { get; private set; } = JoystickType.Fixed;
+    public static float HandleRange { get; private set; } = 1;
+    public static float DeadZone { get; private set; } = 0;
+    public static AxisOptions AxisOptions { get; private set; } = AxisOptions.Both;
+    public static bool SnapX { get; private set; } = true;
 	public static bool SnapY { get; private set; } = true;
 
 	private Queue<FrameInputData> inputDataQueue = new Queue<FrameInputData>();
 
-	public override void OnEnter(SceneModuleParam param)
+	public override void OnEnter()
 	{
-		SceneModuleSystemManager.Instance.onSceneChanged += SetJoystick;
 		SetJoystick();
 	}
 
-	private void SetJoystick(SceneType type = SceneType.Title)
+	private void SetJoystick()
 	{
 		var joyStick = UnityEngine.Object.FindObjectOfType<VariableJoystick>();
 		if (joyStick != null)
@@ -111,7 +110,7 @@ public class FrameInputSystem : MonoSystem
 
 	public override void OnExit()
 	{
-		SceneModuleSystemManager.Instance.onSceneChanged -= SetJoystick;
+		
 	}
 
 	public void OnMoveInputChanged(Vector2 input, int frameCount)

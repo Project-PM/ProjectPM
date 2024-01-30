@@ -31,9 +31,9 @@ public class SessionSystem : MonoSystem
 
 	[SerializeField] private int reconnectCount = 5;
 
-    public override void OnEnter(SceneModuleParam param)
+    public override void OnEnter()
     {
-        base.OnEnter(param);
+        base.OnEnter();
 
         connector = new SessionConnector(ProtocolType.Tcp, reconnectCount);
 		InGamePacketManager.Instance._eventHandler += OnReceivePacket;

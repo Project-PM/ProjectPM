@@ -2,15 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleMainWindow : UIMainWindow
+public class BattleMainWindow : MonoBehaviour
 {
-	[SerializeField] private VariableJoystick joystick;
-
-	protected override void Reset()
-	{
-		base.Reset();
-
-		joystick = GetComponentInChildren<VariableJoystick>();
-	}
+	
 
 }
