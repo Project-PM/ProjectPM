@@ -5,15 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerEx
 {
-    public void LoadScene(Define.EScene type)
+    public void LoadScene(SceneType type)
     {
         //Managers.Clear();
         SceneManager.LoadScene(GetSceneName(type));
     }
 
-    private string GetSceneName(Define.EScene type)
+    private string GetSceneName(SceneType type)
     {
-        string name = System.Enum.GetName(typeof(Define.EScene), type);
+        string name = System.Enum.GetName(typeof(SceneType), type);
         return name;
     }
 
