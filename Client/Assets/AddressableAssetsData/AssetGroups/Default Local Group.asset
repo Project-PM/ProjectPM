@@ -27,11 +27,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 72a8c5e859715f34188dd52f0ec0e15f
-    m_Address: Assets/Bundle/Datas/Parser
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa4d9864c8d945b48999d240456bad65
     m_Address: Assets/Bundle/Animation/CharacterBase/Character.controller
     m_ReadOnly: 0
