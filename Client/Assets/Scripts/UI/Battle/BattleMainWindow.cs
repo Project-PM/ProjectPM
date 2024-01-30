@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleMainWindow : BaseMainWindow
+public class BattleMainWindow : MonoBehaviour
 {
 	
 

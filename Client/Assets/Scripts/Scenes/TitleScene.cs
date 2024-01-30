@@ -1,15 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
-public class BaseMainWindow : InitBase
+public class TitleScene : BaseScene
 {
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
 
-        Managers.UI.SetCanvas(gameObject, false);
+        SceneType = Define.EScene.Title;
+
+        // StartLoadAssets();
+
         return true;
+    }
+
+    public override void Clear()
+    {
+
     }
 }
