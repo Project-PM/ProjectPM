@@ -18,47 +18,63 @@ MonoBehaviour:
   m_GUID: 9455e584e88c94a438130f4b623e8146
   m_SerializeEntries:
   - m_GUID: a97c105638bdf8b4a8650670310a4cd3
-    m_Address: Packages/com.unity.render-pipelines.universal/Runtime/Materials/Sprite-Lit-Default.mat
+    m_Address: Sprite-Lit-Default
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ec536a7718376554185e4a856d5ae230
-    m_Address: Assets/Bundle/Prefabs/UI/Joystick/Variable Joystick.prefab
+    m_Address: Variable Joystick
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 72a8c5e859715f34188dd52f0ec0e15f
-    m_Address: Assets/Bundle/Datas/Parser
+    m_Address: Parser
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa4d9864c8d945b48999d240456bad65
-    m_Address: Assets/Bundle/Animation/CharacterBase/Character.controller
+    m_Address: Character
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c642bcbb0673b6f4684bec599fafe1aa
-    m_Address: Assets/Bundle/Animation/CharacterBase/Skill.anim
+    m_Address: Skill
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b6619c14a21b3cc4c841c13c66c84682
-    m_Address: Assets/Bundle/Animation/CharacterBase/Idle.anim
+    m_Address: Idle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+<<<<<<< Updated upstream
+=======
+  - m_GUID: 01d6f483a849c9e408f7879b087c1d28
+    m_Address: Dash
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+>>>>>>> Stashed changes
   - m_GUID: 6283b9d2a7522704d87b0c155096e787
-    m_Address: Assets/Bundle/Animation/CharacterBase/Move.anim
+    m_Address: Move
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9afc1341c8b9d2845a46fb7a179d92a0
+<<<<<<< Updated upstream
     m_Address: Assets/Bundle/Animation/CharacterBase/Attack1.anim
+=======
+    m_Address: Attack1
+>>>>>>> Stashed changes
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d328ad139b7832040bc80682bbfa9bd1
+<<<<<<< Updated upstream
     m_Address: Assets/Bundle/System/FrameInputSystemAsset.asset
+=======
+    m_Address: FrameInputSystemAsset
+>>>>>>> Stashed changes
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
