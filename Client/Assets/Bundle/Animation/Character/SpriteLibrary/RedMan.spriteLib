@@ -155,6 +155,30 @@ MonoBehaviour:
     m_OverrideEntries: []
     m_FromMain: 0
     m_EntryOverrideCount: 0
+  - m_Name: StandHit
+    m_Hash: 714871616
+    m_CategoryList: []
+    m_OverrideEntries: []
+    m_FromMain: 0
+    m_EntryOverrideCount: 0
+  - m_Name: AirborneHit
+    m_Hash: 286847876
+    m_CategoryList: []
+    m_OverrideEntries: []
+    m_FromMain: 0
+    m_EntryOverrideCount: 0
+  - m_Name: Down
+    m_Hash: 1020083973
+    m_CategoryList: []
+    m_OverrideEntries: []
+    m_FromMain: 0
+    m_EntryOverrideCount: 0
+  - m_Name: Recovery
+    m_Hash: 171307423
+    m_CategoryList: []
+    m_OverrideEntries: []
+    m_FromMain: 0
+    m_EntryOverrideCount: 0
   m_PrimaryLibraryGUID: 
-  m_ModificationHash: 638422353253889753
+  m_ModificationHash: 638422375088943245
   m_Version: 1
