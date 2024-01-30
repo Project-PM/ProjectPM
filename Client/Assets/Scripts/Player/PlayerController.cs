@@ -24,6 +24,8 @@ public class PlayerController : MonoComponent<FrameInputSystem>
 
 	private int playerId = -1;
 
+	private REQ_FRAME_INPUT currentFrameInput = null;
+
 	public void SetPlayerId(int playerId)
 	{
 		this.playerId = playerId;
@@ -37,16 +39,14 @@ public class PlayerController : MonoComponent<FrameInputSystem>
 
 	private void Update()
 	{
-		CheckInput();
+        currentFrameInput = System.MakeFakePacket();
+
 		CheckFall();
 		CheckGrounded();
 		CheckMove();
-	}
+		CheckJump();
 
-	private void CheckInput()
-	{
-		var input = system.MakeFakePacket();
-	}
+    }
 
 	private void CheckGrounded()
 	{
@@ -59,18 +59,21 @@ public class PlayerController : MonoComponent<FrameInputSystem>
 
 	private void CheckMove()
 	{
-		onMove?.Invoke(Vector2.zero);
+		onMove?.Invoke(new Vector2(currentFrameInput.moveVec.x, 0));
 	}
 
-	private void OnJump()
+	private void CheckJump()
 	{
-		if (IsGrounded())
+		if (currentFrameInput.isJump)
 		{
-			if (IsNotYetJump())
-			{
-				onJump?.Invoke();
-			}
-		}
+            if (IsGrounded())
+            {
+                if (IsNotYetJump())
+                {
+                    onJump?.Invoke();
+                }
+            }
+        }
 	}
 
 

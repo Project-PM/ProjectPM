@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 890932030}
   - component: {fileID: 890932029}
   - component: {fileID: 890932028}
+  - component: {fileID: 890932031}
   m_Layer: 6
   m_Name: Ground
   m_TagString: Untagged
@@ -253,6 +254,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &890932031
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 890932027}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1362884799
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,6 +328,7 @@ MonoBehaviour:
   sessionSystem: {fileID: 11400000, guid: ff792ff8bc169774ca2343797be1cc9c, type: 2}
   syncSystem: {fileID: 11400000, guid: ad0ced4be29605c47aa2cd982ee0d311, type: 2}
   frameInputSystem: {fileID: 11400000, guid: d328ad139b7832040bc80682bbfa9bd1, type: 2}
+  debugSystem: {fileID: 11400000, guid: eb84c5d2f9f069c479a11fac914d6afe, type: 2}
 --- !u!1 &1495706430
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,7 +381,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c550df3186b89234abb1514d95ffb6c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  system: {fileID: 11400000, guid: d328ad139b7832040bc80682bbfa9bd1, type: 2}
 --- !u!114 &1495706433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1017,10 +1045,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5993472615248960586, guid: 280141d5dc0a46943a6fb61a33fd8170, type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5993472615248960586, guid: 280141d5dc0a46943a6fb61a33fd8170, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1115,7 +1139,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc55439476af07243869856aa8e6d33d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  system: {fileID: 11400000, guid: d328ad139b7832040bc80682bbfa9bd1, type: 2}
   keyType: 1
 --- !u!222 &3992741900678990428
 CanvasRenderer:
@@ -1211,7 +1234,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc55439476af07243869856aa8e6d33d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  system: {fileID: 11400000, guid: d328ad139b7832040bc80682bbfa9bd1, type: 2}
   keyType: 2
 --- !u!1 &5309009683115469874
 GameObject:
@@ -1454,7 +1476,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7fda0f73e3bded4eabe5f3276b44f20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  system: {fileID: 11400000, guid: d328ad139b7832040bc80682bbfa9bd1, type: 2}
 --- !u!1 &7167742508084590912
 GameObject:
   m_ObjectHideFlags: 0
@@ -1526,7 +1547,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42844a4fccbd54746b90cade4ff70f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  system: {fileID: 11400000, guid: d328ad139b7832040bc80682bbfa9bd1, type: 2}
   background: {fileID: 7848724736272416176}
   handle: {fileID: 7848724736325492657}
 --- !u!114 &7848724736004858313

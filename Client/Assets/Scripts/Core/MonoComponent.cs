@@ -4,10 +4,26 @@ using UnityEngine;
 
 public abstract class MonoComponent<TSystem> : MonoBehaviour where TSystem : MonoSystem
 {
-	[SerializeField] protected TSystem system = null;
+	private TSystem system = null;
+
+    protected TSystem System
+	{
+		get
+		{
+
+			if (system == null)
+			{
+#if UNITY_EDITOR
+				system = AssetLoadHelper.GetSystemAsset<TSystem>();
+#endif
+			}
+
+			return system;
+		}
+	}
 
 	protected virtual void Reset()
 	{
-		system = AssetLoadHelper.GetSystemAsset<TSystem>();
+		
 	}
 }

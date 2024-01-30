@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Library: []
-  m_SpriteLibraryAsset: {fileID: 0}
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: fee4c7a0e37dc904287c27bd06110d79, type: 3}
 --- !u!114 &7693091913001968683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,8 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CategoryHash: 0
-  m_labelHash: 0
+  m_CategoryHash: 0.009161512
+  m_labelHash: 0.000000084799865
   m_SpriteKey: 0
   m_SpriteHash: 375185364
 --- !u!1 &6824513443228993302
@@ -371,7 +371,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65c5f5ebd60a1bc4184f231f227c57c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  system: {fileID: 11400000, guid: d328ad139b7832040bc80682bbfa9bd1, type: 2}
   animator: {fileID: 6118530763181382472}
 --- !u!114 &5377339547715350782
 MonoBehaviour:
@@ -387,12 +386,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 7442671442867769603}
   boxCollider: {fileID: 293973483133230920}
-  GroundedRadius: 0.28
   GroundLayers:
     serializedVersion: 2
     m_Bits: 64
-  Gravity: -0.1
-  JumpHeight: 1.2
+  GroundedRadius: 0.28
+  Gravity: -0.5
+  JumpHeight: 0.1
 --- !u!114 &6695545243425594803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,6 +407,7 @@ MonoBehaviour:
   rigidBody: {fileID: 5802517775724882621}
   controller: {fileID: 7442671442867769603}
   groundCheckComponent: {fileID: 5377339547715350782}
+  moveSpeed: 0.1
 --- !u!1 &8447325291182849178
 GameObject:
   m_ObjectHideFlags: 0

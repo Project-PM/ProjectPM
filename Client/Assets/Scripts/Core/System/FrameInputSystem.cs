@@ -81,13 +81,15 @@ public class REQ_FRAME_INPUT
 {
 	public readonly Vector2 moveVec;
 	public readonly ENUM_ATTACK_KEY pressedAttackKey;
+	public readonly bool isJump;
 	public readonly bool isGuard;
 
-	public REQ_FRAME_INPUT(Vector2 moveVec, ENUM_ATTACK_KEY pressedAttackKey, bool isDash, int targetFrameCount) 
+	public REQ_FRAME_INPUT(Vector2 moveVec, ENUM_ATTACK_KEY pressedAttackKey, bool isJump, bool isGuard, int targetFrameCount) 
 	{
 		this.moveVec = moveVec;
 		this.pressedAttackKey = pressedAttackKey;
-		this.isGuard = isDash;
+		this.isJump = isJump;
+		this.isGuard = isGuard;
 	}
 }
 
@@ -102,6 +104,7 @@ public class FrameInputSystem : MonoSystem
 	public static bool SnapY { get; private set; } = true;
 
 	private Queue<FrameInputData> inputDataQueue = new Queue<FrameInputData>();
+	private REQ_FRAME_INPUT currentFrameInput = null;
 
 	public override void OnEnter()
 	{
@@ -163,9 +166,10 @@ public class FrameInputSystem : MonoSystem
 
 	private REQ_FRAME_INPUT MakeFrameInputPacket(int targetFrameCount)
 	{
-		Vector2 moveVec = Vector2.zero;
+		Vector2 moveVec = currentFrameInput != null ? currentFrameInput.moveVec : Vector2.zero;
 		ENUM_ATTACK_KEY pressedAttackKey = ENUM_ATTACK_KEY.MAX;
-		bool isDash = false;
+		bool isJump = false;
+		bool isGuard = false;
 
 		while (inputDataQueue.TryDequeue(out var result))
 		{
@@ -180,14 +184,20 @@ public class FrameInputSystem : MonoSystem
 					pressedAttackKey = attackInputResult.key;
 				}
 			}
-			else if (result is PressInputData jumpInputResult)
+			else if (result is JumpInputData jumpInputResult)
 			{
-				isDash = jumpInputResult.isPress;
+				isJump = jumpInputResult.isPress;
+			}
+			else if(result is GuardInputData guardInputResult)
+			{
+				isGuard = guardInputResult.isPress;
 			}
 		}
 
-		return new REQ_FRAME_INPUT(moveVec, pressedAttackKey, isDash, targetFrameCount);
-	}
+        currentFrameInput = new REQ_FRAME_INPUT(moveVec, pressedAttackKey, isJump, isGuard, targetFrameCount);
+		return currentFrameInput;
+
+    }
 
 	private float SnapFloat(Vector2 input, float value, AxisOptions snapAxis)
 	{
