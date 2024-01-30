@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerGroundCheckComponent : MonoBehaviour
 {
-	[SerializeField] private PlayerController controller;
+	[SerializeField] private PlayerCharacterController controller;
 
 	[SerializeField] private BoxCollider2D boxCollider;
     [SerializeField] private LayerMask GroundLayers;

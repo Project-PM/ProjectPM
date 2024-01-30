@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovementComponent : MonoBehaviour
 {
 	[SerializeField] private Rigidbody2D rigidBody;
-	[SerializeField] private PlayerController controller;
+	[SerializeField] private PlayerCharacterController controller;
 	[SerializeField] private PlayerGroundCheckComponent groundCheckComponent;
 
 	[SerializeField] private float moveSpeed;

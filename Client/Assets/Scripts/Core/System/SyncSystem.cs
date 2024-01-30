@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SyncSystem : MonoSystem, IPacketReceiver
 {
-	[SerializeField] private SessionSystem sessionSystem = null;
+	[SerializeField] protected SessionSystem sessionSystem = null;
 
 	public override void OnEnter()
 	{
@@ -27,6 +27,6 @@ public class SyncSystem : MonoSystem, IPacketReceiver
 
 	public virtual void OnReceive(IPacket packet)
 	{
-		
+
 	}
 }

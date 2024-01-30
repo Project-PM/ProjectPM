@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4baa4ed309c230042b1f336fc136132b, type: 3}
-  m_Name: DebugSystemAsset
+  m_Script: {fileID: 11500000, guid: 0b58fa467f8e915428e3b821a1406ba0, type: 3}
+  m_Name: SpawnSystemAsset
   m_EditorClassIdentifier: 
-  isEnable: 1
+  sessionSystem: {fileID: 11400000, guid: ff792ff8bc169774ca2343797be1cc9c, type: 2}
   playerComponentPrefab: {fileID: 2480274465849677282, guid: 280141d5dc0a46943a6fb61a33fd8170, type: 3}
+  spawnPos: {x: 0, y: 0, z: 0}
+  characterType: 0

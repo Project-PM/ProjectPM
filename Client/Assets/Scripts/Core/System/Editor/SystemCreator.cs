@@ -15,6 +15,9 @@ public class SystemCreator : Editor
 
         foreach (Type systemType in systemAssembly.GetTypes().Where(t => t.IsSubclassOf(typeof(MonoSystem))))
         {
+            if (AssetLoadHelper.GetSystemAsset(systemType) != null)
+                continue;
+
             var systemAsset = ScriptableObject.CreateInstance(systemType);
             AssetDatabase.CreateAsset(systemAsset, AssetLoadHelper.GetSystemAssetPath(systemType));
         }

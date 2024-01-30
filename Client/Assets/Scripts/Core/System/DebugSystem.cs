@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class DebugSystem : MonoSystem
 {
-    private PlayerComponent playerComponent = null;
+    [SerializeField] private bool isEnable = false;
+	[SerializeField] private PlayerComponent playerComponentPrefab = null;
 
     public override void OnEnter()
     {
         base.OnEnter();
 
-		playerComponent = FindObjectOfType<PlayerComponent>();
-		playerComponent.SetPlayerId(1000);
+        if (isEnable)
+        {
+			var playerComponent = Instantiate(playerComponentPrefab);
+			playerComponent.SetPlayerId(1000);
+            playerComponent.SetInput(true);
+		}
     }
 }

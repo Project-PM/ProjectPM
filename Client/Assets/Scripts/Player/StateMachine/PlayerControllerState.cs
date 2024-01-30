@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PlayerControllerState : StateMachineBehaviour
 {
-	protected PlayerController controller = null;
+	protected PlayerCharacterController controller = null;
 
 	public static void Initialize(Animator ownerAnimator)
 	{
-		var controller = ownerAnimator.GetComponent<PlayerController>();
+		var controller = ownerAnimator.GetComponent<PlayerCharacterController>();
 		if (controller == null)
 			return;
 
@@ -19,7 +19,7 @@ public class PlayerControllerState : StateMachineBehaviour
 		}
 	}
 
-	private void InitializeInternal(PlayerController controller)
+	private void InitializeInternal(PlayerCharacterController controller)
 	{
 		this.controller = controller;
 	}

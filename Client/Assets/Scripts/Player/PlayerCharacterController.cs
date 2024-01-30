@@ -10,7 +10,7 @@ using UnityEngine;
 // 4. 스테이트에서 적당한 함수를 골라 수행시킨다.
 // 5. 함수는 컴포넌트들에게 Action을 뿌린다.
 
-public class PlayerController : MonoComponent<FrameInputSystem>
+public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 {
 	[SerializeField] private Animator animator;
 
@@ -22,13 +22,13 @@ public class PlayerController : MonoComponent<FrameInputSystem>
 	public event Action<Vector2> onMove = null;
 	public event Action onAttack = null;
 
-	private int playerId = -1;
+	private bool isEnable = false;
 
 	private REQ_FRAME_INPUT currentFrameInput = null;
 
-	public void SetPlayerId(int playerId)
+	public void SetInput(bool isEnable)
 	{
-		this.playerId = playerId;
+		this.isEnable = isEnable;
 	}
 
 	private void Awake()
@@ -39,13 +39,15 @@ public class PlayerController : MonoComponent<FrameInputSystem>
 
 	private void Update()
 	{
-        currentFrameInput = System.MakeFakePacket();
+		if (isEnable)
+		{
+			currentFrameInput = System.MakeFakePacket();
+		}
 
 		CheckFall();
 		CheckGrounded();
 		CheckMove();
 		CheckJump();
-
     }
 
 	private void CheckGrounded()
@@ -59,11 +61,17 @@ public class PlayerController : MonoComponent<FrameInputSystem>
 
 	private void CheckMove()
 	{
+		if (currentFrameInput == null)
+			return;
+
 		onMove?.Invoke(new Vector2(currentFrameInput.moveVec.x, 0));
 	}
 
 	private void CheckJump()
 	{
+		if (currentFrameInput == null)
+			return;
+
 		if (currentFrameInput.isJump)
 		{
             if (IsGrounded())

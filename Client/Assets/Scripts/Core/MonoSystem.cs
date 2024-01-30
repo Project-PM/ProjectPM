@@ -19,7 +19,13 @@ public static class AssetLoadHelper
         return string.Format(SystemAssetPathFormat, systemType);
     }
 
-    public static TSystem GetSystemAsset<TSystem>() where TSystem : MonoSystem
+    public static MonoSystem GetSystemAsset(Type systemType)
+    {
+        return AssetDatabase.LoadAssetAtPath<MonoSystem>(GetSystemAssetPath(systemType));
+	}
+
+
+	public static TSystem GetSystemAsset<TSystem>() where TSystem : MonoSystem
     {
         return AssetDatabase.LoadAssetAtPath<TSystem>(GetSystemAssetPath<TSystem>());
     }

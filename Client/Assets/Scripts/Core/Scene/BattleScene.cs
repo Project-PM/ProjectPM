@@ -8,6 +8,7 @@ public class BattleScene : MonoBehaviour
     [SerializeField] private SyncSystem syncSystem;
     [SerializeField] private FrameInputSystem frameInputSystem;
     [SerializeField] private DebugSystem debugSystem;
+    [SerializeField] private SpawnSystem spawnSystem;
 
     private int currentFrameCount = 0;
     private float currentDeltaTime = 0;
@@ -18,7 +19,9 @@ public class BattleScene : MonoBehaviour
         syncSystem = AssetLoadHelper.GetSystemAsset<SyncSystem>();
         frameInputSystem = AssetLoadHelper.GetSystemAsset<FrameInputSystem>();
         debugSystem = AssetLoadHelper.GetSystemAsset<DebugSystem>();
-    }
+		spawnSystem = AssetLoadHelper.GetSystemAsset<SpawnSystem>();
+
+	}
 
     private void Start()
     {
@@ -26,7 +29,9 @@ public class BattleScene : MonoBehaviour
         syncSystem.OnEnter();
         frameInputSystem.OnEnter();
         debugSystem.OnEnter();
-    }
+		spawnSystem.OnEnter();
+
+	}
 
     private void Update()
     {
@@ -37,7 +42,9 @@ public class BattleScene : MonoBehaviour
         sessionSystem.OnUpdate(currentFrameCount, currentDeltaTime);
         frameInputSystem.OnUpdate(currentFrameCount, currentDeltaTime);
         debugSystem.OnUpdate(currentFrameCount, currentDeltaTime);
-    }
+		spawnSystem.OnUpdate(currentFrameCount, currentDeltaTime);
+
+	}
 
     private void OnDestroy()
     {
@@ -45,5 +52,6 @@ public class BattleScene : MonoBehaviour
         syncSystem.OnExit();
         frameInputSystem.OnExit();
         debugSystem.OnExit();
+        spawnSystem.OnExit();
     }
 }
