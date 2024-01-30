@@ -11,6 +11,13 @@ public class BattleScene : MonoBehaviour
     private int currentFrameCount = 0;
     private float currentDeltaTime = 0;
 
+    private void Reset()
+    {
+        sessionSystem = AssetLoadHelper.GetSystemAsset<SessionSystem>();
+        syncSystem = AssetLoadHelper.GetSystemAsset<SyncSystem>();
+        frameInputSystem = AssetLoadHelper.GetSystemAsset<FrameInputSystem>();
+    }
+
     private void Start()
     {
         sessionSystem.OnEnter();

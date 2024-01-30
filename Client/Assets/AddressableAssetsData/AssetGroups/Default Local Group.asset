@@ -47,11 +47,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 01d6f483a849c9e408f7879b087c1d28
-    m_Address: Assets/Bundle/Animation/CharacterBase/Dash.anim
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6283b9d2a7522704d87b0c155096e787
     m_Address: Assets/Bundle/Animation/CharacterBase/Move.anim
     m_ReadOnly: 0

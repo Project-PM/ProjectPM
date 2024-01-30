@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class VariableJoystick : Joystick
 {
     private JoystickType joystickType = JoystickType.Fixed;
-    private Vector2 fixedPosition = Vector2.zero;
+    private Vector2 fixedPosition = new Vector2(256, 256);
 
     public void SetMode(JoystickType joystickType)
     {
