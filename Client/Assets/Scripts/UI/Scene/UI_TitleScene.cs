@@ -4,34 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Define;
 
-public class UI_TitleScene : UI_Scene
+public class UI_TitleScene : UI_BaseScene
 {
-    enum GameObjects
-    {
-        StartImage
-    }
-
-    enum Texts
-    {
-        DisplayText
-    }
-
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
-
-        BindObjects(typeof(GameObjects));
-        BindTexts(typeof(Texts));
-
-        GetObject((int)GameObjects.StartImage).BindEvent((evt) =>
-        {
-            Debug.Log("ChangeScene");
-            Managers.Scene.LoadScene(EScene.Lobby);
-        });
-
-        GetObject((int)GameObjects.StartImage).gameObject.SetActive(false);
-        GetText((int)Texts.DisplayText).text = $"";
 
         StartLoadAssets();
 
@@ -40,6 +18,7 @@ public class UI_TitleScene : UI_Scene
 
     void StartLoadAssets()
     {
+        // PreLoad 라벨이 붙은 모든 리소스를 로드하고 콜백함수로 완료 통보를 받음
         Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
         {
             Debug.Log($"{key} {count}/{totalCount}");
@@ -48,10 +27,7 @@ public class UI_TitleScene : UI_Scene
             {
                 Managers.Data.Init();
 
-                GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);
-                GetText((int)Texts.DisplayText).text = "Touch To Start";
-
-
+                // 씬이동이 가능한 오브젝트 활성화시키기?
             }
         });
     }

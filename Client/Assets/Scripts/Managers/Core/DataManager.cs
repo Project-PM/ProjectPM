@@ -14,12 +14,12 @@ public class DataManager
 
     public void Init()
     {
-        TestDict = LoadJson<Data.TestDataLoader, int, Data.TestData>("Assets/Bundle/Datas/JsonData/TestData.json").MakeDict();
+        TestDict = LoadJson<Data.TestDataLoader, int, Data.TestData>("TestData").MakeDict();
     }
 
     private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
     {
-        TextAsset textAsset = Managers.Resource.Load<TextAsset>(path);
+        TextAsset textAsset = Managers.Resource.Load<TextAsset>("Assets/Bundle/Datas/JsonData/" + path + ".json");
         return JsonConvert.DeserializeObject<Loader>(textAsset.text);
     }
 }

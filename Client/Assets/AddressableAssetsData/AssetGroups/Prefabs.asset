@@ -10,22 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Data
+  m_Name: Prefabs
   m_EditorClassIdentifier: 
-  m_GroupName: Data
+  m_GroupName: Prefabs
   m_Data:
     m_SerializedData: []
-  m_GUID: c5553301e1da19e4b9bf6221cf0b34bd
-  m_SerializeEntries:
-  - m_GUID: 95b71398e9dcb5f448b8bcbfe37754f4
-    m_Address: Assets/Bundle/Datas/JsonData/TestData.json
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
+  m_GUID: 3fcbc2bc4cd81a04f95a62c147eb231b
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 2fbff68df76c9b84baff54fbac5ef644, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 81f84c0b4186c3248bf49d0308c74129, type: 2}
-    - {fileID: 11400000, guid: 9e90faccd5a2775419924ae49c1d3a8b, type: 2}
+    - {fileID: 11400000, guid: febbadd0d1d7a984d828ecce1a73dd0d, type: 2}
+    - {fileID: 11400000, guid: 13cdc0e3bf932ad4bb5064a60d9e354d, type: 2}

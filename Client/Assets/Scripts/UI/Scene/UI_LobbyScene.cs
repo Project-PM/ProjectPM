@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Define;
 
-public class UI_LobbyScene : UI_Scene
+public class UI_LobbyScene : UI_BaseScene
 {
     public override bool Init()
     {

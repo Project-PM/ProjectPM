@@ -11,11 +11,6 @@ public static class Extension
         return Util.GetOrAddComponent<T>(go);
     }
 
-    public static void BindEvent(this GameObject go, Action<PointerEventData> action = null, Define.EUIEvent type = Define.EUIEvent.Click)
-    {
-        UI_Base.BindEvent(go, action, type);
-    }
-
     public static bool IsValid(this GameObject go)
     {
         return go != null && go.activeSelf;

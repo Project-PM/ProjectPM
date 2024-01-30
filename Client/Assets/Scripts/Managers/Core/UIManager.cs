@@ -12,11 +12,11 @@ public class UIManager
 
     private Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();
 
-    private UI_Scene _sceneUI = null;
-    public UI_Scene SceneUI
+    private UI_BaseScene _currentSceneUI = null;
+    public UI_BaseScene CurrentSceneUI
     {
-        set { _sceneUI = value; }
-        get { return _sceneUI; }
+        set { _currentSceneUI = value; }
+        get { return _currentSceneUI; }
     }
 
     public GameObject Root
@@ -61,7 +61,7 @@ public class UIManager
 
     public T GetSceneUI<T>() where T : UI_Base
     {
-        return _sceneUI as T;
+        return _currentSceneUI as T;
     }
 
     public T MakeWorldSpaceUI<T>(Transform parent = null, string name = null) where T : UI_Base
@@ -104,14 +104,14 @@ public class UIManager
         return baseUI;
     }
 
-    public T ShowSceneUI<T>(string name = null) where T : UI_Scene
+    public T ShowSceneUI<T>(string name = null) where T : UI_BaseScene
     {
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
         GameObject go = Managers.Resource.Instantiate(name);
         T sceneUI = Util.GetOrAddComponent<T>(go);
-        _sceneUI = sceneUI;
+        _currentSceneUI = sceneUI;
 
         go.transform.SetParent(Root.transform);
 
@@ -170,6 +170,6 @@ public class UIManager
     public void Clear()
     {
         CloseAllPopupUI();
-        _sceneUI = null;
+        _currentSceneUI = null;
     }
 }
