@@ -6,6 +6,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+public enum WindowUIType
+{
+    None,
+    TestWindow1,
+    TestWindow2,
+}
+
+public enum PopupUIType
+{
+    None,
+
+}
+
 public class UIManager
 {
     private int _order = 10;
@@ -44,5 +57,10 @@ public class UIManager
         {
             canvas.sortingOrder = sortOrder;
         }
+    }
+
+    public BaseWindowUI OpenWindowUI(WindowUIType windowUIType)
+    {
+        return _currentMainWindow.OpenWindowUI(windowUIType);
     }
 }
