@@ -6,6 +6,7 @@ using UnityEngine;
 public class BaseMainWindow : InitBase
 {
     protected Dictionary<WindowUIType, BaseWindowUI> _windowUIDic = new();
+    BaseWindowUI currActiveWindow = null;
 
     protected virtual void Start()
     {
@@ -19,7 +20,6 @@ public class BaseMainWindow : InitBase
             {
                 baseWindowUI.Init();
                 _windowUIDic.Add(baseWindowUI.WindowUIType, baseWindowUI);
-                Debug.Log($"{baseWindowUI.name}, {baseWindowUI.WindowUIType}");
             }
         }
     }
@@ -43,7 +43,11 @@ public class BaseMainWindow : InitBase
             return null;
         }
 
-        _windowUIDic[windowUIType].OpenUI();
-        return _windowUIDic[windowUIType];
+        if (currActiveWindow != null)
+            currActiveWindow.CloseUI();
+
+        currActiveWindow = _windowUIDic[windowUIType];
+        currActiveWindow.OpenUI();
+        return currActiveWindow;
     }
 }

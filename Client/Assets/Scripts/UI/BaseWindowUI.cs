@@ -12,6 +12,7 @@ public abstract class BaseWindowUI : MonoBehaviour
         if (_init)
             return false;
 
+        Managers.UI.SetCanvas(gameObject, false);
         SetWindowUIType();
 
         _init = true;
