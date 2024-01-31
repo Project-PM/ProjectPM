@@ -14,7 +14,7 @@ public class DebugSystem : MonoSystem
         if (isEnable)
         {
 			var playerComponent = Instantiate(playerComponentPrefab);
-			playerComponent.SetPlayerId(1000);
+			playerComponent.SetPlayerInfo(1000, ENUM_CHARACTER_TYPE.Red);
             playerComponent.SetInput(true);
 		}
     }

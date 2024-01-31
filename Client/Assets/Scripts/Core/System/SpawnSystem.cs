@@ -58,16 +58,16 @@ public class SpawnSystem : SyncSystem
 
 	private IEnumerable<int> GetLeftPlayerIds(IEnumerable<RES_PLAYER_LIST.Player> players)
 	{
-		foreach (var playerComponent in playerDictionary.Values)
+		foreach (var playerInfo in playerDictionary)
 		{
-			if (playerComponent == null)
+			if (playerInfo.Value == null)
 				yield break;
 
-			bool isContain = players.Any(p => p.playerId == playerComponent.playerId);
+			bool isContain = players.Any(p => p.playerId == playerInfo.Key);
 			if (isContain)
 				continue;
 
-			yield return playerComponent.playerId;
+			yield return playerInfo.Key;
 		}
 	}
 
@@ -77,7 +77,7 @@ public class SpawnSystem : SyncSystem
 		if (playerComponent == null)
 			return null;
 
-		playerComponent.SetPlayerId(playerId);
+		playerComponent.SetPlayerInfo(playerId, ENUM_CHARACTER_TYPE.Red);
 		playerComponent.SetInput(isSelf);
 
 		return playerComponent;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum ENUM_CHARACTER_TYPE
 {
+    None = -1,
     Red,
     Green, 
     Blue
@@ -13,11 +14,19 @@ public class PlayerComponent : MonoBehaviour
 {
     [SerializeField] private PlayerCharacterController playerController = null;
 
-    public int playerId { get; private set; } = -1;
+    private int playerId = -1;
+	private ENUM_CHARACTER_TYPE characterType = ENUM_CHARACTER_TYPE.None;
 
-    public void SetPlayerId(int playerId)
+
+	public void SetPlayerInfo(int playerId, ENUM_CHARACTER_TYPE characterType)
     {
         this.playerId = playerId;
+        this.characterType = characterType;
+
+        foreach (var actionComponent in GetComponentsInChildren<PlayerFrameActionComponent>())
+        {
+            actionComponent.SetPlayerCharacterType(characterType);
+        }
 	}
 
     public void SetInput(bool isEnable)

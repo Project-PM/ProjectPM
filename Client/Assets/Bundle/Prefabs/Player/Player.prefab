@@ -137,7 +137,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 840501934, guid: d31fe99ecb7321e488785e31af397087, type: 3}
+  m_Sprite: {fileID: -1501885878, guid: d31fe99ecb7321e488785e31af397087, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -178,6 +178,38 @@ MonoBehaviour:
   m_labelHash: 0.000000084799865
   m_SpriteKey: 0
   m_SpriteHash: 375185364
+--- !u!1 &5245162240149407765
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9203515235403309928}
+  m_Layer: 0
+  m_Name: Components
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9203515235403309928
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5245162240149407765}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1678591636614681668}
+  m_Father: {fileID: 5993472615248960586}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6824513443228993302
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +241,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5993472615248960586}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7097291687878796753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1678591636614681668}
+  - component: {fileID: 5063091119352672957}
+  m_Layer: 0
+  m_Name: RedMan
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1678591636614681668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7097291687878796753}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9203515235403309928}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5063091119352672957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7097291687878796753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9623b6c5f33a2e040a61979b694a0f26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deltaFrameCount: 5
+  triggers:
+  - stateName: Idle
+    startFrameIndex: 0
 --- !u!1 &8271826272390545158
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,6 +305,7 @@ GameObject:
   - component: {fileID: 7442671442867769603}
   - component: {fileID: 5377339547715350782}
   - component: {fileID: 6695545243425594803}
+  - component: {fileID: 6123756859426560249}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -245,6 +326,7 @@ Transform:
   m_LocalScale: {x: 1.6, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 9203515235403309928}
   - {fileID: 1198868077693035932}
   - {fileID: 7940001686566504161}
   - {fileID: 8490732752717681258}
@@ -408,6 +490,20 @@ MonoBehaviour:
   controller: {fileID: 7442671442867769603}
   groundCheckComponent: {fileID: 5377339547715350782}
   moveSpeed: 0.1
+--- !u!114 &6123756859426560249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271826272390545158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bc46f1fd3bded641b9f09a9f4da352f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 6118530763181382472}
+  frameIndex: -1
 --- !u!1 &8447325291182849178
 GameObject:
   m_ObjectHideFlags: 0

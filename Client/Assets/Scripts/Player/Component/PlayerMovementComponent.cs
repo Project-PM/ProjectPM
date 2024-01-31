@@ -23,7 +23,6 @@ public class PlayerMovementComponent : MonoBehaviour
 	private void OnMove(Vector2 moveVec)
 	{
 		Vector2 finalMoveVec = new Vector2(moveVec.x * moveSpeed, groundCheckComponent._verticalVelocity);
-		Debug.Log(finalMoveVec);
 		rigidBody.MovePosition(rigidBody.position + finalMoveVec);
 	}
 }
