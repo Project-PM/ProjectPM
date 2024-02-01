@@ -26,6 +26,11 @@ public class CharacterControllerState : StateMachineBehaviour
 		this.controller = controller;
 	}
 
+	protected bool IsEndState(AnimatorStateInfo stateInfo)
+	{
+		return stateInfo.normalizedTime >= 0.99f;
+	}
+
 	public override void OnStateEnter(UnityEngine.Animator animator, UnityEngine.AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
 		base.OnStateEnter(animator, animatorStateInfo, layerIndex);

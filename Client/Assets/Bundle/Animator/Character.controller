@@ -129,12 +129,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9623b6c5f33a2e040a61979b694a0f26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deltaFrameCount: 2
+  deltaFrameCount: 3
   triggers:
-  - startFrameIndex: 0
-  attackBox: {x: 1, y: 1}
-  attackOffset: {x: 0, y: 0}
-  attackCount: 1
+  - startFrameIndex: 2
+  attackInfoList:
+  - attackBox: {x: 2, y: 2}
+    attackOffset: {x: 2, y: 1}
+    attackCount: 1
 --- !u!114 &-3939955809414115724
 MonoBehaviour:
   m_ObjectHideFlags: 1

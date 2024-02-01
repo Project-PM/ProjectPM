@@ -15,6 +15,14 @@ public class TriggerInfo
 	}
 }
 
+[System.Serializable]
+public class AttackInfo
+{
+	[SerializeField] public Vector2 attackBox;
+	[SerializeField] public Vector2 attackOffset;
+	[SerializeField] public int attackCount;
+}
+
 public abstract class PlayerFrameActionState : CharacterControllerState
 {
 	[SerializeField] private int deltaFrameCount = 1;
@@ -50,32 +58,45 @@ public abstract class PlayerFrameActionState : CharacterControllerState
 		if (receiver == null)
 			return;
 
-		foreach (var trigger in triggers)
+		for(int triggerIndex = 0; triggerIndex < triggers.Count; triggerIndex++)
 		{
-			if (trigger.Equals(receiver.frameIndex))
+			var trigger = triggers[triggerIndex];
+			int frameIndex = receiver.frameIndex;
+
+			if (trigger.Equals(frameIndex))
 			{
-				StartFrameAction();
+				StartFrameAction(triggerIndex);
 				break;
 			}
 		}
 	}
 
-	protected abstract void StartFrameAction();
+	protected abstract void StartFrameAction(int triggerIndex);
 }
 
 public abstract class PlayerFrameAttackState : PlayerFrameActionState
 {
-	[SerializeField] private Vector2 attackBox;
-	[SerializeField] private Vector2 attackOffset;
-	[SerializeField] private int attackCount;
+	[SerializeField] List<AttackInfo> attackInfoList = new List<AttackInfo>();
+
+	private Vector2 attackOffset;
+	private Vector2 attackBox;
 
 	private int remainFrameCount = 0;
 	private int remainAttackCount = 0;
 
-	protected override void StartFrameAction()
+	protected override void StartFrameAction(int triggerIndex)
 	{
 		remainFrameCount = DeltaFrameCount;
-		remainAttackCount = attackCount;
+
+		if (attackInfoList.Count > triggerIndex)
+		{
+			var info = attackInfoList[triggerIndex];
+
+			remainAttackCount = info.attackCount;
+			attackBox = info.attackBox;
+			attackOffset = info.attackOffset;
+		}
+
 	}
 
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
@@ -96,15 +117,35 @@ public abstract class PlayerFrameAttackState : PlayerFrameActionState
 		ProgressAction();
 	}
 
-	protected IEnumerable<Collider2D> GetHitObjects()
+	protected IEnumerable<Collider2D> GetHitObjects(Transform centerObj)
 	{
-		return Physics2D.OverlapBoxAll(attackOffset, attackBox, 0)
+		Vector2 centerPos = centerObj.position;
+
+		DrawOverlapBox(centerPos + attackOffset, attackBox);
+
+		return Physics2D.OverlapBoxAll(centerPos + attackOffset, attackBox, 0)
 			.Where(h => h.gameObject.layer != LayerMask.NameToLayer("Player"));
+	}
+
+	private void DrawOverlapBox(Vector2 point, Vector2 size)
+	{
+		Vector2 leftDown = point - size / 2;
+		Vector2 rightUp = point + size / 2;
+		Vector2 leftUp = new Vector2(point.x - size.x / 2, point.y + size.y / 2);
+		Vector2 rightDown = new Vector2(point.x + size.x / 2, point.y - size.y / 2);
+
+		Debug.DrawLine(leftDown, leftUp);
+		Debug.DrawLine(rightDown, rightUp);
+		Debug.DrawLine(leftDown, rightDown);
+		Debug.DrawLine(leftUp, rightUp);
 	}
 
 	protected IEnumerable<IDamageable> GetDamageableObjects()
 	{
-		return GetHitObjects().OfType<IDamageable>();
+		if (controller == null)
+			return null;
+
+		return GetHitObjects(controller.transform).OfType<IDamageable>();
 	}
 
 	private void ProgressAction()
@@ -144,51 +185,3 @@ public abstract class PlayerFrameAttackState : PlayerFrameActionState
 		return true;
 	}
 }
-
-#if UNITY_EDITOR
-
-public class PlayerFrameAttackDrawer : Editor
-{
-	private CharacterScene characterScene;
-	private PlayerComponent playerComponent;
-
-	private SerializedProperty attackBoxProperty;
-	private SerializedProperty attackOffsetProperty;
-
-	private void OnEnable()
-	{
-		characterScene = FindObjectOfType<CharacterScene>();
-		if (characterScene == null)
-			return;
-
-		playerComponent = FindObjectOfType<PlayerComponent>();
-		if (playerComponent == null)
-			return;
-
-		characterScene.onDrawGizmos += OnDrawGizmos;
-
-		attackBoxProperty = serializedObject.FindProperty("attackBox");
-		attackOffsetProperty = serializedObject.FindProperty("attackOffset");
-	}
-
-	private void OnDisable()
-	{
-		if (characterScene != null)
-		{
-			characterScene.onDrawGizmos -= OnDrawGizmos;
-		}
-
-		playerComponent = null;
-	}
-
-	private void OnDrawGizmos()
-	{
-		Vector2 playerPos = playerComponent.transform.position;
-		Vector2 startPos = playerPos + attackOffsetProperty.vector2Value;
-		Vector2 size = attackBoxProperty.vector2Value;
-
-		Gizmos.DrawWireCube(startPos, size);
-	}
-} 
-
-#endif

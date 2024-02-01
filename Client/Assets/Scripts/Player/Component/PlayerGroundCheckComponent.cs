@@ -26,6 +26,8 @@ public class PlayerGroundCheckComponent : MonoBehaviour
 
 	public float _verticalVelocity { get; private set; }
 
+	public bool UseGravity = true;
+
 	private void OnEnable()
 	{
 		GroundedOffset = boxCollider.size.y / -2 + boxCollider.offset.y;
@@ -59,7 +61,10 @@ public class PlayerGroundCheckComponent : MonoBehaviour
 
 	private void Update()
 	{
-		JumpAndGravity();
+		if (UseGravity)
+		{
+			JumpAndGravity();
+		}
 	}
 
 	private bool IsGrounded()

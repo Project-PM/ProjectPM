@@ -53,7 +53,9 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 		CheckGrounded();
 		CheckMove();
 		CheckJump();
-    }
+		CheckAttack();
+
+	}
 
 	private void CheckGrounded()
 	{
@@ -98,6 +100,17 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 			{
 				// 떨어지는 중임을 판별
 			}
+		}
+	}
+
+	private void CheckAttack()
+	{
+		if (currentFrameInput == null) 
+			return;
+
+		if (currentFrameInput.pressedAttackKey == ENUM_ATTACK_KEY.ATTACK)
+		{
+			animator.Play("Attack1");
 		}
 	}
 

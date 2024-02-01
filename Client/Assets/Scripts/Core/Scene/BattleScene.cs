@@ -11,7 +11,7 @@ public class BattleScene : MonoBehaviour
     [SerializeField] private DebugSystem debugSystem;
     [SerializeField] private SpawnSystem spawnSystem;
 
-    private int currentFrameCount = 0;
+	private int currentFrameCount = 0;
     private float currentDeltaTime = 0;
 
     private void Reset()
@@ -55,5 +55,4 @@ public class BattleScene : MonoBehaviour
         debugSystem.OnExit();
         spawnSystem.OnExit();
     }
-
 }

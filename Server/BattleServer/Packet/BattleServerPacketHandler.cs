@@ -10,19 +10,25 @@ public partial class BattlePacketManager
 	{
 		var enterPacket = packet as REQ_ENTER_GAME;
 
-		if (session is BattleSession inGameSession)
+		if (session is BattleSession battleSession)
 		{
-			inGameSession.OnRequestEnterGame(enterPacket);
+			battleSession.OnRequestEnterGame(enterPacket);
 		}
 	}
 
 	private void ON_REQ_LEAVE_GAME(PacketSession session, IPacket packet)
 	{
-
+		if (session is BattleSession battleSession)
+		{
+			battleSession.OnRequestLeaveGame();
+		}
 	}
 
 	private void ON_REQ_PLAYER_LIST(PacketSession session, IPacket packet)
 	{
-
+		if (session is BattleSession battleSession)
+		{
+			battleSession.OnRequestPlayerList();
+		}
 	}
 }

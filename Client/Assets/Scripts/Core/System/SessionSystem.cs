@@ -98,6 +98,8 @@ public class SessionSystem : MonoSystem
 
 		foreach (var packet in packetQueue.PopAll())
 		{
+			Debug.Log($"RECEIVE : {packet.GetType()}");
+
 			foreach (var receiver in packetReceivers)
 			{
 				receiver.OnReceive(packet);
@@ -113,6 +115,7 @@ public class SessionSystem : MonoSystem
 			return;
 		}
 
+		Debug.Log($"SEND : {packet.GetType()}");
 		packetSession.Send(packet.Write());
 	}
 
