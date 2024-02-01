@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SyncSystem : MonoSystem, IPacketReceiver
+public abstract class SyncSystem : MonoSystem, IPacketReceiver
 {
 	[SerializeField] protected SessionSystem sessionSystem = null;
 

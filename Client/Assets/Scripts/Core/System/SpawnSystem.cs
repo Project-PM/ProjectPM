@@ -18,6 +18,11 @@ public class SpawnSystem : SyncSystem
 		// sessionSystem.TryConnect();
 	}
 
+	public void Spawn()
+	{
+		sessionSystem.TryConnect();
+	}
+
 	public override void OnReceive(IPacket packet)
 	{
 		if (packet is RES_CONNECTED connectedPacket)

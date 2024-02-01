@@ -98,7 +98,7 @@ public class SessionSystem : MonoSystem
 
 		foreach (var packet in packetQueue.PopAll())
 		{
-			Debug.Log($"RECEIVE : {packet.GetType()}");
+			Debug.Log($"[RECEIVE] {Time.frameCount} : {packet.GetType()}");
 
 			foreach (var receiver in packetReceivers)
 			{
@@ -115,7 +115,7 @@ public class SessionSystem : MonoSystem
 			return;
 		}
 
-		Debug.Log($"SEND : {packet.GetType()}");
+		Debug.Log($"[SEND] {Time.frameCount} :  {packet.GetType()}");
 		packetSession.Send(packet.Write());
 	}
 
