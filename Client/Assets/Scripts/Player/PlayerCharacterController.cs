@@ -23,6 +23,7 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	public event Action onAttack = null;
 
 	private bool isEnable = false;
+	private ENUM_CHARACTER_TYPE characterType = ENUM_CHARACTER_TYPE.None;
 
 	private REQ_FRAME_INPUT currentFrameInput = null;
 
@@ -31,10 +32,14 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 		this.isEnable = isEnable;
 	}
 
-	private void Awake()
+	public void SetCharacter(ENUM_CHARACTER_TYPE characterType)
 	{
-		// 스테이트 머신 활성화
-		PlayerControllerState.Initialize(animator);
+		this.characterType = characterType;
+	}
+
+	private void Start()
+	{
+		CharacterControllerState.Initialize(characterType, animator);
 	}
 
 	private void Update()

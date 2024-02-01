@@ -9,7 +9,7 @@ public class PlayerGroundCheckComponent : MonoBehaviour
 	[SerializeField] private BoxCollider2D boxCollider;
     [SerializeField] private LayerMask GroundLayers;
 
-    [SerializeField] private float GroundedRadius = 0.28f;
+    [SerializeField] private float GroundedRadius = 0.35f;
 	[SerializeField] private float Gravity = -0.1f;
 	[SerializeField] private float JumpHeight = 0.1f;
 
@@ -28,7 +28,7 @@ public class PlayerGroundCheckComponent : MonoBehaviour
 
 	private void OnEnable()
 	{
-		GroundedOffset = boxCollider.size.y;
+		GroundedOffset = boxCollider.size.y / -2 + boxCollider.offset.y;
 
 		controller.IsGrounded += IsGrounded;
 		controller.IsFallTimeout += IsFallTimeout;
@@ -64,7 +64,7 @@ public class PlayerGroundCheckComponent : MonoBehaviour
 
 	private bool IsGrounded()
 	{
-		Vector2 startPos = new Vector2(transform.position.x, transform.position.y - GroundedOffset);
+		Vector2 startPos = new Vector2(transform.position.x, transform.position.y + GroundedOffset);
 
 		Debug.DrawRay(startPos, Vector2.down * GroundedRadius);
 		return Physics2D.Raycast(startPos, Vector2.down, GroundedRadius, GroundLayers);

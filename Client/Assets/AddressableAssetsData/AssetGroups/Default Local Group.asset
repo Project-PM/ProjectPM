@@ -38,7 +38,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b6619c14a21b3cc4c841c13c66c84682
-    m_Address: Assets/Bundle/Animation/CharacterBase/Idle.anim
+    m_Address: Assets/Bundle/Animation/Character/RedMan/RedMan_Idle.anim
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

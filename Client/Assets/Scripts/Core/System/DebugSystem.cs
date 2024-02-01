@@ -5,6 +5,7 @@ using UnityEngine;
 public class DebugSystem : MonoSystem
 {
     [SerializeField] private bool isEnable = false;
+    [SerializeField] private bool isUsableInput = false;
 	[SerializeField] private PlayerComponent playerComponentPrefab = null;
 
     public override void OnEnter()
@@ -13,9 +14,14 @@ public class DebugSystem : MonoSystem
 
         if (isEnable)
         {
-			var playerComponent = Instantiate(playerComponentPrefab);
+            var playerComponent = FindObjectOfType<PlayerComponent>();
+            if (playerComponent == null)
+            {
+				playerComponent = Instantiate(playerComponentPrefab);
+			}
+
 			playerComponent.SetPlayerInfo(1000, ENUM_CHARACTER_TYPE.Red);
-            playerComponent.SetInput(true);
+            playerComponent.SetInput(isUsableInput);
 		}
     }
 }

@@ -2,25 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControllerState : StateMachineBehaviour
+public class CharacterControllerState : StateMachineBehaviour
 {
 	protected PlayerCharacterController controller = null;
+	protected ENUM_CHARACTER_TYPE characterType = ENUM_CHARACTER_TYPE.None;
 
-	public static void Initialize(Animator ownerAnimator)
+	public static void Initialize(ENUM_CHARACTER_TYPE characterType, Animator ownerAnimator)
 	{
 		var controller = ownerAnimator.GetComponent<PlayerCharacterController>();
 		if (controller == null)
 			return;
 
-		var states = ownerAnimator.GetBehaviours<PlayerControllerState>();
+		var states = ownerAnimator.GetBehaviours<CharacterControllerState>();
 		foreach (var state in states)
 		{
-			state.InitializeInternal(controller);
+			state.InitializeInternal(characterType, controller);
 		}
 	}
 
-	private void InitializeInternal(PlayerCharacterController controller)
+	private void InitializeInternal(ENUM_CHARACTER_TYPE characterType, PlayerCharacterController controller)
 	{
+		this.characterType = characterType;
 		this.controller = controller;
 	}
 

@@ -23,10 +23,7 @@ public class PlayerComponent : MonoBehaviour
         this.playerId = playerId;
         this.characterType = characterType;
 
-        foreach (var actionComponent in GetComponentsInChildren<PlayerFrameActionComponent>())
-        {
-            actionComponent.SetPlayerCharacterType(characterType);
-        }
+        playerController.SetCharacter(characterType);
 	}
 
     public void SetInput(bool isEnable)

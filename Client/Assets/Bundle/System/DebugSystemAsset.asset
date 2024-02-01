@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: DebugSystemAsset
   m_EditorClassIdentifier: 
   isEnable: 1
+  isUsableInput: 1
   playerComponentPrefab: {fileID: 2480274465849677282, guid: 280141d5dc0a46943a6fb61a33fd8170, type: 3}
