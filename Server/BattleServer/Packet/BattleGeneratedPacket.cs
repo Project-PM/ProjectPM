@@ -13,6 +13,8 @@ public enum BattlePacketID
 	RES_BROADCAST_LEAVE_GAME = 5,
 	REQ_PLAYER_LIST = 6,
 	RES_PLAYER_LIST = 7,
+	REQ_FRAME_INPUT = 8,
+	RES_FRAME_INPUT = 9,
 	
 }
 
@@ -275,6 +277,157 @@ public class RES_PLAYER_LIST : IPacket
 		count += sizeof(ushort);
 		foreach (Player player in this.players)
 			player.Write(segment, ref count);
+
+		Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+
+		return SendBufferHelper.Close(count);
+	}
+}
+
+public class REQ_FRAME_INPUT : IPacket
+{
+	public int frameNumber;
+	public int playerId;
+	public float moveX;
+	public float moveY;
+	public int attackKey;
+	public bool isJump;
+	public bool isGuard;
+
+	public ushort Protocol { get { return (ushort)BattlePacketID.REQ_FRAME_INPUT; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		this.frameNumber = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+		count += sizeof(int);
+		this.playerId = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+		count += sizeof(int);
+		this.moveX = BitConverter.ToSingle(segment.Array, segment.Offset + count);
+		count += sizeof(float);
+		this.moveY = BitConverter.ToSingle(segment.Array, segment.Offset + count);
+		count += sizeof(float);
+		this.attackKey = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+		count += sizeof(int);
+		this.isJump = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
+		count += sizeof(bool);
+		this.isGuard = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
+		count += sizeof(bool);
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+
+		count += sizeof(ushort);
+		Array.Copy(BitConverter.GetBytes((ushort)BattlePacketID.REQ_FRAME_INPUT), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+		count += sizeof(ushort);
+		Array.Copy(BitConverter.GetBytes(this.frameNumber), 0, segment.Array, segment.Offset + count, sizeof(int));
+		count += sizeof(int);
+		Array.Copy(BitConverter.GetBytes(this.playerId), 0, segment.Array, segment.Offset + count, sizeof(int));
+		count += sizeof(int);
+		Array.Copy(BitConverter.GetBytes(this.moveX), 0, segment.Array, segment.Offset + count, sizeof(float));
+		count += sizeof(float);
+		Array.Copy(BitConverter.GetBytes(this.moveY), 0, segment.Array, segment.Offset + count, sizeof(float));
+		count += sizeof(float);
+		Array.Copy(BitConverter.GetBytes(this.attackKey), 0, segment.Array, segment.Offset + count, sizeof(int));
+		count += sizeof(int);
+		Array.Copy(BitConverter.GetBytes(this.isJump), 0, segment.Array, segment.Offset + count, sizeof(bool));
+		count += sizeof(bool);
+		Array.Copy(BitConverter.GetBytes(this.isGuard), 0, segment.Array, segment.Offset + count, sizeof(bool));
+		count += sizeof(bool);
+
+		Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+
+		return SendBufferHelper.Close(count);
+	}
+}
+
+public class RES_FRAME_INPUT : IPacket
+{
+	public int frameNumber;
+	public class PlayerInput
+	{
+		public int playerId;
+		public float moveX;
+		public float moveY;
+		public int attackKey;
+		public bool isJump;
+		public bool isGuard;
+	
+		public void Read(ArraySegment<byte> segment, ref ushort count)
+		{
+			this.playerId = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+			count += sizeof(int);
+			this.moveX = BitConverter.ToSingle(segment.Array, segment.Offset + count);
+			count += sizeof(float);
+			this.moveY = BitConverter.ToSingle(segment.Array, segment.Offset + count);
+			count += sizeof(float);
+			this.attackKey = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+			count += sizeof(int);
+			this.isJump = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
+			count += sizeof(bool);
+			this.isGuard = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
+			count += sizeof(bool);
+		}
+	
+		public bool Write(ArraySegment<byte> segment, ref ushort count)
+		{
+			bool success = true;
+			Array.Copy(BitConverter.GetBytes(this.playerId), 0, segment.Array, segment.Offset + count, sizeof(int));
+			count += sizeof(int);
+			Array.Copy(BitConverter.GetBytes(this.moveX), 0, segment.Array, segment.Offset + count, sizeof(float));
+			count += sizeof(float);
+			Array.Copy(BitConverter.GetBytes(this.moveY), 0, segment.Array, segment.Offset + count, sizeof(float));
+			count += sizeof(float);
+			Array.Copy(BitConverter.GetBytes(this.attackKey), 0, segment.Array, segment.Offset + count, sizeof(int));
+			count += sizeof(int);
+			Array.Copy(BitConverter.GetBytes(this.isJump), 0, segment.Array, segment.Offset + count, sizeof(bool));
+			count += sizeof(bool);
+			Array.Copy(BitConverter.GetBytes(this.isGuard), 0, segment.Array, segment.Offset + count, sizeof(bool));
+			count += sizeof(bool);
+			return success;
+		}	
+	}
+	public List<PlayerInput> playerInputs = new List<PlayerInput>();
+
+	public ushort Protocol { get { return (ushort)BattlePacketID.RES_FRAME_INPUT; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		this.frameNumber = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+		count += sizeof(int);
+		this.playerInputs.Clear();
+		ushort playerInputLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+		count += sizeof(ushort);
+		for (int i = 0; i < playerInputLen; i++)
+		{
+			PlayerInput playerInput = new PlayerInput();
+			playerInput.Read(segment, ref count);
+			playerInputs.Add(playerInput);
+		}
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+
+		count += sizeof(ushort);
+		Array.Copy(BitConverter.GetBytes((ushort)BattlePacketID.RES_FRAME_INPUT), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+		count += sizeof(ushort);
+		Array.Copy(BitConverter.GetBytes(this.frameNumber), 0, segment.Array, segment.Offset + count, sizeof(int));
+		count += sizeof(int);
+		Array.Copy(BitConverter.GetBytes((ushort)this.playerInputs.Count), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+		count += sizeof(ushort);
+		foreach (PlayerInput playerInput in this.playerInputs)
+			playerInput.Write(segment, ref count);
 
 		Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
 

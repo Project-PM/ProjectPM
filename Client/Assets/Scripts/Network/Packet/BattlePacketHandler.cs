@@ -24,4 +24,9 @@ public partial class BattlePacketManager
 	{
 
 	}
+
+	public void ON_RES_FRAME_INPUT(PacketSession session, IPacket packet)
+	{
+
+	}
 }

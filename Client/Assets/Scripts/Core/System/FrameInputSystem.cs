@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -77,97 +78,135 @@ public class JumpInputData : PressInputData
 }
 
 
-public class REQ_FRAME_INPUT
+public class FrameInputSystem : SyncSystem
 {
-	public readonly Vector2 moveVec;
-	public readonly ENUM_ATTACK_KEY pressedAttackKey;
-	public readonly bool isJump;
-	public readonly bool isGuard;
-
-	public REQ_FRAME_INPUT(Vector2 moveVec, ENUM_ATTACK_KEY pressedAttackKey, bool isJump, bool isGuard, int targetFrameCount) 
-	{
-		this.moveVec = moveVec;
-		this.pressedAttackKey = pressedAttackKey;
-		this.isJump = isJump;
-		this.isGuard = isGuard;
-	}
-}
-
-public class FrameInputSystem : MonoSystem
-{
-	public float MoveThreshold { get; private set; } = 1;
-    public JoystickType JoystickType { get; private set; } = JoystickType.Fixed;
-    public float HandleRange { get; private set; } = 1;
-    public float DeadZone { get; private set; } = 0;
-    public AxisOptions AxisOptions { get; private set; } = AxisOptions.Both;
-    public bool SnapX { get; private set; } = true;
-	public bool SnapY { get; private set; } = true;
+	[SerializeField] private bool isOfflineMode = true;
 
 	private Queue<FrameInputData> inputDataQueue = new Queue<FrameInputData>();
-	private REQ_FRAME_INPUT currentFrameInput = null;
 
-	public override void OnEnter()
-	{
-		SetJoystick();
-	}
+	private int playerId = -1;
 
-	private void SetJoystick()
+	private int sendFrameNumber = 1;
+	private RES_FRAME_INPUT receiveFrameInput = new RES_FRAME_INPUT();
+
+	public event Action<RES_FRAME_INPUT> onReceiveFrameInput = null;
+
+	public override void OnEnter(SystemParam param)
 	{
-		var joyStick = UnityEngine.Object.FindObjectOfType<VariableJoystick>();
-		if (joyStick != null)
-		{
-			joyStick.SetMode(JoystickType);
-		}
+		Application.targetFrameRate = 30;
+		playerId = param.playerId;
+		sendFrameNumber = 1;
 	}
 
 	public override void OnExit()
 	{
-		
+		playerId = -1;
 	}
 
-	public void OnMoveInputChanged(Vector2 input, int frameCount)
+	public void OnMoveInputChanged(Vector2 input)
 	{
-		float x = SnapX ? SnapFloat(input, input.x, AxisOptions.Horizontal) : input.x;
-		float y = SnapY ? SnapFloat(input, input.y, AxisOptions.Vertical) : input.y;
-
-		var inputData = new MoveInputData(new Vector2(x, y), frameCount);
+		var inputData = new MoveInputData(input, sendFrameNumber);
 		inputDataQueue.Enqueue(inputData);
 	}
 
-	public void OnGuardInputChanged(bool isPress, int frameCount)
+	public void OnGuardInputChanged(bool isPress)
 	{
-		var inputData = new GuardInputData(isPress, frameCount);
+		var inputData = new GuardInputData(isPress, sendFrameNumber);
 		inputDataQueue.Enqueue(inputData);
 	}
 
-	public void OnAttackInputChanged(ENUM_ATTACK_KEY key, bool isAttack, int frameCount)
+	public void OnAttackInputChanged(ENUM_ATTACK_KEY key, bool isAttack)
 	{
-		var inputData = new AttackInputData(key, isAttack, frameCount);
+		var inputData = new AttackInputData(key, isAttack, sendFrameNumber);
 		inputDataQueue.Enqueue(inputData);
 	}
 
-    public void OnJumpInputChanged(bool isPress, int frameCount)
+    public void OnJumpInputChanged(bool isPress)
     {
-        var inputData = new JumpInputData(isPress, frameCount);
+        var inputData = new JumpInputData(isPress, sendFrameNumber);
         inputDataQueue.Enqueue(inputData);
     }
 
-    /// <summary>
-    /// 여기를 바로 REQ로 보낸다.
-    /// RES로 받은 Output 데이터를 캐릭터에게 보냅니다.
-    /// </summary>
-    /// <param name="targetFrameCount"></param>
-    /// <returns></returns>
-    /// 
-    public REQ_FRAME_INPUT MakeFakePacket()
+    public RES_FRAME_INPUT MakeFakePacket(int frameNumber)
 	{
-		return MakeFrameInputPacket(Time.frameCount);
+		var sendInput = MakeFrameInputPacket(frameNumber);
+		if (sendInput == null)
+			return null;
+
+		var receiveFrameInput = new RES_FRAME_INPUT();
+		receiveFrameInput.frameNumber = sendInput.frameNumber;
+
+		var playerInput = new RES_FRAME_INPUT.PlayerInput();
+		playerInput.playerId = playerId;
+		playerInput.moveX = sendInput.moveX;
+		playerInput.moveY = sendInput.moveY;
+		playerInput.attackKey = sendInput.attackKey;
+		playerInput.isJump = sendInput.isJump;
+		playerInput.isGuard = sendInput.isGuard;
+
+		receiveFrameInput.playerInputs = new List<RES_FRAME_INPUT.PlayerInput>
+		{
+			playerInput
+		};
+
+		return receiveFrameInput;
 	}
 
-	private REQ_FRAME_INPUT MakeFrameInputPacket(int targetFrameCount)
+	public override void OnPrevUpdate(int deltaFrameCount, float deltaTime)
 	{
-		Vector2 moveVec = currentFrameInput != null ? currentFrameInput.moveVec : Vector2.zero;
-		ENUM_ATTACK_KEY pressedAttackKey = ENUM_ATTACK_KEY.MAX;
+		base.OnPrevUpdate(deltaFrameCount, deltaTime);
+
+		if (isOfflineMode)
+		{
+			receiveFrameInput = MakeFakePacket(sendFrameNumber);
+
+			sendFrameNumber = receiveFrameInput.frameNumber + 1;
+			onReceiveFrameInput?.Invoke(receiveFrameInput);
+		}
+	}
+
+	public override void OnLateUpdate(int deltaFrameCount, float deltaTime)
+	{
+		base.OnLateUpdate(deltaFrameCount, deltaTime);
+
+		if (IsReceivedPacket() == false)
+			return;
+
+		SendPacket();
+	}
+
+	private void SendPacket()
+	{
+		int nextFrameNumber = receiveFrameInput.frameNumber + 1;
+
+		var sendInput = MakeFrameInputPacket(nextFrameNumber);
+		if (sendInput == null)
+			return;
+
+		if (Send(sendInput) == false)
+			return;
+
+		sendFrameNumber = nextFrameNumber;
+	}
+
+	private bool IsReceivedPacket()
+	{
+		return isOfflineMode == false && receiveFrameInput.frameNumber == sendFrameNumber;
+	}
+
+	public override void OnReceive(IPacket packet)
+	{
+		if (packet is RES_FRAME_INPUT frameInput)
+		{
+			receiveFrameInput = frameInput;
+			onReceiveFrameInput?.Invoke(frameInput);
+		}
+	}
+
+	private REQ_FRAME_INPUT MakeFrameInputPacket(int frameNumber)
+	{
+		Vector2 moveVec = Vector2.zero;
+		ENUM_ATTACK_KEY pressedAttackKey = ENUM_ATTACK_KEY.NONE;
 		bool isJump = false;
 		bool isGuard = false;
 
@@ -194,60 +233,16 @@ public class FrameInputSystem : MonoSystem
 			}
 		}
 
-        currentFrameInput = new REQ_FRAME_INPUT(moveVec, pressedAttackKey, isJump, isGuard, targetFrameCount);
-		return currentFrameInput;
+        var sendInput = new REQ_FRAME_INPUT();
 
+		sendInput.playerId = playerId;
+		sendInput.frameNumber = frameNumber;
+		sendInput.moveX = moveVec.x;
+		sendInput.moveY = moveVec.y;
+		sendInput.attackKey = (int)pressedAttackKey;
+		sendInput.isGuard = isGuard;
+		sendInput.isJump = isJump;
+
+		return sendInput;
     }
-
-	private float SnapFloat(Vector2 input, float value, AxisOptions snapAxis)
-	{
-		if (value == 0)
-			return value;
-
-		if (AxisOptions == AxisOptions.Both)
-		{
-			float angle = Vector2.Angle(input, Vector2.up);
-			if (snapAxis == AxisOptions.Horizontal)
-			{
-				if (angle < 22.5f || angle > 157.5f)
-				{
-					return 0;
-				}
-				else
-				{
-					return (value > 0) ? 1 : -1;
-				}
-			}
-			else if (snapAxis == AxisOptions.Vertical)
-			{
-				if (angle > 67.5f && angle < 112.5f)
-				{
-					return 0;
-				}
-				else
-				{
-					return (value > 0) ? 1 : -1;
-				}
-			}
-			else
-			{
-				return value;
-			}
-		}
-		else
-		{
-			if (value > 0)
-			{
-				return 1;
-			}
-			else if (value < 0)
-			{
-				return -1;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-	}
 }

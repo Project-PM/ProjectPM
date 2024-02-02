@@ -23,6 +23,8 @@ public partial class BattlePacketManager : Singleton<BattlePacketManager>
 		_handler.Add((ushort)BattlePacketID.REQ_LEAVE_GAME, ON_REQ_LEAVE_GAME);
 		_makeFunc.Add((ushort)BattlePacketID.REQ_PLAYER_LIST, MakePacket<REQ_PLAYER_LIST>);
 		_handler.Add((ushort)BattlePacketID.REQ_PLAYER_LIST, ON_REQ_PLAYER_LIST);
+		_makeFunc.Add((ushort)BattlePacketID.REQ_FRAME_INPUT, MakePacket<REQ_FRAME_INPUT>);
+		_handler.Add((ushort)BattlePacketID.REQ_FRAME_INPUT, ON_REQ_FRAME_INPUT);
 
 	}
 

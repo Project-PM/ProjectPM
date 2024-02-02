@@ -34,7 +34,7 @@ public static class AssetLoadHelper
 
 public abstract class MonoSystem : ScriptableObject
 {
-    public virtual void OnEnter()
+    public virtual void OnEnter(SystemParam param)
     {
 
     }
@@ -44,8 +44,18 @@ public abstract class MonoSystem : ScriptableObject
 
     }
 
+    public virtual void OnPrevUpdate(int deltaFrameCount, float deltaTime)
+    {
+
+    }
+
     public virtual void OnUpdate(int deltaFrameCount, float deltaTime)
     {
         
+    }
+
+    public virtual void OnLateUpdate(int deltaFrameCount, float deltaTime)
+    {
+
     }
 }

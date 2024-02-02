@@ -50,9 +50,9 @@ public class SessionSystem : MonoSystem
 	private List<IPacketReceiver> packetReceivers = new();
 	private Queue<IPacketReceiver> pendingPacketReceiverQueue = new();
 	
-    public override void OnEnter()
+    public override void OnEnter(SystemParam param)
     {
-        base.OnEnter();
+        base.OnEnter(param);
 
         connector = new SessionConnector(SessionHelper.GetProtocolType(sessionType), reconnectCount);
 		BattlePacketManager.Instance._eventHandler += OnReceivePacket;
@@ -65,9 +65,9 @@ public class SessionSystem : MonoSystem
 		base.OnExit();
 	}
 
-	public override void OnUpdate(int deltaFrameCount, float deltaTime)
+	public override void OnPrevUpdate(int deltaFrameCount, float deltaTime)
 	{
-		base.OnUpdate(deltaFrameCount, deltaTime);
+		base.OnPrevUpdate(deltaFrameCount, deltaTime);
 
 		if (IsConnectedSession() == false)
 			return;
@@ -107,16 +107,14 @@ public class SessionSystem : MonoSystem
 		}
 	}
 
-	public void Send(IPacket packet)
+	public bool Send(IPacket packet)
 	{
 		if (packetSession == null)
-		{
-			Debug.LogError($"{packet.GetType()} : 세션이 활성화되지 않은 상태에서 패킷 전송을 시도합니다.");
-			return;
-		}
+			return false;
 
 		Debug.Log($"[SEND] {Time.frameCount} :  {packet.GetType()}");
 		packetSession.Send(packet.Write());
+		return true;
 	}
 
 	public void RegisterPacketReceiver(IPacketReceiver receiver)

@@ -6,9 +6,9 @@ public abstract class SyncSystem : MonoSystem, IPacketReceiver
 {
 	[SerializeField] protected SessionSystem sessionSystem = null;
 
-	public override void OnEnter()
+	public override void OnEnter(SystemParam systemParam)
 	{
-		base.OnEnter();
+		base.OnEnter(systemParam);
 
 		sessionSystem.RegisterPacketReceiver(this);
 	}
@@ -20,9 +20,9 @@ public abstract class SyncSystem : MonoSystem, IPacketReceiver
 		sessionSystem.UnRegisterPacketReceiver(this);
 	}
 
-	public void Send(IPacket packet)
+	public bool Send(IPacket packet)
 	{
-		sessionSystem.Send(packet);
+		return sessionSystem.Send(packet);
 	}
 
 	public virtual void OnReceive(IPacket packet)

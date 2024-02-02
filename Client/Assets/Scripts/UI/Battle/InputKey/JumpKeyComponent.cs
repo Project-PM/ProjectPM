@@ -8,12 +8,12 @@ public class JumpKeyComponent : InputKeyComponent
     public override void OnDrag(PointerEventData eventData)
     {
         base.OnDrag(eventData);
-        System.OnJumpInputChanged(isPressed, Time.frameCount);
+        System.OnJumpInputChanged(isPressed);
     }
 
     public override void OnPointerUp(PointerEventData eventData)
     {
         base.OnPointerUp(eventData);
-        System.OnJumpInputChanged(isPressed, Time.frameCount);
+        System.OnJumpInputChanged(isPressed);
     }
 }

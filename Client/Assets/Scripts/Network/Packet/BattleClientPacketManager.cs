@@ -25,6 +25,8 @@ public partial class BattlePacketManager : Singleton<BattlePacketManager>
 		_handler.Add((ushort)BattlePacketID.RES_BROADCAST_LEAVE_GAME, ON_RES_BROADCAST_LEAVE_GAME);
 		_makeFunc.Add((ushort)BattlePacketID.RES_PLAYER_LIST, MakePacket<RES_PLAYER_LIST>);
 		_handler.Add((ushort)BattlePacketID.RES_PLAYER_LIST, ON_RES_PLAYER_LIST);
+		_makeFunc.Add((ushort)BattlePacketID.RES_FRAME_INPUT, MakePacket<RES_FRAME_INPUT>);
+		_handler.Add((ushort)BattlePacketID.RES_FRAME_INPUT, ON_RES_FRAME_INPUT);
 
 	}
 

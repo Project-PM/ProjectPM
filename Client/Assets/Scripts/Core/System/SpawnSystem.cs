@@ -11,9 +11,9 @@ public class SpawnSystem : SyncSystem
 
 	private Dictionary<int, PlayerComponent> playerDictionary = new Dictionary<int, PlayerComponent>();
 
-	public override void OnEnter()
+	public override void OnEnter(SystemParam param)
 	{
-		base.OnEnter();
+		base.OnEnter(param);
 
 		// sessionSystem.TryConnect();
 	}
@@ -83,8 +83,6 @@ public class SpawnSystem : SyncSystem
 			return null;
 
 		playerComponent.SetPlayerInfo(playerId, ENUM_CHARACTER_TYPE.Red);
-		playerComponent.SetInput(isSelf);
-
 		return playerComponent;
 	}
 }

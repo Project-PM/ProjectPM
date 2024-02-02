@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -22,14 +23,12 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	public event Action<Vector2> onMove = null;
 	public event Action onAttack = null;
 
-	private bool isEnable = false;
+	private int playerId = -1;
 	private ENUM_CHARACTER_TYPE characterType = ENUM_CHARACTER_TYPE.None;
 
-	private REQ_FRAME_INPUT currentFrameInput = null;
-
-	public void SetInput(bool isEnable)
+	public void SetPlayerId(int playerId)
 	{
-		this.isEnable = isEnable;
+		this.playerId = playerId;
 	}
 
 	public void SetCharacter(ENUM_CHARACTER_TYPE characterType)
@@ -42,22 +41,28 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 		CharacterControllerState.Initialize(characterType, animator);
 	}
 
-	private void Update()
+	private void OnEnable()
 	{
-		if (isEnable)
-		{
-			currentFrameInput = System.MakeFakePacket();
-		}
-
-		CheckFall();
-		CheckGrounded();
-		CheckMove();
-		CheckJump();
-		CheckAttack();
-
+		System.onReceiveFrameInput += OnReceiveFrameInput;
 	}
 
-	private void CheckGrounded()
+	private void OnDisable()
+	{
+		System.onReceiveFrameInput -= OnReceiveFrameInput;
+	}
+
+	private void OnReceiveFrameInput(RES_FRAME_INPUT frameInput)
+	{
+		RES_FRAME_INPUT.PlayerInput playerInput = frameInput.playerInputs.FirstOrDefault(i => i.playerId == playerId);
+		
+		CheckFall(playerInput);
+		CheckGrounded(playerInput);
+		CheckMove(playerInput);
+		CheckJump(playerInput);
+		CheckAttack(playerInput);
+	}
+
+	private void CheckGrounded(RES_FRAME_INPUT.PlayerInput playerInput)
 	{
 		bool isGrounded = IsGrounded();
 		if (isGrounded)
@@ -66,20 +71,14 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 		}
 	}
 
-	private void CheckMove()
+	private void CheckMove(RES_FRAME_INPUT.PlayerInput playerInput)
 	{
-		if (currentFrameInput == null)
-			return;
-
-		onMove?.Invoke(new Vector2(currentFrameInput.moveVec.x, 0));
+		onMove?.Invoke(new Vector2(playerInput.moveX, 0));
 	}
 
-	private void CheckJump()
+	private void CheckJump(RES_FRAME_INPUT.PlayerInput playerInput)
 	{
-		if (currentFrameInput == null)
-			return;
-
-		if (currentFrameInput.isJump)
+		if (playerInput.isJump)
 		{
             if (IsGrounded())
             {
@@ -91,8 +90,7 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
         }
 	}
 
-
-	private void CheckFall()
+	private void CheckFall(RES_FRAME_INPUT.PlayerInput playerInput)
 	{
 		if (IsGrounded() == false)
 		{
@@ -103,12 +101,9 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 		}
 	}
 
-	private void CheckAttack()
+	private void CheckAttack(RES_FRAME_INPUT.PlayerInput playerInput)
 	{
-		if (currentFrameInput == null) 
-			return;
-
-		if (currentFrameInput.pressedAttackKey == ENUM_ATTACK_KEY.ATTACK)
+		if (playerInput.attackKey == (int)ENUM_ATTACK_KEY.ATTACK)
 		{
 			animator.Play("Attack1");
 		}

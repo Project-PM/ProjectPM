@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class DebugSystem : MonoSystem
 {
-    [SerializeField] private bool isUsableInput = false;
     [SerializeField] private bool useGravity = true;
 
 	[SerializeField] private PlayerComponent playerComponentPrefab = null;
+
+	private int playerId = -1;
+
+	public override void OnEnter(SystemParam param)
+	{
+		playerId = param.playerId;
+	}
 
     public void Spawn()
     {
@@ -17,8 +23,7 @@ public class DebugSystem : MonoSystem
 			playerComponent = Instantiate(playerComponentPrefab);
 		}
 
-		playerComponent.SetPlayerInfo(1000, ENUM_CHARACTER_TYPE.Red);
-		playerComponent.SetInput(isUsableInput);
+		playerComponent.SetPlayerInfo(playerId, ENUM_CHARACTER_TYPE.Red);
 
 		var groundCheckComponent = FindObjectOfType<PlayerGroundCheckComponent>();
 		if (groundCheckComponent == null)

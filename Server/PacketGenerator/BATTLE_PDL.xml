@@ -24,4 +24,25 @@
 			<int name="playerId"/>
 		</list>
 	</packet>
+	<packet name="REQ_FRAME_INPUT">
+		<int name="frameNumber"/>
+		<int name="playerId"/>
+		<float name="moveX"/>
+		<float name="moveY"/>
+		<int name="attackKey"/>
+		<bool name="isJump"/>
+		<bool name="isGuard"/>
+	</packet>
+	<packet name="RES_FRAME_INPUT">
+		<int name="frameNumber"/>
+		<list name="playerInput">
+			<int name="playerId"/>
+			<float name="moveX"/>
+			<float name="moveY"/>
+			<int name="attackKey"/>
+			<bool name="isJump"/>
+			<bool name="isGuard"/>
+		</list>
+	</packet>
+			
 </PDL>

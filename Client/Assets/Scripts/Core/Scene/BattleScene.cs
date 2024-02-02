@@ -3,12 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class SystemParam
+{
+    public readonly int playerId; 
+
+    public SystemParam(int playerId)
+    {
+        this.playerId = playerId;
+    }
+}
+
 public class BattleScene : MonoBehaviour
 {
     [SerializeField] private SessionSystem sessionSystem;
     [SerializeField] private FrameInputSystem frameInputSystem;
     [SerializeField] private DebugSystem debugSystem;
     [SerializeField] private SpawnSystem spawnSystem;
+
+    private SystemParam systemParam = new SystemParam(1000);
 
 	private int currentFrameCount = 0;
     private float currentDeltaTime = 0;
@@ -19,16 +31,14 @@ public class BattleScene : MonoBehaviour
         frameInputSystem = AssetLoadHelper.GetSystemAsset<FrameInputSystem>();
         debugSystem = AssetLoadHelper.GetSystemAsset<DebugSystem>();
 		spawnSystem = AssetLoadHelper.GetSystemAsset<SpawnSystem>();
-
 	}
 
     private void Start()
     {
-        sessionSystem.OnEnter();
-        frameInputSystem.OnEnter();
-        debugSystem.OnEnter();
-		spawnSystem.OnEnter();
-
+        sessionSystem.OnEnter(systemParam);
+        frameInputSystem.OnEnter(systemParam);
+        debugSystem.OnEnter(systemParam);
+		spawnSystem.OnEnter(systemParam);
 	}
 
     private void Update()
@@ -36,13 +46,21 @@ public class BattleScene : MonoBehaviour
         currentFrameCount++;
         currentDeltaTime += Time.deltaTime;
 
-        sessionSystem.OnUpdate(currentFrameCount, currentDeltaTime);
+        frameInputSystem.OnPrevUpdate(currentFrameCount, currentDeltaTime);
+
+
+		sessionSystem.OnUpdate(currentFrameCount, currentDeltaTime);
         frameInputSystem.OnUpdate(currentFrameCount, currentDeltaTime);
         debugSystem.OnUpdate(currentFrameCount, currentDeltaTime);
 		spawnSystem.OnUpdate(currentFrameCount, currentDeltaTime);
 	}
 
-    private void OnDestroy()
+	private void LateUpdate()
+	{
+		frameInputSystem.OnLateUpdate(currentFrameCount, currentDeltaTime);
+	}
+
+	private void OnDestroy()
     {
         sessionSystem.OnExit();
         frameInputSystem.OnExit();
