@@ -31,4 +31,9 @@ public partial class BattlePacketManager
 			battleSession.OnRequestPlayerList();
 		}
 	}
+
+	private void ON_REQ_FRAME_INPUT(PacketSession session, IPacket packet)
+	{
+
+	}
 }
