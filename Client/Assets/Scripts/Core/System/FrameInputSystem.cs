@@ -88,13 +88,13 @@ public class FrameInputSystem : SyncSystem
 
 	public event Action<RES_FRAME_INPUT> onReceiveFrameInput = null;
 
-	private int sendFrameNumber = 0;
+	private int sendFrameNumber = -1;
 
 	public override void OnEnter(SystemParam param)
 	{
 		base.OnEnter(param);
 
-		sendFrameNumber = 0;
+		sendFrameNumber = -1;
 		Application.targetFrameRate = targetFrameRate;
 	}
 
@@ -159,6 +159,8 @@ public class FrameInputSystem : SyncSystem
 #if UNITY_EDITOR
 		if (isOfflineMode)
 		{
+			sendFrameNumber = receiveFrameInput.frameNumber + 1;
+
 			receiveFrameInput = MakeFakePacket(sendFrameNumber);
 			onReceiveFrameInput?.Invoke(receiveFrameInput);
 		}
@@ -181,12 +183,15 @@ public class FrameInputSystem : SyncSystem
 		if (sendInput == null)
 			return;
 
-		Send(sendInput);
+		if (Send(sendInput) == false)
+			return;
+
+		sendFrameNumber = sendInput.frameNumber;
 	}
 
 	private bool IsReceivedPacket()
 	{
-		return isOfflineMode == false && receiveFrameInput.frameNumber == sendFrameNumber;
+		return isOfflineMode == false && receiveFrameInput.frameNumber == sendFrameNumber + 1;
 	}
 
 	public override void OnReceive(IPacket packet)
@@ -194,8 +199,6 @@ public class FrameInputSystem : SyncSystem
 		if (packet is RES_FRAME_INPUT frameInput)
 		{
 			receiveFrameInput = frameInput;
-			sendFrameNumber = frameInput.frameNumber;
-
 			onReceiveFrameInput?.Invoke(frameInput);
 		}
 	}
