@@ -8,13 +8,6 @@ public class DebugSystem : MonoSystem
 
 	[SerializeField] private PlayerComponent playerComponentPrefab = null;
 
-	private int playerId = -1;
-
-	public override void OnEnter(SystemParam param)
-	{
-		playerId = param.playerId;
-	}
-
     public void Spawn()
     {
 		var playerComponent = FindObjectOfType<PlayerComponent>();
