@@ -81,7 +81,6 @@ public class JumpInputData : PressInputData
 public class FrameInputSystem : SyncSystem
 {
 	[SerializeField] private bool isOfflineMode = true;
-	[SerializeField] private int sendFrameNumber = 0;
 	[SerializeField] private int targetFrameRate = 30;
 
 	private Queue<FrameInputData> inputDataQueue = new Queue<FrameInputData>();
@@ -89,10 +88,13 @@ public class FrameInputSystem : SyncSystem
 
 	public event Action<RES_FRAME_INPUT> onReceiveFrameInput = null;
 
+	private int sendFrameNumber = 0;
+
 	public override void OnEnter(SystemParam param)
 	{
 		base.OnEnter(param);
 
+		sendFrameNumber = 0;
 		Application.targetFrameRate = targetFrameRate;
 	}
 
@@ -158,8 +160,6 @@ public class FrameInputSystem : SyncSystem
 		if (isOfflineMode)
 		{
 			receiveFrameInput = MakeFakePacket(sendFrameNumber);
-
-			sendFrameNumber = receiveFrameInput.frameNumber + 1;
 			onReceiveFrameInput?.Invoke(receiveFrameInput);
 		}
 #endif
@@ -177,16 +177,11 @@ public class FrameInputSystem : SyncSystem
 
 	private void SendPacket()
 	{
-		int nextFrameNumber = receiveFrameInput.frameNumber + 1;
-
-		var sendInput = MakeFrameInputPacket(nextFrameNumber);
+		var sendInput = MakeFrameInputPacket(receiveFrameInput.frameNumber);
 		if (sendInput == null)
 			return;
 
-		if (Send(sendInput) == false)
-			return;
-
-		sendFrameNumber = nextFrameNumber;
+		Send(sendInput);
 	}
 
 	private bool IsReceivedPacket()
@@ -199,6 +194,8 @@ public class FrameInputSystem : SyncSystem
 		if (packet is RES_FRAME_INPUT frameInput)
 		{
 			receiveFrameInput = frameInput;
+			sendFrameNumber = frameInput.frameNumber;
+
 			onReceiveFrameInput?.Invoke(frameInput);
 		}
 	}

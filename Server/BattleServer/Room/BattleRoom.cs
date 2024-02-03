@@ -9,8 +9,11 @@ namespace BattleServer
     internal class BattleRoom : Room
 	{
 		private Dictionary<int, int> playerCharacterDictionary = new Dictionary<int, int>();
+		private Dictionary<int, REQ_FRAME_INPUT> playerFrameInputDictionary = new Dictionary<int, REQ_FRAME_INPUT>();
 
-        internal BattleRoom(int roomId, int maxSessionCount) : base(roomId, maxSessionCount)
+		private int currentFrameCount = 0;
+
+		internal BattleRoom(int roomId, int maxSessionCount) : base(roomId, maxSessionCount)
 		{
 
 		}
@@ -86,26 +89,49 @@ namespace BattleServer
 
 		private void OnResponseFrameInput(Session session, REQ_FRAME_INPUT request)
 		{
+			// 현재 프레임 카운트가 아닌 인풋은 무시
+			if (request.frameNumber != currentFrameCount)
+				return;
+
+			// 이미 보낸 유저의 인풋은 무시
+			if (playerFrameInputDictionary.ContainsKey(session.sessionId))
+				return;
+
+			playerFrameInputDictionary.Add(session.sessionId, request);
+
+			if (playerFrameInputDictionary.Count == roomSessions.Count)
+			{
+				BroadcastFrameInput();
+
+				playerFrameInputDictionary.Clear();
+			}
+		}
+
+		private void BroadcastFrameInput()
+		{
 			var response = new RES_FRAME_INPUT();
+			response.frameNumber = currentFrameCount + 1;
 
 			foreach (BattleSession s in roomSessions)
 			{
-				var playerInput = new RES_FRAME_INPUT.PlayerInput();
+				if (playerFrameInputDictionary.TryGetValue(s.sessionId, out var frameInput))
+				{
+					var playerInput = new RES_FRAME_INPUT.PlayerInput();
 
-				playerInput.playerId = s.sessionId;
-				playerInput.moveX = request.moveX;
-				playerInput.moveY = request.moveY;
-				playerInput.isJump = request.isJump;
-				playerInput.isGuard = request.isGuard;
-				playerInput.attackKey = request.attackKey;
+					playerInput.playerId = s.sessionId;
 
-				response.playerInputs.Add(playerInput);
+					playerInput.moveX = frameInput.moveX;
+					playerInput.moveY = frameInput.moveY;
+					playerInput.isJump = frameInput.isJump;
+					playerInput.isGuard = frameInput.isGuard;
+					playerInput.attackKey = frameInput.attackKey;
+
+					response.playerInputs.Add(playerInput);
+				}
 			}
 
-			// 디버깅용으로 우선...
-			response.frameNumber = request.frameNumber;
-
-			session.Send(response.Write());
+			Broadcast(response.Write());
+			currentFrameCount++;
 		}
 
 
