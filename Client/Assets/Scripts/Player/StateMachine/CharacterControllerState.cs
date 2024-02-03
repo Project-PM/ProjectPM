@@ -125,14 +125,9 @@ public class CharacterControllerState : StateMachineBehaviour
 		{
 			animator.Play("Fall");
 		}
-		else if (animatorStateInfo.IsName("Idle") == false && IsConditionToIdle(animatorStateInfo))
+		else if (animatorStateInfo.IsName("Idle") == false)
 		{
 			animator.Play("Idle");
 		}
-	}
-
-	protected virtual bool IsConditionToIdle(AnimatorStateInfo animatorStateInfo)
-	{
-		return true;
 	}
 }
