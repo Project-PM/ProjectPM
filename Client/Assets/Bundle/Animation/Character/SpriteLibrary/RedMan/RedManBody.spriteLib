@@ -62,9 +62,49 @@ MonoBehaviour:
   - m_Name: FrontMove
     m_Hash: 149859261
     m_CategoryList: []
-    m_OverrideEntries: []
+    m_OverrideEntries:
+    - m_Name: 0
+      m_Hash: 886824737
+      m_Sprite: {fileID: 21300016, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 21300016, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+    - m_Name: 1
+      m_Hash: 64810935
+      m_Sprite: {fileID: 21300018, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 21300018, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: 21300020, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 21300020, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+    - m_Name: 3
+      m_Hash: 768773787
+      m_Sprite: {fileID: 21300022, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 21300022, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+    - m_Name: 4
+      m_Hash: 867572536
+      m_Sprite: {fileID: 21300024, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 21300024, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+    - m_Name: 5
+      m_Hash: 78719918
+      m_Sprite: {fileID: 21300026, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 21300026, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+    - m_Name: 6
+      m_Hash: 498629140
+      m_Sprite: {fileID: 21300028, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 21300028, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+    - m_Name: 7
+      m_Hash: 717179522
+      m_Sprite: {fileID: 21300030, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 21300030, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
     m_FromMain: 0
-    m_EntryOverrideCount: 0
+    m_EntryOverrideCount: 8
   - m_Name: BackMove
     m_Hash: 764485978
     m_CategoryList: []
@@ -180,5 +220,5 @@ MonoBehaviour:
     m_FromMain: 0
     m_EntryOverrideCount: 0
   m_PrimaryLibraryGUID: 
-  m_ModificationHash: 638424225625187954
+  m_ModificationHash: 638426088272235311
   m_Version: 1
