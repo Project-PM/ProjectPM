@@ -2,27 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControllerIdleState : CharacterControllerState
+public class CharacterMoveState : CharacterControllerState
 {
+    [SerializeField] private float moveSpeed = 0.1f;
+
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
 		base.OnStateEnter(animator, animatorStateInfo, layerIndex);
+		controller.TryMove(moveSpeed);
 	}
 
-	// 기존 Update
 	public override void OnStatePrevUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
 		base.OnStatePrevUpdate(animator, animatorStateInfo, layerIndex);
-	}
-
-	// 기존 Late Update
-	public override void OnStateLateUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
-	{
-		base.OnStateLateUpdate(animator, animatorStateInfo, layerIndex);
+		controller.TryMove(moveSpeed);
 	}
 
 	public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
+		controller.TryMove(moveSpeed);
 		base.OnStateExit(animator, animatorStateInfo, layerIndex);
 	}
 }

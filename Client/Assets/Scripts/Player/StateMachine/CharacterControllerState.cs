@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 스테이트 추가하고 애니메이터 플레이 대체하기
+public enum ENUM_CHARACTER_STATE
+{
+
+}
+
 public class CharacterControllerState : StateMachineBehaviour
 {
 	protected PlayerCharacterController controller = null;
@@ -41,6 +47,7 @@ public class CharacterControllerState : StateMachineBehaviour
 		OnStatePrevUpdate(animator, animatorStateInfo, layerIndex);
 
 		base.OnStateUpdate(animator, animatorStateInfo, layerIndex);
+		CheckNextState(animator, animatorStateInfo);
 
 		OnStateLateUpdate(animator, animatorStateInfo, layerIndex);
 	}
@@ -68,5 +75,64 @@ public class CharacterControllerState : StateMachineBehaviour
 	public sealed override void OnStateMachineExit(Animator animator, int stateMachinePathHash)
 	{
 		base.OnStateMachineExit(animator, stateMachinePathHash);
+	}
+
+	protected virtual void CheckNextState(Animator animator, AnimatorStateInfo animatorStateInfo)
+	{
+		if (controller.CheckHit(out DamageType damageType))
+		{
+			if (damageType == DamageType.Stand)
+			{
+				animator.Play("StandHit");
+			}
+			else if (damageType == DamageType.Airborne)
+			{
+				animator.Play("AirborneHit");
+			}
+			else if (damageType == DamageType.Down)
+			{
+				animator.Play("Down");
+			}
+		}
+		else if (controller.CheckUltimate())
+		{
+			animator.Play("Ultimate");
+		}
+		else if (controller.CheckSkill())
+		{
+			animator.Play("Skill");
+		}
+		else if (controller.CheckAttack())
+		{
+			animator.Play("Attack1");
+		}
+		else if (controller.CheckJumpable())
+		{
+			animator.Play("Jump");
+		}
+		else if (controller.CheckMove(out bool isFront))
+		{
+			if (isFront)
+			{
+				animator.Play("FrontMove");
+			}
+			else
+			{
+				animator.Play("BackMove");
+			}
+		}
+		else if (controller.CheckFall())
+		{
+			animator.Play("Fall");
+		}
+		else if (animatorStateInfo.IsName("Idle") == false && IsConditionToIdle(animatorStateInfo))
+		{
+			animator.Play("Idle");
+		}
+	}
+
+	protected virtual bool IsConditionToIdle(AnimatorStateInfo animatorStateInfo)
+	{
+		return true;
 	}
 }

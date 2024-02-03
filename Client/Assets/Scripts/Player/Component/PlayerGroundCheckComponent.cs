@@ -11,7 +11,6 @@ public class PlayerGroundCheckComponent : MonoBehaviour
 
     [SerializeField] private float GroundedRadius = 0.35f;
 	[SerializeField] private float Gravity = -0.1f;
-	[SerializeField] private float JumpHeight = 0.1f;
 
 	private float _jumpTimeoutDelta = 0.0f;
 	private float _fallTimeoutDelta = 0.0f;
@@ -59,7 +58,7 @@ public class PlayerGroundCheckComponent : MonoBehaviour
 		return isFallTimeout;
 	}
 
-	private void Update()
+	private void LateUpdate()
 	{
 		if (UseGravity)
 		{
@@ -80,9 +79,9 @@ public class PlayerGroundCheckComponent : MonoBehaviour
 		return _jumpTimeoutDelta <= 0.0f;
 	}
 
-	private void OnJump()
+	private void OnJump(float jumpHeight)
 	{
-		_verticalVelocity = Mathf.Sqrt(-1f * JumpHeight * Gravity);
+		_verticalVelocity = Mathf.Sqrt(-1f * jumpHeight * Gravity);
 	}
 
 	private void JumpAndGravity()

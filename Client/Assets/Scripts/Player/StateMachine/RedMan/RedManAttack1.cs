@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class RedManAttack1 : PlayerFrameAttackState
+public class RedManAttack1 : CharacterFrameAttackState
 {
 	protected override bool DoFrameAction()
 	{

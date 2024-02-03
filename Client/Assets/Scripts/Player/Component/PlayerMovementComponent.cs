@@ -8,8 +8,6 @@ public class PlayerMovementComponent : MonoBehaviour
 	[SerializeField] private PlayerCharacterController controller;
 	[SerializeField] private PlayerGroundCheckComponent groundCheckComponent;
 
-	[SerializeField] private float moveSpeed;
-
 	private void OnEnable()
 	{
 		controller.onMove += OnMove;
@@ -22,7 +20,7 @@ public class PlayerMovementComponent : MonoBehaviour
 
 	private void OnMove(Vector2 moveVec)
 	{
-		Vector2 finalMoveVec = new Vector2(moveVec.x * moveSpeed, groundCheckComponent._verticalVelocity);
+		Vector2 finalMoveVec = new Vector2(moveVec.x, groundCheckComponent._verticalVelocity);
 		rigidBody.MovePosition(rigidBody.position + finalMoveVec);
 	}
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterAttack1State : CharacterControllerState
+public class CharacterLandState : CharacterControllerState
 {
 	protected override void CheckNextState(Animator animator, AnimatorStateInfo animatorStateInfo)
 	{
@@ -11,4 +11,5 @@ public class CharacterAttack1State : CharacterControllerState
 			animator.Play("Idle");
 		}
 	}
+
 }

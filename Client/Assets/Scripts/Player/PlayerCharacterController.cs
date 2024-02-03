@@ -11,6 +11,13 @@ using UnityEngine;
 // 4. 스테이트에서 적당한 함수를 골라 수행시킨다.
 // 5. 함수는 컴포넌트들에게 Action을 뿌린다.
 
+public enum DamageType
+{
+	Airborne,
+	Stand,
+	Down
+}
+
 public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 {
 	[SerializeField] private Animator animator;
@@ -18,13 +25,16 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	public event Func<bool> IsNotYetJump;
 	public event Func<bool> IsFallTimeout;
 	public event Func<bool> IsGrounded;
+	public event Func<bool> IsFrontRight;
 
-	public event Action onJump = null;
+	public event Action<float> onJump = null;
 	public event Action<Vector2> onMove = null;
 	public event Action onAttack = null;
 
 	private int playerId = -1;
 	private ENUM_CHARACTER_TYPE characterType = ENUM_CHARACTER_TYPE.None;
+
+	private RES_FRAME_INPUT.PlayerInput myPlayerInput = new RES_FRAME_INPUT.PlayerInput();
 
 	public void SetPlayerId(int playerId)
 	{
@@ -53,60 +63,102 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 
 	private void OnReceiveFrameInput(RES_FRAME_INPUT frameInput)
 	{
-		RES_FRAME_INPUT.PlayerInput playerInput = frameInput.playerInputs.FirstOrDefault(i => i.playerId == playerId);
-
-		CheckFall(playerInput);
-		CheckGrounded(playerInput);
-		CheckMove(playerInput);
-		CheckJump(playerInput);
-		CheckAttack(playerInput);
+		myPlayerInput = frameInput.playerInputs.FirstOrDefault(i => i.playerId == playerId);
 	}
 
-	private void CheckGrounded(RES_FRAME_INPUT.PlayerInput playerInput)
+	public bool CheckMove(out bool isFront)
 	{
-		bool isGrounded = IsGrounded();
-		if (isGrounded)
-		{
-			
-		}
-	}
+		isFront = false;
 
-	private void CheckMove(RES_FRAME_INPUT.PlayerInput playerInput)
-	{
-		onMove?.Invoke(new Vector2(playerInput.moveX, 0));
-	}
-
-	private void CheckJump(RES_FRAME_INPUT.PlayerInput playerInput)
-	{
-		if (playerInput.isJump)
-		{
-            if (IsGrounded())
-            {
-                if (IsNotYetJump())
-                {
-                    onJump?.Invoke();
-                }
-            }
-        }
-	}
-
-	private void CheckFall(RES_FRAME_INPUT.PlayerInput playerInput)
-	{
 		if (IsGrounded() == false)
-		{
-			if (IsFallTimeout())
-			{
-				// 떨어지는 중임을 판별
-			}
-		}
+			return false;
+
+		if (myPlayerInput == null)
+			return false;
+
+		if (myPlayerInput.moveX < 0.01f && myPlayerInput.moveX > -0.01f)
+			return false;
+
+		isFront = IsFrontRight() && myPlayerInput.moveX > 0.01f;
+		isFront |= IsFrontRight() == false && myPlayerInput.moveX < 0.01f;
+
+		return true;
 	}
 
-	private void CheckAttack(RES_FRAME_INPUT.PlayerInput playerInput)
+	public bool CheckJumpable()
 	{
-		if (playerInput.attackKey == (int)ENUM_ATTACK_KEY.ATTACK)
-		{
-			animator.Play("Attack1");
-		}
+		if (myPlayerInput == null)
+			return false;
+
+		if (myPlayerInput.isJump == false)
+			return false;
+
+		if (IsGrounded() == false)
+			return false;
+
+		if (IsNotYetJump() == false)
+			return false;
+
+		return true;
 	}
 
+	public bool CheckGrounded()
+	{
+		return IsGrounded();
+	}
+
+	public bool CheckFall()
+	{
+		if (IsGrounded())
+			return false;
+
+		if (IsFallTimeout() == false)
+			return false;
+
+		return true;
+	}
+
+	public bool CheckAttack()
+	{
+		if (myPlayerInput == null)
+			return false;
+
+		return myPlayerInput.attackKey == (int)ENUM_ATTACK_KEY.ATTACK;
+	}
+
+	public bool CheckSkill()
+	{
+		if (myPlayerInput == null)
+			return false;
+
+		return myPlayerInput.attackKey == (int)ENUM_ATTACK_KEY.SKILL;
+	}
+
+	public bool CheckUltimate()
+	{
+		if (myPlayerInput == null)
+			return false;
+
+		return myPlayerInput.attackKey == (int)ENUM_ATTACK_KEY.ULTIMATE;
+	}
+
+	public bool CheckHit(out DamageType damageType)
+	{
+		damageType = DamageType.Stand;
+		return false;
+	}
+
+	public void TryMove(float moveSpeed)
+	{
+		if (myPlayerInput == null)
+			return;
+
+		Vector2 moveVec = new Vector2(myPlayerInput.moveX * moveSpeed, 0);
+		onMove?.Invoke(moveVec);
+	}
+
+	public void TryJump(float jumpHeight)
+	{
+		onJump?.Invoke(jumpHeight);
+	}
 }

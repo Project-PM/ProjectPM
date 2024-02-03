@@ -23,7 +23,7 @@ public class AttackInfo
 	[SerializeField] public int attackCount;
 }
 
-public abstract class PlayerFrameActionState : CharacterControllerState
+public abstract class CharacterFrameActionState : CharacterControllerState
 {
 	[SerializeField] private int deltaFrameCount = 1;
 	[SerializeField] private List<TriggerInfo> triggers = new List<TriggerInfo>();
@@ -33,24 +33,25 @@ public abstract class PlayerFrameActionState : CharacterControllerState
 
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
-		base.OnStateEnter(animator, animatorStateInfo, layerIndex);
-
 		receiver = animator.GetComponent<AnimationFrameReceiver>();
 		CheckFrame();
 	}
 
 	public override void OnStatePrevUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
-		base.OnStatePrevUpdate(animator, animatorStateInfo, layerIndex);
 		CheckFrame();
 	}
 
 	public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
-		base.OnStateExit(animator, animatorStateInfo, layerIndex);
 		CheckFrame();
 
 		receiver = null;
+	}
+
+	protected sealed override void CheckNextState(Animator animator, AnimatorStateInfo animatorStateInfo)
+	{
+		
 	}
 
 	private void CheckFrame()
@@ -74,7 +75,7 @@ public abstract class PlayerFrameActionState : CharacterControllerState
 	protected abstract void StartFrameAction(int triggerIndex);
 }
 
-public abstract class PlayerFrameAttackState : PlayerFrameActionState
+public abstract class CharacterFrameAttackState : CharacterFrameActionState
 {
 	[SerializeField] List<AttackInfo> attackInfoList = new List<AttackInfo>();
 
