@@ -46,8 +46,10 @@ public class BattleScene : MonoBehaviour
         currentFrameCount++;
         currentDeltaTime += Time.deltaTime;
 
-        frameInputSystem.OnPrevUpdate(currentFrameCount, currentDeltaTime);
-
+        sessionSystem.OnPrevUpdate(currentFrameCount, currentDeltaTime);
+		frameInputSystem.OnPrevUpdate(currentFrameCount, currentDeltaTime);
+        debugSystem.OnPrevUpdate(currentFrameCount, currentDeltaTime);
+        spawnSystem.OnPrevUpdate(currentFrameCount, currentDeltaTime);
 
 		sessionSystem.OnUpdate(currentFrameCount, currentDeltaTime);
         frameInputSystem.OnUpdate(currentFrameCount, currentDeltaTime);

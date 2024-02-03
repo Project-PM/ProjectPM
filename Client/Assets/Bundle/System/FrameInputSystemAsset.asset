@@ -13,11 +13,4 @@ MonoBehaviour:
   m_Name: FrameInputSystemAsset
   m_EditorClassIdentifier: 
   sessionSystem: {fileID: 11400000, guid: ff792ff8bc169774ca2343797be1cc9c, type: 2}
-  MoveThreshold: 1
-  JoystickType: 0
-  HandleRange: 1
-  DeadZone: 0
-  AxisOptions: 0
-  SnapX: 1
-  SnapY: 1
-  isOfflineMode: 1
+  isOfflineMode: 0

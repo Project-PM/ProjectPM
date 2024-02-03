@@ -50,6 +50,15 @@ namespace BattleServer
 			return true;
 		}
 
+		public bool OnRequestFrameInput(REQ_FRAME_INPUT frameInput)
+		{
+			if (sessionRoom == null)
+				return false;
+
+			sessionRoom.ResponseFrameInput(this, frameInput);
+			return true;
+		}
+
 		public override void OnConnected(EndPoint endPoint)
 		{
 			Console.WriteLine($"OnConnected : {endPoint}");
@@ -73,7 +82,7 @@ namespace BattleServer
 
 		public override void OnSend(int numOfBytes)
 		{
-			
+			Console.WriteLine($"OnSend : {numOfBytes}");
 		}
 	}
 }

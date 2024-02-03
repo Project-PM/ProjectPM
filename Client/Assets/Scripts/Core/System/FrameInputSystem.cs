@@ -81,26 +81,24 @@ public class JumpInputData : PressInputData
 public class FrameInputSystem : SyncSystem
 {
 	[SerializeField] private bool isOfflineMode = true;
+	[SerializeField] private int sendFrameNumber = 0;
+	[SerializeField] private int targetFrameRate = 30;
 
 	private Queue<FrameInputData> inputDataQueue = new Queue<FrameInputData>();
-
-	private int playerId = -1;
-
-	private int sendFrameNumber = 1;
 	private RES_FRAME_INPUT receiveFrameInput = new RES_FRAME_INPUT();
 
 	public event Action<RES_FRAME_INPUT> onReceiveFrameInput = null;
 
 	public override void OnEnter(SystemParam param)
 	{
-		Application.targetFrameRate = 30;
-		playerId = param.playerId;
-		sendFrameNumber = 1;
+		base.OnEnter(param);
+
+		Application.targetFrameRate = targetFrameRate;
 	}
 
 	public override void OnExit()
 	{
-		playerId = -1;
+		base.OnExit();
 	}
 
 	public void OnMoveInputChanged(Vector2 input)
@@ -156,6 +154,7 @@ public class FrameInputSystem : SyncSystem
 	{
 		base.OnPrevUpdate(deltaFrameCount, deltaTime);
 
+#if UNITY_EDITOR
 		if (isOfflineMode)
 		{
 			receiveFrameInput = MakeFakePacket(sendFrameNumber);
@@ -163,16 +162,17 @@ public class FrameInputSystem : SyncSystem
 			sendFrameNumber = receiveFrameInput.frameNumber + 1;
 			onReceiveFrameInput?.Invoke(receiveFrameInput);
 		}
+#endif
 	}
 
 	public override void OnLateUpdate(int deltaFrameCount, float deltaTime)
 	{
 		base.OnLateUpdate(deltaFrameCount, deltaTime);
 
-		if (IsReceivedPacket() == false)
-			return;
-
-		SendPacket();
+		if (IsReceivedPacket())
+		{
+			SendPacket();
+		}
 	}
 
 	private void SendPacket()

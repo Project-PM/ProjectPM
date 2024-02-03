@@ -15,7 +15,7 @@ namespace ServerCore
         private Listener mylistener = new Listener(ProtocolType.Tcp, 10, 100);
 
         private JobTimer jobTimer = new JobTimer();
-        private int flushWaitTime = 250;
+        private int flushWaitTime = 16;
 
         private Func<EndPoint, Session> sessionFactory = null;
 

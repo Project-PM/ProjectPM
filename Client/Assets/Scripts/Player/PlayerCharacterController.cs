@@ -54,7 +54,7 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	private void OnReceiveFrameInput(RES_FRAME_INPUT frameInput)
 	{
 		RES_FRAME_INPUT.PlayerInput playerInput = frameInput.playerInputs.FirstOrDefault(i => i.playerId == playerId);
-		
+
 		CheckFall(playerInput);
 		CheckGrounded(playerInput);
 		CheckMove(playerInput);

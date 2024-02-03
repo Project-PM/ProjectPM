@@ -34,15 +34,17 @@ public static class AssetLoadHelper
 
 public abstract class MonoSystem : ScriptableObject
 {
-    public virtual void OnEnter(SystemParam param)
+	protected int playerId = -1;
+
+	public virtual void OnEnter(SystemParam param)
     {
+		playerId = param.playerId;
+	}
 
-    }
-
-    public virtual void OnExit()
+	public virtual void OnExit()
     {
-
-    }
+        playerId = -1;
+	}
 
     public virtual void OnPrevUpdate(int deltaFrameCount, float deltaTime)
     {

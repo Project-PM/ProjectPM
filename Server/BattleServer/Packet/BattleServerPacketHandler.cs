@@ -34,6 +34,11 @@ public partial class BattlePacketManager
 
 	private void ON_REQ_FRAME_INPUT(PacketSession session, IPacket packet)
 	{
+		var frameInput = packet as REQ_FRAME_INPUT;
 
+		if (session is BattleSession battleSession)
+		{
+			battleSession.OnRequestFrameInput(frameInput);
+		}
 	}
 }

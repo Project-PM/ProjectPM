@@ -216,7 +216,7 @@ namespace ServerCore
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine($"RegisterRecv Failed {e}");
+				Console.WriteLine($"RegisterReceive Failed {e}");
 			}
 		}
 
@@ -254,7 +254,7 @@ namespace ServerCore
 				}
 				catch (Exception e)
 				{
-					Console.WriteLine($"OnRecvCompleted Failed {e}");
+					Console.WriteLine($"OnReceiveCompleted Failed {e}");
 				}
 			}
 			else

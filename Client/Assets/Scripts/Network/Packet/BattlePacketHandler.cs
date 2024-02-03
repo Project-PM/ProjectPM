@@ -7,7 +7,7 @@ public partial class BattlePacketManager
 {
 	public void ON_RES_CONNECTED(PacketSession session, IPacket packet)
 	{
-
+		
 	}
 
 	public void ON_RES_BROADCAST_ENTER_GAME(PacketSession session, IPacket packet)

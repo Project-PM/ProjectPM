@@ -12,6 +12,7 @@ namespace BattleServer
 
         internal BattleRoom(int roomId, int maxSessionCount) : base(roomId, maxSessionCount)
 		{
+
 		}
 
         protected void OnEnter(Session session, REQ_ENTER_GAME packet)
@@ -55,16 +56,24 @@ namespace BattleServer
 			});
         }
 
-        private void OnResponsePlayerList(Session session)
+		public void ResponseFrameInput(Session session, REQ_FRAME_INPUT request)
+		{
+			jobQueue.Push(() =>
+			{
+				OnResponseFrameInput(session, request);
+			});
+		}
+
+		private void OnResponsePlayerList(Session session)
         {
-			var players = new RES_PLAYER_LIST();
+			var response = new RES_PLAYER_LIST();
 
 			foreach (BattleSession s in roomSessions)
 			{
 				if (playerCharacterDictionary.TryGetValue(s.sessionId, out var characterType) == false)
 					continue;
 
-				players.players.Add(new RES_PLAYER_LIST.Player()
+				response.players.Add(new RES_PLAYER_LIST.Player()
 				{
 					isSelf = s == session,
 					playerId = s.sessionId,
@@ -72,14 +81,39 @@ namespace BattleServer
 				});
 			}
 
-			session.Send(players.Write());
+			session.Send(response.Write());
 		}
 
-		public void Enter(BattleSession session, REQ_ENTER_GAME packet)
+		private void OnResponseFrameInput(Session session, REQ_FRAME_INPUT request)
+		{
+			var response = new RES_FRAME_INPUT();
+
+			foreach (BattleSession s in roomSessions)
+			{
+				var playerInput = new RES_FRAME_INPUT.PlayerInput();
+
+				playerInput.playerId = s.sessionId;
+				playerInput.moveX = request.moveX;
+				playerInput.moveY = request.moveY;
+				playerInput.isJump = request.isJump;
+				playerInput.isGuard = request.isGuard;
+				playerInput.attackKey = request.attackKey;
+
+				response.playerInputs.Add(playerInput);
+			}
+
+			// 디버깅용으로 우선...
+			response.frameNumber = request.frameNumber;
+
+			session.Send(response.Write());
+		}
+
+
+		public void Enter(BattleSession session, REQ_ENTER_GAME request)
 		{
 			jobQueue.Push(() =>
 			{
-				OnEnter(session, packet);
+				OnEnter(session, request);
 			});
 		}
 	}
