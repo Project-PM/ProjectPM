@@ -40,6 +40,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSkillTable: {fileID: 11400000, guid: 68b969ccb01ef8440a5a01f7a8024cf2, type: 2}
+--- !u!114 &-8794847732934356093
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9623b6c5f33a2e040a61979b694a0f26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deltaFrameCount: 1
+  triggers: []
+  attackInfoList: []
+  attackCharacterType: 2
 --- !u!1102 &-7620273075075684017
 AnimatorState:
   serializedVersion: 6
@@ -266,6 +282,7 @@ MonoBehaviour:
   - attackBox: {x: 2, y: 2}
     attackOffset: {x: 2, y: 1}
     attackCount: 1
+  attackCharacterType: 0
 --- !u!114 &-4383703698923201343
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -424,6 +441,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSkillTable: {fileID: 11400000, guid: 68b969ccb01ef8440a5a01f7a8024cf2, type: 2}
+--- !u!114 &-2343350027994156505
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9623b6c5f33a2e040a61979b694a0f26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deltaFrameCount: 1
+  triggers: []
+  attackInfoList: []
+  attackCharacterType: 1
 --- !u!1102 &-402689853291514102
 AnimatorState:
   serializedVersion: 6
@@ -527,7 +560,7 @@ AnimatorStateMachine:
     m_Position: {x: 410, y: 520, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5684547180010492739}
-    m_Position: {x: 140, y: 400, z: 0}
+    m_Position: {x: 150, y: 400, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8346577578543145704}
     m_Position: {x: 410, y: 450, z: 0}
@@ -622,6 +655,8 @@ AnimatorState:
   m_StateMachineBehaviours:
   - {fileID: -7513623567182278704}
   - {fileID: -4586743673135329841}
+  - {fileID: -8794847732934356093}
+  - {fileID: -2343350027994156505}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1

@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class RedManAttack1 : CharacterFrameAttackState
+public class CharacterAttack : CharacterFrameAttackState
 {
+	[Header("위 세팅 값이 적용되는 캐릭터 타입")]
+	[SerializeField] private ENUM_CHARACTER_TYPE attackCharacterType = ENUM_CHARACTER_TYPE.Red;
+	
 	protected override bool DoFrameAction()
 	{
-		if (characterType != ENUM_CHARACTER_TYPE.Red)
+		if (characterType != attackCharacterType)
 			return false;
 
 		var hitObjects = GetDamageableObjects();

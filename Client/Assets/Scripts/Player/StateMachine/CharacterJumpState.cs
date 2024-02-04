@@ -31,26 +31,26 @@ public class CharacterJumpState : CharacterControllerState
 		// 뭘 맞아도 이 때는 공중 피격
 		if (controller.CheckHit(out DamageType damageType))
 		{
-			animator.Play("AirborneHit");
+			animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
 		}
 		else if (controller.CheckAttack())
 		{
-			animator.Play("JumpAttack");
+			animator.Play(ENUM_CHARACTER_STATE.JumpAttack);
 		}
 		else if(controller.CheckSkill())
 		{
-			animator.Play("JumpSkill");
+			animator.Play(ENUM_CHARACTER_STATE.JumpSkill);
 		}
 		else if (controller.CheckFall())
 		{
-			if (animatorStateInfo.normalizedTime >= 1.0f)
+			if (animatorStateInfo.IsEndState())
 			{
-				animator.Play("Fall");
+				animator.Play(ENUM_CHARACTER_STATE.Fall);
 			}
 		}
 		else if (controller.CheckGrounded())
 		{
-			animator.Play("Land");
+			animator.Play(ENUM_CHARACTER_STATE.Land);
 		}
 	}
 

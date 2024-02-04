@@ -1,11 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-// 스테이트 추가하고 애니메이터 플레이 대체하기
 public enum ENUM_CHARACTER_STATE
 {
+	Idle,
+	FrontMove,
+	BackMove,
+	Fall,
+	Jump,
+	Land,
+	AirborneHit,
+	StandHit,
+	Down,
+	Recovery,
+	Attack1,
+	Attack2,
+	Attack3,
+	JumpAttack,
+	Skill,
+	JumpSkill,
+	Ultimate,
+}
 
+public static class AnimatorHelper
+{
+	public static void Play(this Animator animator, ENUM_CHARACTER_STATE characterState)
+	{
+		animator.Play(characterState.ToString());
+	}
+
+	public static bool IsState(this AnimatorStateInfo stateInfo,  ENUM_CHARACTER_STATE characterState)
+	{
+		return stateInfo.IsName(characterState.ToString());
+	}
+
+	public static bool IsEndState(this AnimatorStateInfo stateInfo)
+	{
+		return stateInfo.normalizedTime >= 1.0f;
+	}
 }
 
 public class CharacterControllerState : StateMachineBehaviour
@@ -83,51 +117,51 @@ public class CharacterControllerState : StateMachineBehaviour
 		{
 			if (damageType == DamageType.Stand)
 			{
-				animator.Play("StandHit");
+				animator.Play(ENUM_CHARACTER_STATE.StandHit);
 			}
 			else if (damageType == DamageType.Airborne)
 			{
-				animator.Play("AirborneHit");
+				animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
 			}
 			else if (damageType == DamageType.Down)
 			{
-				animator.Play("Down");
+				animator.Play(ENUM_CHARACTER_STATE.Down);
 			}
 		}
 		else if (controller.CheckUltimate())
 		{
-			animator.Play("Ultimate");
+			animator.Play(ENUM_CHARACTER_STATE.Ultimate);
 		}
 		else if (controller.CheckSkill())
 		{
-			animator.Play("Skill");
+			animator.Play(ENUM_CHARACTER_STATE.Skill);
 		}
 		else if (controller.CheckAttack())
 		{
-			animator.Play("Attack1");
+			animator.Play(ENUM_CHARACTER_STATE.Attack1);
 		}
 		else if (controller.CheckJumpable())
 		{
-			animator.Play("Jump");
+			animator.Play(ENUM_CHARACTER_STATE.Jump);
 		}
 		else if (controller.CheckMove(out bool isFront))
 		{
 			if (isFront)
 			{
-				animator.Play("FrontMove");
+				animator.Play(ENUM_CHARACTER_STATE.FrontMove);
 			}
 			else
 			{
-				animator.Play("BackMove");
+				animator.Play(ENUM_CHARACTER_STATE.BackMove);
 			}
 		}
 		else if (controller.CheckFall())
 		{
-			animator.Play("Fall");
+			animator.Play(ENUM_CHARACTER_STATE.Fall);
 		}
-		else if (animatorStateInfo.IsName("Idle") == false)
+		else if (animatorStateInfo.IsState(ENUM_CHARACTER_STATE.Idle) == false)
 		{
-			animator.Play("Idle");
+			animator.Play(ENUM_CHARACTER_STATE.Idle);
 		}
 	}
 }

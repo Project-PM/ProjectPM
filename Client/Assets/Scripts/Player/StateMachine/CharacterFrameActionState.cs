@@ -34,6 +34,7 @@ public abstract class CharacterFrameActionState : CharacterControllerState
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
 		receiver = animator.GetComponent<AnimationFrameReceiver>();
+		
 		CheckFrame();
 	}
 
