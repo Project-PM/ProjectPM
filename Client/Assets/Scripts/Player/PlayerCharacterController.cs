@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +14,11 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	public event Func<bool> IsFallTimeout;
 	public event Func<bool> IsGrounded;
 	public event Func<bool> IsFrontRight;
+	public event Func<ENUM_DAMAGE_TYPE> IsHit;
 
 	public event Action<float> onJump = null;
 	public event Action<Vector2> onMove = null;
 	public event Action<float> onMoveX = null;
-	public event Action onAttack = null;
 
 	private int playerId = -1;
 	private ENUM_CHARACTER_TYPE characterType = ENUM_CHARACTER_TYPE.None;
@@ -133,8 +133,10 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 
 	public bool CheckHit(out ENUM_DAMAGE_TYPE damageType)
 	{
-		damageType = ENUM_DAMAGE_TYPE.Stand;
-		return false;
+		// 당장은 이렇게 넣어두었지만, 이 Func는 Late Update 시점 서버에 Send 할 때 써야 한다
+		// 서버에서 보내준 isHit 값으로 현재 프레임의 히트를 체크해야 함
+		damageType = IsHit();
+		return damageType != ENUM_DAMAGE_TYPE.None;
 	}
 
 	public void TryMove(float moveSpeed)

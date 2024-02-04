@@ -5,9 +5,11 @@ using UnityEngine;
 
 public enum ENUM_DAMAGE_TYPE
 {
-    Stand,
-    Airborne,
-    Down
+    None = -1,
+    Stand, // 스탠딩 경직 타격
+    Airborne, // 공중 타격, 맞으면 뜸
+    Down, // 맞으면 넘어짐
+    JustDamage // 데미지만 들어감
 }
 
 [Serializable]
