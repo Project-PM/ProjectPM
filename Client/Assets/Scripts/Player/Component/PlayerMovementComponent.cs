@@ -11,16 +11,23 @@ public class PlayerMovementComponent : MonoBehaviour
 	private void OnEnable()
 	{
 		controller.onMove += OnMove;
+		controller.onMoveX += OnMoveX;
 	}
 
 	private void OnDisable()
 	{
 		controller.onMove -= OnMove;
-	}
+        controller.onMoveX -= OnMoveX;
+    }
 
 	private void OnMove(Vector2 moveVec)
 	{
-		Vector2 finalMoveVec = new Vector2(moveVec.x, groundCheckComponent._verticalVelocity);
-		rigidBody.MovePosition(rigidBody.position + finalMoveVec);
+		rigidBody.MovePosition(rigidBody.position + moveVec);
 	}
+
+	private void OnMoveX(float moveX)
+	{
+        Vector2 finalMoveVec = new Vector2(moveX, groundCheckComponent._verticalVelocity);
+        rigidBody.MovePosition(rigidBody.position + finalMoveVec);
+    }
 }

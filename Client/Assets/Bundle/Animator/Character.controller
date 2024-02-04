@@ -40,22 +40,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSkillTable: {fileID: 11400000, guid: 68b969ccb01ef8440a5a01f7a8024cf2, type: 2}
---- !u!114 &-8794847732934356093
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9623b6c5f33a2e040a61979b694a0f26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deltaFrameCount: 1
-  triggers: []
-  attackInfoList: []
-  attackCharacterType: 2
 --- !u!1102 &-7620273075075684017
 AnimatorState:
   serializedVersion: 6
@@ -94,6 +78,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aa571e6aec01e344b5b9a172a35346c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  comboNormalizeTime: 0.9
+  nextComboState: 11
 --- !u!1102 &-7405234807362327398
 AnimatorState:
   serializedVersion: 6
@@ -133,6 +119,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSkillTable: {fileID: 11400000, guid: 68b969ccb01ef8440a5a01f7a8024cf2, type: 2}
+--- !u!114 &-6985625689475003476
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9623b6c5f33a2e040a61979b694a0f26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deltaFrameCount: 1
+  triggers: []
+  attackInfoList: []
+  attackerCharacterType: 0
+  damageInfo:
+    type: 1
+    amount: 0
+    knockBackPower: 0
+    stiffTime: 0
+    upperPower: 0
 --- !u!114 &-6238785035421609186
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -221,7 +229,9 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 8328909030061879130}
+  - {fileID: 7208850586138354219}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -282,7 +292,13 @@ MonoBehaviour:
   - attackBox: {x: 2, y: 2}
     attackOffset: {x: 2, y: 1}
     attackCount: 1
-  attackCharacterType: 0
+  attackerCharacterType: 0
+  damageInfo:
+    type: 0
+    amount: 3
+    knockBackPower: 0.1
+    stiffTime: 0
+    upperPower: 0
 --- !u!114 &-4383703698923201343
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -441,22 +457,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSkillTable: {fileID: 11400000, guid: 68b969ccb01ef8440a5a01f7a8024cf2, type: 2}
---- !u!114 &-2343350027994156505
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9623b6c5f33a2e040a61979b694a0f26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deltaFrameCount: 1
-  triggers: []
-  attackInfoList: []
-  attackCharacterType: 1
 --- !u!1102 &-402689853291514102
 AnimatorState:
   serializedVersion: 6
@@ -615,6 +615,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSkillTable: {fileID: 11400000, guid: 68b969ccb01ef8440a5a01f7a8024cf2, type: 2}
+--- !u!114 &2574199552098989088
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20829cfe56bce014d9d5b2731a26491f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 0.1
 --- !u!114 &2703227517164048681
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -655,8 +668,6 @@ AnimatorState:
   m_StateMachineBehaviours:
   - {fileID: -7513623567182278704}
   - {fileID: -4586743673135329841}
-  - {fileID: -8794847732934356093}
-  - {fileID: -2343350027994156505}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -734,7 +745,9 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 6803597484711141724}
+  - {fileID: 8264916615849843752}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -773,7 +786,9 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 2574199552098989088}
+  - {fileID: -6985625689475003476}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -856,6 +871,42 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &6803597484711141724
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aa571e6aec01e344b5b9a172a35346c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  comboNormalizeTime: 0.9
+  nextComboState: 12
+--- !u!114 &7208850586138354219
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9623b6c5f33a2e040a61979b694a0f26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deltaFrameCount: 1
+  triggers: []
+  attackInfoList: []
+  attackerCharacterType: 0
+  damageInfo:
+    type: 0
+    amount: 0
+    knockBackPower: 0
+    stiffTime: 0
+    upperPower: 0
 --- !u!114 &7463789471283171702
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -894,6 +945,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04c0c9e4d9497147b1ec945ed56d4c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8264916615849843752
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9623b6c5f33a2e040a61979b694a0f26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deltaFrameCount: 1
+  triggers: []
+  attackInfoList: []
+  attackerCharacterType: 0
+  damageInfo:
+    type: 0
+    amount: 0
+    knockBackPower: 0
+    stiffTime: 0
+    upperPower: 0
+--- !u!114 &8328909030061879130
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aa571e6aec01e344b5b9a172a35346c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  comboNormalizeTime: 0.9
+  nextComboState: 12
 --- !u!114 &8329602665670113450
 MonoBehaviour:
   m_ObjectHideFlags: 1

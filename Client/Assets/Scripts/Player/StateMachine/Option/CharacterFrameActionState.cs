@@ -25,8 +25,11 @@ public class AttackInfo
 
 public abstract class CharacterFrameActionState : CharacterControllerState
 {
-	[SerializeField] private int deltaFrameCount = 1;
-	[SerializeField] private List<TriggerInfo> triggers = new List<TriggerInfo>();
+    [Header("[지속 프레임 수]")]
+    [SerializeField] private int deltaFrameCount = 1;
+    
+	[Header("[적용할 시작 프레임]")]
+    [SerializeField] private List<TriggerInfo> triggers = new List<TriggerInfo>();
 
 	private AnimationFrameReceiver receiver;
 	protected int DeltaFrameCount => deltaFrameCount;
@@ -78,9 +81,16 @@ public abstract class CharacterFrameActionState : CharacterControllerState
 
 public abstract class CharacterFrameAttackState : CharacterFrameActionState
 {
+	[Header("[공격할 시작 프레임에 연결되는 공격 정보]")]
 	[SerializeField] List<AttackInfo> attackInfoList = new List<AttackInfo>();
 
-	private Vector2 attackOffset;
+    [Header("[적용할 캐릭터 타입]")]
+    [SerializeField] private ENUM_CHARACTER_TYPE attackerCharacterType = ENUM_CHARACTER_TYPE.Red;
+
+    [Header("[데미지 정보]")]
+    [SerializeField] private DamageInfo damageInfo;
+
+    private Vector2 attackOffset;
 	private Vector2 attackBox;
 
 	private int remainFrameCount = 0;
@@ -119,7 +129,7 @@ public abstract class CharacterFrameAttackState : CharacterFrameActionState
 		ProgressAction();
 	}
 
-	protected IEnumerable<Collider2D> GetHitObjects(Transform centerObj)
+	protected IEnumerable<Collider2D> GetOverlapBoxAll(Transform centerObj)
 	{
 		Vector2 centerPos = centerObj.position;
 
@@ -142,12 +152,12 @@ public abstract class CharacterFrameAttackState : CharacterFrameActionState
 		Debug.DrawLine(leftUp, rightUp);
 	}
 
-	protected IEnumerable<IDamageable> GetDamageableObjects()
+	protected IEnumerable<IDamageable> GetDamageableOverlapBoxAll()
 	{
 		if (controller == null)
 			return null;
 
-		return GetHitObjects(controller.transform).OfType<IDamageable>();
+		return GetOverlapBoxAll(controller.transform).OfType<IDamageable>();
 	}
 
 	private void ProgressAction()
@@ -155,10 +165,13 @@ public abstract class CharacterFrameAttackState : CharacterFrameActionState
 		if (ProgressFrameCount() == false)
 			return;
 
-		if (ProgressAttackCount() == false)
-			return;
+		ProgressAttackCount();
+		PregressAdditionalAction();
+    }
 
-		// TO-DO
+	protected virtual void PregressAdditionalAction()
+	{
+
 	}
 
 	private bool ProgressFrameCount()
@@ -170,20 +183,34 @@ public abstract class CharacterFrameAttackState : CharacterFrameActionState
 		return true;
 	}
 
-	private bool ProgressAttackCount()
+	private void ProgressAttackCount()
 	{
 		if (remainAttackCount == 0)
-			return false;
+			return;
 
-		if (DoFrameAction() == false)
-			return false;
+        if (characterType != attackerCharacterType)
+            return;
+
+        if (DoFrameAttack() == false)
+			return;
 
 		remainAttackCount--;
-		return true;
+		return;
 	}
 
-	protected virtual bool DoFrameAction()
-	{
-		return true;
-	}
+    protected virtual bool DoFrameAttack()
+    {
+        var hitObjects = GetDamageableOverlapBoxAll();
+        if (hitObjects.Any() == false)
+            return false;
+
+        bool isSuccess = false;
+
+        foreach (var hitObject in hitObjects)
+        {
+            isSuccess |= hitObject.OnHit(controller, damageInfo);
+        }
+
+        return isSuccess;
+    }
 }

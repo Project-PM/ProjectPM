@@ -27,7 +27,7 @@ public class CharacterFallState : CharacterControllerState
 	protected override void CheckNextState(Animator animator, AnimatorStateInfo animatorStateInfo)
 	{
 		// 뭘 맞아도 이 때는 공중 피격
-		if (controller.CheckHit(out DamageType damageType))
+		if (controller.CheckHit(out ENUM_DAMAGE_TYPE damageType))
 		{
 			animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
 		}

@@ -113,17 +113,17 @@ public class CharacterControllerState : StateMachineBehaviour
 
 	protected virtual void CheckNextState(Animator animator, AnimatorStateInfo animatorStateInfo)
 	{
-		if (controller.CheckHit(out DamageType damageType))
+		if (controller.CheckHit(out ENUM_DAMAGE_TYPE damageType))
 		{
-			if (damageType == DamageType.Stand)
+			if (damageType == ENUM_DAMAGE_TYPE.Stand)
 			{
 				animator.Play(ENUM_CHARACTER_STATE.StandHit);
 			}
-			else if (damageType == DamageType.Airborne)
+			else if (damageType == ENUM_DAMAGE_TYPE.Airborne)
 			{
 				animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
 			}
-			else if (damageType == DamageType.Down)
+			else if (damageType == ENUM_DAMAGE_TYPE.Down)
 			{
 				animator.Play(ENUM_CHARACTER_STATE.Down);
 			}

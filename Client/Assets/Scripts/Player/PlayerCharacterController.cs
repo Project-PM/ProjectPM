@@ -5,18 +5,6 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-// 1. 인풋을 꺼내어 체크한다.
-// 2. 컴포넌트에 매달아 놓은 Func들로 상태를 체크한다.
-// 3. 적절한 스테이트의 애니메이션을 수행한다.
-// 4. 스테이트에서 적당한 함수를 골라 수행시킨다.
-// 5. 함수는 컴포넌트들에게 Action을 뿌린다.
-
-public enum DamageType
-{
-	Airborne,
-	Stand,
-	Down
-}
 
 public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 {
@@ -29,6 +17,7 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 
 	public event Action<float> onJump = null;
 	public event Action<Vector2> onMove = null;
+	public event Action<float> onMoveX = null;
 	public event Action onAttack = null;
 
 	private int playerId = -1;
@@ -142,9 +131,9 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 		return myPlayerInput.attackKey == (int)ENUM_ATTACK_KEY.ULTIMATE;
 	}
 
-	public bool CheckHit(out DamageType damageType)
+	public bool CheckHit(out ENUM_DAMAGE_TYPE damageType)
 	{
-		damageType = DamageType.Stand;
+		damageType = ENUM_DAMAGE_TYPE.Stand;
 		return false;
 	}
 
@@ -153,11 +142,15 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 		if (myPlayerInput == null)
 			return;
 
-		Vector2 moveVec = new Vector2(myPlayerInput.moveX * moveSpeed, 0);
-		onMove?.Invoke(moveVec);
+        onMoveX?.Invoke(myPlayerInput.moveX * moveSpeed);
 	}
 
-	public void TryJump(float jumpHeight)
+	public void TryMove(Vector2 moveVec)
+	{
+        onMove?.Invoke(moveVec);
+    }
+
+    public void TryJump(float jumpHeight)
 	{
 		onJump?.Invoke(jumpHeight);
 	}
