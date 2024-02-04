@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CategoryHash: 0.009161512
+  m_CategoryHash: 5.3709393e-34
   m_labelHash: 0.00000040954276
   m_SpriteKey: 0
   m_SpriteHash: 584558514
@@ -226,6 +226,7 @@ GameObject:
   - component: {fileID: 5377339547715350782}
   - component: {fileID: 6695545243425594803}
   - component: {fileID: 4564688862825467699}
+  - component: {fileID: 1821194266457588202}
   - component: {fileID: 6123756859426560249}
   m_Layer: 0
   m_Name: Player
@@ -422,6 +423,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 7442671442867769603}
+--- !u!114 &1821194266457588202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271826272390545158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b297a585af21eb4fbe1feb2ef7da285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 7442671442867769603}
+  isInvinsible: 0
+  isSuperArmor: 0
 --- !u!114 &6123756859426560249
 MonoBehaviour:
   m_ObjectHideFlags: 0
