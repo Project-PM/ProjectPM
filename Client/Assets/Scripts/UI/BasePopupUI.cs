@@ -25,6 +25,8 @@ public class BasePopupUI : BaseCanvasUI
         IsActive = true;
         this.gameObject.SetActive(true);
 
+        Managers.UI.PushPopupStack(this);
+
         return true;
     }
 

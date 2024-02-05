@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class BaseMainWindow : BaseCanvasUI
 {
-    protected Dictionary<WindowUIType, BaseWindowUI> _windowUIDic = new();
+    protected Dictionary<WindowUIType, BaseWindowUI> windowUIDic = new();
+
+    public Stack<BasePopupUI> popupStack = new Stack<BasePopupUI>();
     BaseWindowUI currActiveWindow = null;
 
     protected virtual void Start()
     {
-        _windowUIDic.Clear();
+        windowUIDic.Clear();
 
         for (int i = 0; i < this.transform.childCount; i++)
         {
@@ -19,7 +21,7 @@ public class BaseMainWindow : BaseCanvasUI
             if (baseWindowUI != null)
             {
                 baseWindowUI.Init();
-                _windowUIDic.Add(baseWindowUI.WindowUIType, baseWindowUI);
+                windowUIDic.Add(baseWindowUI.WindowUIType, baseWindowUI);
             }
         }
     }
@@ -39,7 +41,7 @@ public class BaseMainWindow : BaseCanvasUI
 
     public virtual BaseWindowUI OpenWindowUI(WindowUIType windowUIType, UIParam param = null)
     {
-        if (_windowUIDic.ContainsKey(windowUIType) == false)
+        if (windowUIDic.ContainsKey(windowUIType) == false)
         {
             Debug.LogWarning($"{windowUIType} 는 현재 씬에 없습니다.");
             return null;
@@ -48,7 +50,7 @@ public class BaseMainWindow : BaseCanvasUI
         if (currActiveWindow != null && currActiveWindow.WindowUIType != windowUIType)
             currActiveWindow.CloseWindowUI();
         
-        currActiveWindow = _windowUIDic[windowUIType];
+        currActiveWindow = windowUIDic[windowUIType];
         currActiveWindow.OpenWindowUI(param);
         return currActiveWindow;
     }

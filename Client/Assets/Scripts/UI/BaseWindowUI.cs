@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseWindowUI : BaseCanvasUI
+public class BaseWindowUI : BaseCanvasUI
 {
     public WindowUIType WindowUIType { get; protected set; }
 
@@ -16,7 +16,10 @@ public abstract class BaseWindowUI : BaseCanvasUI
         if (this.gameObject.activeSelf == true)
             this.gameObject.SetActive(false);
 
-        SetWindowUIType();
+        WindowUIType = Extension.ParseEnum<WindowUIType>(this.gameObject.name);
+
+        if (WindowUIType == WindowUIType.None)
+            Debug.LogError("WindowUIType 열거형과 GameObject 이름이 다릅니다.");
 
         return true;
     }
@@ -42,9 +45,4 @@ public abstract class BaseWindowUI : BaseCanvasUI
 
         return true;
     }
-
-    /// <summary>
-    /// 나의 windowUIType을 세팅
-    /// </summary>
-    protected abstract void SetWindowUIType();
 }

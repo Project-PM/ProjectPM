@@ -326,7 +326,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sessionSystem: {fileID: 11400000, guid: ff792ff8bc169774ca2343797be1cc9c, type: 2}
-  syncSystem: {fileID: 11400000, guid: ad0ced4be29605c47aa2cd982ee0d311, type: 2}
   frameInputSystem: {fileID: 11400000, guid: d328ad139b7832040bc80682bbfa9bd1, type: 2}
   debugSystem: {fileID: 11400000, guid: eb84c5d2f9f069c479a11fac914d6afe, type: 2}
   spawnSystem: {fileID: 11400000, guid: dbd3589154831dd4abbfee61b4c681b9, type: 2}
@@ -1284,7 +1283,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 5000
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &6457211745377294403
 RectTransform:
@@ -1479,6 +1478,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 543a35d759202ad4699969f08e708e2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 6058884830309570088}
+  canvasScaler: {fileID: 2436408320680775353}
 --- !u!114 &7848724736004858312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1491,8 +1492,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42844a4fccbd54746b90cade4ff70f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deadZone: 0
+  handleRange: 1
+  AxisOptions: 0
+  SnapX: 1
+  SnapY: 1
   background: {fileID: 7848724736272416176}
   handle: {fileID: 7848724736325492657}
+  moveThreshold: 1
+  joystickType: 0
 --- !u!114 &7848724736004858313
 MonoBehaviour:
   m_ObjectHideFlags: 0
