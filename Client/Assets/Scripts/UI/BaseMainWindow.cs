@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BaseMainWindow : InitBase
+public class BaseMainWindow : BaseCanvasUI
 {
     protected Dictionary<WindowUIType, BaseWindowUI> _windowUIDic = new();
     BaseWindowUI currActiveWindow = null;
@@ -29,13 +29,15 @@ public class BaseMainWindow : InitBase
         if (base.Init() == false)
             return false;
 
-        Managers.UI.SetCanvas(gameObject, false);
         Managers.UI.CurrentMainWindow = this;
+
+        if (this.gameObject.activeSelf == false)
+            this.gameObject.SetActive(true);
 
         return true;
     }
 
-    public virtual BaseWindowUI OpenWindowUI(WindowUIType windowUIType)
+    public virtual BaseWindowUI OpenWindowUI(WindowUIType windowUIType, UIParam param = null)
     {
         if (_windowUIDic.ContainsKey(windowUIType) == false)
         {
@@ -43,11 +45,11 @@ public class BaseMainWindow : InitBase
             return null;
         }
 
-        if (currActiveWindow != null)
-            currActiveWindow.CloseUI();
-
+        if (currActiveWindow != null && currActiveWindow.WindowUIType != windowUIType)
+            currActiveWindow.CloseWindowUI();
+        
         currActiveWindow = _windowUIDic[windowUIType];
-        currActiveWindow.OpenUI();
+        currActiveWindow.OpenWindowUI(param);
         return currActiveWindow;
     }
 }

@@ -2,36 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseWindowUI : MonoBehaviour
+public abstract class BaseWindowUI : BaseCanvasUI
 {
     public WindowUIType WindowUIType { get; protected set; }
-    protected bool _init = false;
-    
-    public virtual bool Init()
+
+    public bool IsActive { get; private set; } = false;
+
+    public override bool Init()
     {
-        if (_init)
+        if (base.Init() == false)
             return false;
 
-        Managers.UI.SetCanvas(gameObject, false);
+        if (this.gameObject.activeSelf == true)
+            this.gameObject.SetActive(false);
+
         SetWindowUIType();
 
-        _init = true;
         return true;
     }
 
-    protected virtual void Awake()
+    public virtual bool OpenWindowUI(UIParam param = null)
     {
-        Init();
-    }
+        if (IsActive)
+            return false;
 
-    public virtual void OpenUI()
-    {
+        IsActive = true;
         this.gameObject.SetActive(true);
-    }
 
-    public virtual void CloseUI()
+        return true;
+    }
+    
+    public virtual bool CloseWindowUI()
     {
+        if (!IsActive)
+            return false;
+
+        IsActive = false;
         this.gameObject.SetActive(false);
+
+        return true;
     }
 
     /// <summary>

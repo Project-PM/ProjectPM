@@ -32,6 +32,8 @@ public class UIManager
 
     public void SetCanvas(GameObject go, bool sort = true, int sortOrder = 0)
     {
+        go.layer = LayerMask.NameToLayer("UI");
+
         Canvas canvas = Extension.GetOrAddComponent<Canvas>(go);
         if (canvas == null)
         {
@@ -44,6 +46,8 @@ public class UIManager
         {
             cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             cs.referenceResolution = new Vector2(1920, 1080);
+            cs.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
+            cs.referencePixelsPerUnit = 100;
         }
 
         go.GetOrAddComponent<GraphicRaycaster>();
