@@ -23,9 +23,9 @@ public class BasePopupUI : BaseCanvasUI
             return false;
 
         IsActive = true;
+        int sortingOrder = Managers.UI.PushPopupStack(this);
+        SetSortingOrder(sortingOrder);
         this.gameObject.SetActive(true);
-
-        Managers.UI.PushPopupStack(this);
 
         return true;
     }
@@ -35,7 +35,11 @@ public class BasePopupUI : BaseCanvasUI
         if (!IsActive)
             return false;
 
+        if (Managers.UI.ClosePopupUIEnsure(this) == false)
+            return false;
+
         IsActive = false;
+        Managers.UI.PopPopupStack();
         this.gameObject.SetActive(false);
 
         return true;

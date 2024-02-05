@@ -42,4 +42,12 @@ public class Managers : MonoBehaviour
             s_instance = go.GetComponent<Managers>();
         }
     }
+    
+    /// <summary>
+    /// æ¿ ¿Ãµø Ω√ »£√‚µ 
+    /// </summary>
+    public static void Clear()
+    {
+        UI.Clear();
+    }
 }

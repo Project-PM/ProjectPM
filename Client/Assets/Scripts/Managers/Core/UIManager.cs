@@ -35,52 +35,43 @@ public class UIManager
 
     Stack<BasePopupUI> popupStack = new Stack<BasePopupUI>();
 
-    private int currPopupOrder = 10;
+    private int currSortingOrder = 10;
 
     public BaseWindowUI OpenWindowUI(WindowUIType windowUIType, UIParam param = null)
     {
         return _currentMainWindow.OpenWindowUI(windowUIType, param);
     }
 
-    public void PushPopupStack(BasePopupUI popupUI)
+    public int PushPopupStack(BasePopupUI popupUI)
     {
         popupStack.Push(popupUI);
+
+        return currSortingOrder++;
     }
 
-    public void ClosePopupUI(BasePopupUI popupUI)
+    public void PopPopupStack()
+    {
+        popupStack.Pop();
+        currSortingOrder--;
+    }
+
+    public bool ClosePopupUIEnsure(BasePopupUI popupUI)
     {
         if (popupStack.Count == 0)
-            return;
+            return true;
 
         if(popupStack.Peek() != popupUI)
         {
-            Debug.Log("ÆË¾÷ ´Ý±â ½ÇÆÐ");
-            return;
+            Debug.Log($"ÆË¾÷À» ´ÝÀ» ¼ö ¾øÀ½\nÇöÀç ÃÖ»óÀ§ ÆË¾÷ : {popupStack.Peek().name}");
+            return false;
         }
-        
-        ClosePopupUI();
-    }
 
-    public void CloseAllPopupUI()
-    {
-        while (popupStack.Count > 0)
-            ClosePopupUI();
-    }
-
-    private void ClosePopupUI()
-    {
-        if (popupStack.Count == 0)
-            return;
-
-        BasePopupUI currPopupUI = popupStack.Pop();
-
-        currPopupUI.ClosePopupUI();
-        currPopupOrder--;
+        return true;
     }
 
     public void Clear()
     {
-        CloseAllPopupUI();
+        popupStack.Clear();
         CurrentMainWindow = null;
     }
 }
