@@ -1,12 +1,24 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class UIParam { }
+
+public class UIActiveEffectParam : UIParam
+{
+    public DirectionType dir;
+    public RectTransform targetRectTr;
+    public Image fadeImage;
+
+    public UIActiveEffectParam(DirectionType dir, RectTransform targetRectTr, Image fadeImage)
+    {
+        this.dir = dir;
+        this.targetRectTr = targetRectTr;
+        this.fadeImage = fadeImage;
+    }
+}
 
 public class BaseCanvasUI : InitBase
 {
@@ -82,6 +94,18 @@ public class BaseCanvasUI : InitBase
     protected void SetSortingOrder(int order)
     {
         canvas.sortingOrder = order;
+    }
+
+    void ActiveEffectPresetting(UIActiveEffectParam param)
+    {
+
+    }
+
+    IEnumerator IActiveEffect(UIActiveEffectParam param)
+    {
+        // ÃÊ±â °ª
+
+        yield return null;
     }
 }
 

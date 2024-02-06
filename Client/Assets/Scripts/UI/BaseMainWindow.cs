@@ -11,31 +11,29 @@ public class BaseMainWindow : BaseCanvasUI
     public Stack<BasePopupUI> popupStack = new Stack<BasePopupUI>();
     BaseWindowUI currActiveWindow = null;
 
-    protected virtual void Start()
-    {
-        windowUIDic.Clear();
-
-        for (int i = 0; i < this.transform.childCount; i++)
-        {
-            BaseWindowUI baseWindowUI = this.transform.GetChild(i).GetComponent<BaseWindowUI>();
-
-            if (baseWindowUI != null)
-            {
-                baseWindowUI.Init();
-                windowUIDic.Add(baseWindowUI.WindowUIType, baseWindowUI);
-            }
-        }
-    }
-
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
 
-        Managers.UI.CurrentMainWindow = this;
-
         if (this.gameObject.activeSelf == false)
             this.gameObject.SetActive(true);
+
+        SetSortingOrder(1);
+
+        Managers.UI.CurrentMainWindow = this;
+        windowUIDic.Clear();
+ 
+        Transform rootWindowsTr = this.transform.Find("@Windows");
+
+        for (int i = 0; i < rootWindowsTr.childCount; i++)
+        {
+            if (rootWindowsTr.GetChild(i).TryGetComponent<BaseWindowUI>(out var baseWindowUI))
+            {
+                baseWindowUI.Init();
+                windowUIDic.Add(baseWindowUI.WindowUIType, baseWindowUI);
+            }
+        }
 
         return true;
     }

@@ -16,8 +16,10 @@ public class BaseWindowUI : BaseCanvasUI
         if (this.gameObject.activeSelf == true)
             this.gameObject.SetActive(false);
 
-        WindowUIType = Extension.ParseEnum<WindowUIType>(this.gameObject.name);
+        SetSortingOrder(5);
 
+        WindowUIType = Extension.ParseEnum<WindowUIType>(this.gameObject.name);
+        
         if (WindowUIType == WindowUIType.None)
             Debug.LogError("WindowUIType 열거형과 GameObject 이름이 다릅니다.");
 
@@ -45,4 +47,11 @@ public class BaseWindowUI : BaseCanvasUI
 
         return true;
     }
+
+    #region OnClick Event
+    public void OnClickExitWindow()
+    {
+        CloseWindowUI();
+    }
+    #endregion
 }

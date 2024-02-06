@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class LobbyMainWindow : BaseMainWindow
 {
-    [SerializeField] BasePopupUI popupUI;
 
 
-    public void TestButton()
+    #region OnClick Event
+    public void OnClickPlayerProfile()
     {
-        popupUI.OpenPopupUI();
+        OpenWindowUI(WindowUIType.PlayerProfileWindow);
     }
+    #endregion
 }
