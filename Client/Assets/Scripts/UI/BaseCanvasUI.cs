@@ -20,10 +20,12 @@ public class UIActiveEffectParam : UIParam
     }
 }
 
-public class BaseCanvasUI : InitBase
+public class BaseUI : InitBase
 {
     [SerializeField] private Canvas canvas;
     [SerializeField] private CanvasScaler canvasScaler;
+
+    [SerializeField] UIEffect[] uIEffects;
 
     public override bool Init()
     {
@@ -94,18 +96,6 @@ public class BaseCanvasUI : InitBase
     protected void SetSortingOrder(int order)
     {
         canvas.sortingOrder = order;
-    }
-
-    void ActiveEffectPresetting(UIActiveEffectParam param)
-    {
-
-    }
-
-    IEnumerator IActiveEffect(UIActiveEffectParam param)
-    {
-        // ÃÊ±â °ª
-
-        yield return null;
     }
 }
 

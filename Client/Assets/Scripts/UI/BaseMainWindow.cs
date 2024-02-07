@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BaseMainWindow : BaseCanvasUI
+public class BaseMainWindow : BaseUI
 {
     protected Dictionary<WindowUIType, BaseWindowUI> windowUIDic = new();
 
@@ -46,7 +46,8 @@ public class BaseMainWindow : BaseCanvasUI
             return null;
         }
 
-        if (currActiveWindow != null && currActiveWindow.WindowUIType != windowUIType)
+        if (currActiveWindow != null && currActiveWindow.WindowUIType != windowUIType
+            && currActiveWindow.IsActive)
             currActiveWindow.CloseWindowUI();
         
         currActiveWindow = windowUIDic[windowUIType];
