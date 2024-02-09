@@ -14,12 +14,14 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	public event Func<bool> IsFallTimeout;
 	public event Func<bool> IsGrounded;
 	public event Func<bool> IsFrontRight;
+	public event Func<bool> IsSuccessAttack;
 
 	public event Func<ENUM_DAMAGE_TYPE> IsHit;
+	public event Func<DamageInfo> GetDamageInfo;
 
 	public event Action<float> onJump = null;
 	public event Action<Vector2> onMove = null;
-	public event Action<float> onMoveX = null;
+	public event Action<float> onMoveInput = null;
 	public event Action<bool> onSetGravity = null;
 
 	private int playerId = -1;
@@ -39,7 +41,7 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 
 	private void Start()
 	{
-		CharacterControllerState.Initialize(characterType, animator);
+        animator.InitializeCharacter(characterType);
 	}
 
 	private void OnEnable()
@@ -79,10 +81,14 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	public bool CheckFrontRight()
 	{
 		return IsFrontRight();
-
     }
 
-	public bool CheckJumpable()
+	public DamageInfo TryGetDamageInfo()
+	{
+		return GetDamageInfo();
+    }
+
+    public bool CheckJumpable()
 	{
 		if (myPlayerInput == null)
 			return false;
@@ -123,6 +129,11 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 		return myPlayerInput.attackKey == (int)ENUM_ATTACK_KEY.ATTACK;
 	}
 
+	public bool CheckSuccessAttack()
+	{
+		return IsSuccessAttack();
+    }
+
 	public bool CheckSkill()
 	{
 		if (myPlayerInput == null)
@@ -155,15 +166,20 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 		return damageType != ENUM_DAMAGE_TYPE.None;
 	}
 
-	public void TryMove(float moveSpeed)
+	public void TryMoveAndJump(float moveSpeed = 0.0f)
 	{
 		if (myPlayerInput == null)
 			return;
 
-        onMoveX?.Invoke(myPlayerInput.moveX * moveSpeed);
+        onMoveInput?.Invoke(myPlayerInput.moveX * moveSpeed);
 	}
 
-	public void TryMove(Vector2 moveVec)
+	public void MovePosition(float moveX, float moveY)
+	{
+		MovePosition(new Vector2(moveX, moveY));
+	}
+
+	public void MovePosition(Vector2 moveVec)
 	{
         onMove?.Invoke(moveVec);
     }

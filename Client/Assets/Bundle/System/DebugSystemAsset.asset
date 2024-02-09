@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: DebugSystemAsset
   m_EditorClassIdentifier: 
   useGravity: 1
+  myPlayerPos: {x: -2, y: 0}
+  otherPlayerPos: {x: 1, y: 0}
+  myCharacterType: 0
+  otherCharacterType: 0
   playerComponentPrefab: {fileID: 2480274465849677282, guid: 280141d5dc0a46943a6fb61a33fd8170, type: 3}

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7940001686566504161}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8490732752717681258}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Jacket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 3801770168641584784}
   - component: {fileID: 3728059562184814406}
   - component: {fileID: 7693091913001968683}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ MonoBehaviour:
   m_CategoryHash: 5.3709393e-34
   m_labelHash: 0.00000040954276
   m_SpriteKey: 0
-  m_SpriteHash: 584558514
+  m_SpriteHash: 288431053
 --- !u!1 &6824513443228993302
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,7 +187,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6838939627023696801}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shoes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,8 +227,9 @@ GameObject:
   - component: {fileID: 6695545243425594803}
   - component: {fileID: 4564688862825467699}
   - component: {fileID: 1821194266457588202}
+  - component: {fileID: 8283005278515562879}
   - component: {fileID: 6123756859426560249}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -289,11 +290,11 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.0001
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 7fa44bfdb127f974b9e191fa89a6e300, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -313,7 +314,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 8271826272390545158}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 7fa44bfdb127f974b9e191fa89a6e300, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -407,8 +408,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c715d81f9b072264d86da736ebc53764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidBody: {fileID: 5802517775724882621}
   controller: {fileID: 7442671442867769603}
+  rigidBody: {fileID: 5802517775724882621}
   groundCheckComponent: {fileID: 5377339547715350782}
 --- !u!114 &4564688862825467699
 MonoBehaviour:
@@ -423,6 +424,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 7442671442867769603}
+  frontCheckOffset: {x: 7, y: 1, z: 0}
+  frontCheckSize: {x: 12, y: 5, z: 0}
 --- !u!114 &1821194266457588202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,8 +439,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 7442671442867769603}
+  superArmorDamageRate: 1.2
+  guardDamageRate: 0.3
   isInvinsible: 0
   isSuperArmor: 0
+  isGuard: 0
+--- !u!114 &8283005278515562879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271826272390545158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9759bda412ea3b4459ad541163809edf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 7442671442867769603}
 --- !u!114 &6123756859426560249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -460,7 +479,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7021379456146313094}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pants
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -491,7 +510,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1786258321195770462}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

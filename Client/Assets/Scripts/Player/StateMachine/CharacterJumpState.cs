@@ -11,18 +11,18 @@ public class CharacterJumpState : CharacterControllerState
 	{
 		base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 		controller.TryJump(jumpHeight);
-		controller.TryMove(moveSpeed);
+		controller.TryMoveAndJump(moveSpeed);
 	}
 
 	public override void OnStatePrevUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
 		base.OnStatePrevUpdate(animator, animatorStateInfo, layerIndex);
-		controller.TryMove(moveSpeed);
+		controller.TryMoveAndJump(moveSpeed);
 	}
 
 	public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
-		controller.TryMove(moveSpeed);
+		controller.TryMoveAndJump(moveSpeed);
 		base.OnStateExit(animator, animatorStateInfo, layerIndex);
 	}
 

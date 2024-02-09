@@ -4,6 +4,24 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
+public class DrawHelper
+{
+    public static void DrawOverlapBox(Vector2 point, Vector2 size, Color color = default)
+    {
+#if UNITY_EDITOR
+        Vector2 leftDown = point - size / 2;
+        Vector2 rightUp = point + size / 2;
+        Vector2 leftUp = new Vector2(point.x - size.x / 2, point.y + size.y / 2);
+        Vector2 rightDown = new Vector2(point.x + size.x / 2, point.y - size.y / 2);
+
+        Debug.DrawLine(leftDown, leftUp, color);
+        Debug.DrawLine(rightDown, rightUp, color);
+        Debug.DrawLine(leftDown, rightDown, color);
+        Debug.DrawLine(leftUp, rightUp, color);
+#endif
+    }
+}
+
 [System.Serializable]
 public class TriggerInfo
 {
@@ -125,6 +143,20 @@ public class CharacterFrameAttackState : CharacterFrameActionState
     private Vector2 attackOffset;
 	private Vector2 attackBox;
 
+	private IAttackable myAttackable = null;
+	protected IAttackable MyAttackable
+	{
+		get
+		{
+			if (myAttackable == null)
+			{
+				myAttackable = controller.GetComponent<IAttackable>();
+			}
+
+			return null;
+		}
+	}
+
 	private int remainAttackCount = 0;
 
 	protected override void StartFrameAction(int triggerIndex)
@@ -147,35 +179,30 @@ public class CharacterFrameAttackState : CharacterFrameActionState
 		ProgressAttackCount();
     }
 
-    protected IEnumerable<Collider2D> GetOverlapBoxAll(Transform centerObj)
+	protected IEnumerable<Collider2D> GetOverlapBoxAll(Transform centerObj)
 	{
 		Vector2 centerPos = centerObj.position;
 
-		DrawOverlapBox(centerPos + attackOffset, attackBox);
+		DrawHelper.DrawOverlapBox(centerPos + attackOffset, attackBox);
 
-		return Physics2D.OverlapBoxAll(centerPos + attackOffset, attackBox, 0)
-			.Where(h => h.gameObject.layer != LayerMask.NameToLayer("Player"));
-	}
-
-	private void DrawOverlapBox(Vector2 point, Vector2 size)
-	{
-		Vector2 leftDown = point - size / 2;
-		Vector2 rightUp = point + size / 2;
-		Vector2 leftUp = new Vector2(point.x - size.x / 2, point.y + size.y / 2);
-		Vector2 rightDown = new Vector2(point.x + size.x / 2, point.y - size.y / 2);
-
-		Debug.DrawLine(leftDown, leftUp);
-		Debug.DrawLine(rightDown, rightUp);
-		Debug.DrawLine(leftDown, rightDown);
-		Debug.DrawLine(leftUp, rightUp);
-	}
+        return Physics2D.OverlapBoxAll(centerPos + attackOffset, attackBox, 0)
+            .Where(c => c.transform != centerObj)
+            .Where(h => h.gameObject.layer == LayerMask.NameToLayer("Player"));
+    }
 
 	protected IEnumerable<IDamageable> GetDamageableOverlapBoxAll()
 	{
 		if (controller == null)
 			return null;
 
-		return GetOverlapBoxAll(controller.transform).OfType<IDamageable>();
+        return GetOverlapBoxAll(controller.transform)
+			.Where(c => c.GetComponent<IDamageable>() != null)
+			.Select(c => c.GetComponent<IDamageable>());
+	}
+
+	protected IAttackable GetMyAttackable()
+	{
+		return controller.GetComponent<IAttackable>();
 	}
 
 	private void ProgressAttackCount()
@@ -186,7 +213,8 @@ public class CharacterFrameAttackState : CharacterFrameActionState
         if (DoFrameAttack() == false)
 			return;
 
-		remainAttackCount--;
+		MyAttackable?.OnAttack();
+        remainAttackCount--;
 		return;
 	}
 

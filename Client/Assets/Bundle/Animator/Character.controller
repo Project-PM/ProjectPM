@@ -51,7 +51,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -4812336400533664106}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -91,7 +92,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 4346028220617866216}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -140,7 +142,7 @@ MonoBehaviour:
     amount: 0
     knockBackPower: 0
     stiffTime: 0
-    upperPower: 0
+    upperHeight: 0
 --- !u!114 &-6238785035421609186
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -179,6 +181,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac3ac3a27018c794fb0cac4b084418bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5849712292556007047
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 644cbb43ba560a343a9e475d953f2474, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upperPowerRate: 0.2
 --- !u!1102 &-5684547180010492739
 AnimatorState:
   serializedVersion: 6
@@ -190,7 +205,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -2515085253825699433}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -286,6 +302,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeedVec: {x: 1, y: -1}
+--- !u!114 &-4812336400533664106
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ce8c3b8f0ee9da4faebacd8a4b1cf84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-4586743673135329841
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -310,8 +338,8 @@ MonoBehaviour:
     type: 0
     amount: 3
     knockBackPower: 0.1
-    stiffTime: 0
-    upperPower: 0
+    stiffTime: 0.3
+    upperHeight: 0.1
 --- !u!114 &-4383703698923201343
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -472,6 +500,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSkillTable: {fileID: 11400000, guid: 68b969ccb01ef8440a5a01f7a8024cf2, type: 2}
+--- !u!114 &-2515085253825699433
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4ef411356aee26479f8ab57dd3b312d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-2462505902637422172
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -506,7 +546,7 @@ MonoBehaviour:
     amount: 0
     knockBackPower: 0
     stiffTime: 0
-    upperPower: 0
+    upperHeight: 0
 --- !u!1102 &-402689853291514102
 AnimatorState:
   serializedVersion: 6
@@ -801,7 +841,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -5849712292556007047}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -854,6 +895,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbb476db7b7df72479dd156f055b861c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4346028220617866216
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb3570657cbcf647b73831f3a5aed60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &4872987816524236532
@@ -1000,7 +1053,7 @@ MonoBehaviour:
     amount: 0
     knockBackPower: 0
     stiffTime: 0
-    upperPower: 0
+    upperHeight: 0
 --- !u!114 &7463789471283171702
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1060,7 +1113,7 @@ MonoBehaviour:
     amount: 0
     knockBackPower: 0
     stiffTime: 0
-    upperPower: 0
+    upperHeight: 0
 --- !u!114 &8328909030061879130
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1164,7 +1217,7 @@ MonoBehaviour:
     amount: 0
     knockBackPower: 0
     stiffTime: 0
-    upperPower: 0
+    upperHeight: 0
 --- !u!114 &8734513833417263306
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1177,7 +1230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ac99ae6b1e6a4e4682beb4cfc44d628, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guardKnockBackDistance: 0.05
+  guardKnockBackDistance: 0.02
 --- !u!114 &8960209103788682150
 MonoBehaviour:
   m_ObjectHideFlags: 1

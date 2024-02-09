@@ -2,59 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterGuardState : CharacterControllerState
+public class CharacterAirborneHitState : CharacterControllerState
 {
-    [SerializeField] private float guardKnockBackDistance;
-
     public override void OnStateEnter(UnityEngine.Animator animator, UnityEngine.AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         base.OnStateEnter(animator, animatorStateInfo, layerIndex);
-        TryKnockBack(); 
+        OnAirborneHit();
     }
 
     public override void OnStatePrevUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         base.OnStatePrevUpdate(animator, animatorStateInfo, layerIndex);
-        TryKnockBack();
+        controller.TryMoveAndJump();
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
-        TryKnockBack();
+        controller.TryMoveAndJump();
         base.OnStateExit(animator, animatorStateInfo, layerIndex);
     }
 
-    private void TryKnockBack()
+    private void OnAirborneHit()
     {
-        if (controller.CheckHit(out ENUM_DAMAGE_TYPE _) == false)
-            return;
+        var damageInfo = GetDamageInfo();
 
-        Vector2 knockBackMoveVec = Vector2.zero;
+        controller.TryJump(damageInfo.upperHeight);
 
-        if (controller.CheckFrontRight())
-        {
-            knockBackMoveVec = new Vector2(guardKnockBackDistance * -1, 0);
-        }
-        else
-        {
-            knockBackMoveVec = new Vector2(guardKnockBackDistance, 0);
-        }
+        float moveX = controller.CheckFrontRight() ? damageInfo.knockBackPower * -1 : damageInfo.knockBackPower;
+        controller.MovePosition(moveX, 0);
+    }
 
-        controller.MovePosition(knockBackMoveVec);
+    private DamageInfo GetDamageInfo()
+    {
+        return controller.TryGetDamageInfo();
     }
 
     protected override void CheckNextState(Animator animator, AnimatorStateInfo animatorStateInfo)
     {
         if (controller.CheckHit(out ENUM_DAMAGE_TYPE damageType))
         {
-            if (damageType != ENUM_DAMAGE_TYPE.GuardDamage)
+            if (damageType == ENUM_DAMAGE_TYPE.Airborne)
             {
-                animator.Play(ENUM_CHARACTER_STATE.StandHit);
+                animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
             }
         }
-        else if(controller.CheckGuard() == false)
+        else if (controller.CheckGrounded())
         {
-            animator.Play(ENUM_CHARACTER_STATE.Idle);
+            animator.Play(ENUM_CHARACTER_STATE.Down);
         }
     }
 }

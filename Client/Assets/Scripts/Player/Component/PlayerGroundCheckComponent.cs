@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerGroundCheckComponent : MonoBehaviour
+public class PlayerGroundCheckComponent : PlayerChildComponent
 {
-	[SerializeField] private PlayerCharacterController controller;
-
 	[SerializeField] private BoxCollider2D boxCollider;
     [SerializeField] private LayerMask GroundLayers;
 

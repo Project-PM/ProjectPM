@@ -6,22 +6,29 @@ public class DebugSystem : MonoSystem
 {
     [SerializeField] private bool useGravity = true;
 
-	[SerializeField] private PlayerComponent playerComponentPrefab = null;
+    [SerializeField] private Vector2 myPlayerPos = Vector2.zero;
+    [SerializeField] private Vector2 otherPlayerPos = Vector2.zero;
+
+    [SerializeField] private ENUM_CHARACTER_TYPE myCharacterType = ENUM_CHARACTER_TYPE.Red;
+    [SerializeField] private ENUM_CHARACTER_TYPE otherCharacterType = ENUM_CHARACTER_TYPE.Red;
+
+    [SerializeField] private PlayerComponent playerComponentPrefab = null;
 
     public void Spawn()
     {
-		var playerComponent = FindObjectOfType<PlayerComponent>();
-		if (playerComponent == null)
-		{
-			playerComponent = Instantiate(playerComponentPrefab);
-		}
+        var myPlayerComponent = Instantiate(playerComponentPrefab, myPlayerPos, Quaternion.identity);
+        myPlayerComponent.SetPlayerInfo(playerId, myCharacterType);
 
-		playerComponent.SetPlayerInfo(playerId, ENUM_CHARACTER_TYPE.Red);
+        var otherPlayerComponent = Instantiate(playerComponentPrefab, otherPlayerPos, Quaternion.identity);
+        otherPlayerComponent.SetPlayerInfo(-1, otherCharacterType);
 
-		var groundCheckComponent = FindObjectOfType<PlayerGroundCheckComponent>();
-		if (groundCheckComponent == null)
+        var groundCheckComponents = FindObjectsOfType<PlayerGroundCheckComponent>();
+		if (groundCheckComponents == null)
 			return;
 
-		groundCheckComponent.UseGravity = useGravity;
-	}
+        foreach(var groundCheckComponent in groundCheckComponents)
+        {
+            groundCheckComponent.UseGravity = useGravity;
+        }
+    }
 }

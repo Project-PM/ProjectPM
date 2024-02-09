@@ -42,6 +42,19 @@ public static class AnimatorHelper
 	{
 		return stateInfo.normalizedTime >= 1.0f;
 	}
+
+	public static void InitializeCharacter(this Animator ownerAnimator, ENUM_CHARACTER_TYPE characterType)
+	{
+        var controller = ownerAnimator.GetComponent<PlayerCharacterController>();
+        if (controller == null)
+            return;
+
+        var states = ownerAnimator.GetBehaviours<CharacterControllerState>();
+        foreach (var state in states)
+        {
+            state.InitializeCharacter(characterType, controller);
+        }
+    }
 }
 
 public class CharacterControllerState : StateMachineBehaviour
@@ -49,26 +62,13 @@ public class CharacterControllerState : StateMachineBehaviour
 	protected PlayerCharacterController controller = null;
 	protected ENUM_CHARACTER_TYPE characterType = ENUM_CHARACTER_TYPE.None;
 
-	public static void Initialize(ENUM_CHARACTER_TYPE characterType, Animator ownerAnimator)
-	{
-		var controller = ownerAnimator.GetComponent<PlayerCharacterController>();
-		if (controller == null)
-			return;
-
-		var states = ownerAnimator.GetBehaviours<CharacterControllerState>();
-		foreach (var state in states)
-		{
-			state.InitializeInternal(characterType, controller);
-		}
-	}
-
-	private void InitializeInternal(ENUM_CHARACTER_TYPE characterType, PlayerCharacterController controller)
+	public void InitializeCharacter(ENUM_CHARACTER_TYPE characterType, PlayerCharacterController controller)
 	{
 		this.characterType = characterType;
 		this.controller = controller;
 	}
 
-	protected bool IsEndState(AnimatorStateInfo stateInfo)
+	protected virtual bool IsEndState(AnimatorStateInfo stateInfo)
 	{
 		return stateInfo.normalizedTime >= 0.99f;
 	}
@@ -124,10 +124,6 @@ public class CharacterControllerState : StateMachineBehaviour
 			else if (damageType == ENUM_DAMAGE_TYPE.Airborne)
 			{
 				animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
-			}
-			else if (damageType == ENUM_DAMAGE_TYPE.Down)
-			{
-				animator.Play(ENUM_CHARACTER_STATE.Down);
 			}
 		}
 		else if (controller.CheckUltimate())

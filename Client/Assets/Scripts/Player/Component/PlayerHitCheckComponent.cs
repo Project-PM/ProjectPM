@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHitCheckComponent : MonoBehaviour, IDamageable
+public class PlayerHitCheckComponent : PlayerChildComponent, IDamageable
 {
-    [SerializeField] private PlayerCharacterController controller;
-
     [SerializeField] private float superArmorDamageRate = 1.2f;
     [SerializeField] private float guardDamageRate = 0.3f;
 
@@ -15,11 +13,14 @@ public class PlayerHitCheckComponent : MonoBehaviour, IDamageable
 
     private Coroutine endOfFrameCoroutine = null;
     private WaitForEndOfFrame endOfFrame = new WaitForEndOfFrame();
+
     private ENUM_DAMAGE_TYPE currentDamagedType = ENUM_DAMAGE_TYPE.None;
+    private DamageInfo currentDamageInfo = new DamageInfo();
 
     private void OnEnable()
     {
         controller.IsHit += IsHit;
+        controller.GetDamageInfo += GetDamageInfo;
 
         if (endOfFrameCoroutine != null)
         {
@@ -37,11 +38,17 @@ public class PlayerHitCheckComponent : MonoBehaviour, IDamageable
         }
 
         controller.IsHit -= IsHit;
+        controller.GetDamageInfo -= GetDamageInfo;
     }
 
     private ENUM_DAMAGE_TYPE IsHit()
     {
         return currentDamagedType;
+    }
+
+    private DamageInfo GetDamageInfo()
+    {
+        return currentDamageInfo;
     }
 
     private IEnumerator OnLateUpdate()
@@ -74,6 +81,7 @@ public class PlayerHitCheckComponent : MonoBehaviour, IDamageable
             currentDamagedType = damageInfo.type;
         }
 
+        currentDamageInfo = damageInfo;
         return true;
     }
 }

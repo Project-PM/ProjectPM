@@ -136,18 +136,22 @@ public class FrameInputSystem : SyncSystem
 		var receiveFrameInput = new RES_FRAME_INPUT();
 		receiveFrameInput.frameNumber = sendInput.frameNumber;
 
-		var playerInput = new RES_FRAME_INPUT.PlayerInput();
-		playerInput.playerId = playerId;
-		playerInput.moveX = sendInput.moveX;
-		playerInput.moveY = sendInput.moveY;
-		playerInput.attackKey = sendInput.attackKey;
-		playerInput.isJump = sendInput.isJump;
-		playerInput.isGuard = sendInput.isGuard;
+		var myPlayerInput = new RES_FRAME_INPUT.PlayerInput();
+		myPlayerInput.playerId = playerId;
+		myPlayerInput.moveX = sendInput.moveX;
+		myPlayerInput.moveY = sendInput.moveY;
+		myPlayerInput.attackKey = sendInput.attackKey;
+		myPlayerInput.isJump = sendInput.isJump;
+		myPlayerInput.isGuard = sendInput.isGuard;
+
+		var otherPlayerInput = new RES_FRAME_INPUT.PlayerInput();
+		otherPlayerInput.playerId = -1;
 
 		receiveFrameInput.playerInputs = new List<RES_FRAME_INPUT.PlayerInput>
 		{
-			playerInput
-		};
+			myPlayerInput,
+            otherPlayerInput
+        };
 
 		return receiveFrameInput;
 	}

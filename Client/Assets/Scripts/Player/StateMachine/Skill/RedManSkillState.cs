@@ -28,7 +28,18 @@ public class RedManSkillState : CharacterSkillState
 
     protected override void CheckNextState(Animator animator, AnimatorStateInfo animatorStateInfo)
     {
-        if (animatorStateInfo.IsEndState())
+        if (controller.CheckHit(out ENUM_DAMAGE_TYPE damageType))
+        {
+            if (damageType == ENUM_DAMAGE_TYPE.Stand)
+            {
+                animator.Play(ENUM_CHARACTER_STATE.StandHit);
+            }
+            else if (damageType == ENUM_DAMAGE_TYPE.Airborne)
+            {
+                animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
+            }
+        }
+        else if (animatorStateInfo.IsEndState())
         {
             animator.Play(ENUM_CHARACTER_STATE.Idle);
         }

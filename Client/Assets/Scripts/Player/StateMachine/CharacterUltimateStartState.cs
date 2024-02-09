@@ -2,17 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterUltimateStartState : MonoBehaviour
+public class CharacterUltimateStartState : CharacterControllerState
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void CheckNextState(Animator animator, AnimatorStateInfo animatorStateInfo)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (controller.CheckSuccessAttack())
+        {
+            animator.Play(ENUM_CHARACTER_STATE.Ultimate);
+        }
+        else if(controller.CheckHit(out ENUM_DAMAGE_TYPE damageType))
+        {
+            if (damageType == ENUM_DAMAGE_TYPE.Stand)
+            {
+                animator.Play(ENUM_CHARACTER_STATE.StandHit);
+            }
+            else if (damageType == ENUM_DAMAGE_TYPE.Airborne)
+            {
+                animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
+            }
+        }
+        else
+        {
+            if (IsEndState(animatorStateInfo))
+            {
+                animator.Play(ENUM_CHARACTER_STATE.Idle);
+            }
+        }
     }
 }

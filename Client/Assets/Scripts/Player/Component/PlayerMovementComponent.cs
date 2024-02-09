@@ -2,32 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovementComponent : MonoBehaviour
+public class PlayerMovementComponent : PlayerChildComponent
 {
 	[SerializeField] private Rigidbody2D rigidBody;
-	[SerializeField] private PlayerCharacterController controller;
 	[SerializeField] private PlayerGroundCheckComponent groundCheckComponent;
 
 	private void OnEnable()
 	{
 		controller.onMove += OnMove;
-		controller.onMoveX += OnMoveX;
+		controller.onMoveInput += OnMoveInput;
 	}
 
 	private void OnDisable()
 	{
 		controller.onMove -= OnMove;
-        controller.onMoveX -= OnMoveX;
+        controller.onMoveInput -= OnMoveInput;
     }
 
 	private void OnMove(Vector2 moveVec)
 	{
-		rigidBody.MovePosition(rigidBody.position + moveVec);
+        rigidBody.position = rigidBody.position + moveVec;
 	}
 
-	private void OnMoveX(float moveX)
+	private void OnMoveInput(float moveX)
 	{
         Vector2 finalMoveVec = new Vector2(moveX, groundCheckComponent._verticalVelocity);
-        rigidBody.MovePosition(rigidBody.position + finalMoveVec);
+        rigidBody.position = rigidBody.position + finalMoveVec;
     }
 }

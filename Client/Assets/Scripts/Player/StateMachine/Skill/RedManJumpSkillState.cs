@@ -42,7 +42,7 @@ public class RedManJumpSkillState : CharacterSkillState
             moveVec = new Vector2(moveSpeedVec.x * -1, moveSpeedVec.y);
         }
 
-        controller.TryMove(moveVec);
+        controller.MovePosition(moveVec);
 
     }
 
