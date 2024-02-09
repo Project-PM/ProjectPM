@@ -25,6 +25,8 @@ public class BaseMainWindow : BaseUI
         windowUIDic.Clear();
  
         Transform rootWindowsTr = this.transform.Find("@Windows");
+        if (rootWindowsTr == null)
+            return false;
 
         for (int i = 0; i < rootWindowsTr.childCount; i++)
         {

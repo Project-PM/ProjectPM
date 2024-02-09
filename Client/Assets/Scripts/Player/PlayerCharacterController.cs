@@ -14,11 +14,13 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	public event Func<bool> IsFallTimeout;
 	public event Func<bool> IsGrounded;
 	public event Func<bool> IsFrontRight;
+
 	public event Func<ENUM_DAMAGE_TYPE> IsHit;
 
 	public event Action<float> onJump = null;
 	public event Action<Vector2> onMove = null;
 	public event Action<float> onMoveX = null;
+	public event Action<bool> onSetGravity = null;
 
 	private int playerId = -1;
 	private ENUM_CHARACTER_TYPE characterType = ENUM_CHARACTER_TYPE.None;
@@ -74,6 +76,12 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 		return true;
 	}
 
+	public bool CheckFrontRight()
+	{
+		return IsFrontRight();
+
+    }
+
 	public bool CheckJumpable()
 	{
 		if (myPlayerInput == null)
@@ -123,6 +131,14 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 		return myPlayerInput.attackKey == (int)ENUM_ATTACK_KEY.SKILL;
 	}
 
+	public bool CheckGuard()
+	{
+        if (myPlayerInput == null)
+            return false;
+
+		return myPlayerInput.isGuard;
+    }
+
 	public bool CheckUltimate()
 	{
 		if (myPlayerInput == null)
@@ -156,4 +172,9 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	{
 		onJump?.Invoke(jumpHeight);
 	}
+
+	public void TrySetGravity(bool useGravity)
+	{
+        onSetGravity?.Invoke(useGravity);
+    }	
 }

@@ -21,7 +21,9 @@ public enum ENUM_CHARACTER_STATE
 	JumpAttack,
 	Skill,
 	JumpSkill,
+	Ultimate_Start,
 	Ultimate,
+	Guard,
 }
 
 public static class AnimatorHelper
@@ -130,11 +132,15 @@ public class CharacterControllerState : StateMachineBehaviour
 		}
 		else if (controller.CheckUltimate())
 		{
-			animator.Play(ENUM_CHARACTER_STATE.Ultimate);
+			animator.Play(ENUM_CHARACTER_STATE.Ultimate_Start);
 		}
 		else if (controller.CheckSkill())
 		{
 			animator.Play(ENUM_CHARACTER_STATE.Skill);
+		}
+		else if(controller.CheckGuard())
+		{
+			animator.Play(ENUM_CHARACTER_STATE.Guard);
 		}
 		else if (controller.CheckAttack())
 		{
