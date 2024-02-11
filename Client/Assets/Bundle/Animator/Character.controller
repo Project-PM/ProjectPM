@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 644cbb43ba560a343a9e475d953f2474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upperPowerRate: 0.2
+  upperPowerRate: 0.15
 --- !u!1102 &-5684547180010492739
 AnimatorState:
   serializedVersion: 6
@@ -335,11 +335,11 @@ MonoBehaviour:
     attackOffset: {x: 2, y: 1}
     attackCount: 1
   damageInfo:
-    type: 0
+    type: 1
     amount: 3
     knockBackPower: 0.1
     stiffTime: 0.3
-    upperHeight: 0.1
+    upperHeight: 1
 --- !u!114 &-4383703698923201343
 MonoBehaviour:
   m_ObjectHideFlags: 1
