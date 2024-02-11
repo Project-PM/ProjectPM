@@ -16,7 +16,7 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	public event Func<bool> IsFrontRight;
 	public event Func<bool> IsSuccessAttack;
 
-	public event Func<ENUM_DAMAGE_TYPE> IsHit;
+	public Func<ENUM_DAMAGE_TYPE> IsHit;
 	public event Func<DamageInfo> GetDamageInfo;
 
 	public event Action<float> onJump = null;
@@ -24,7 +24,7 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	public event Action<float> onMoveInput = null;
 	public event Action<bool> onSetGravity = null;
 
-	private int playerId = -1;
+	public int playerId { get; private set; }
 	private ENUM_CHARACTER_TYPE characterType = ENUM_CHARACTER_TYPE.None;
 
 	private RES_FRAME_INPUT.PlayerInput myPlayerInput = new RES_FRAME_INPUT.PlayerInput();
@@ -42,6 +42,14 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	private void Start()
 	{
         animator.InitializeCharacter(characterType);
+	}
+
+	private void LateUpdate()
+	{
+		ENUM_DAMAGE_TYPE damageType = IsHit();
+		bool isSuccessAttack = IsSuccessAttack();
+
+		System.OnPlayerInputChanged(playerId, damageType, isSuccessAttack);
 	}
 
 	private void OnEnable()
@@ -131,8 +139,11 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 
 	public bool CheckSuccessAttack()
 	{
-		return IsSuccessAttack();
-    }
+		if (myPlayerInput == null)
+			return false;
+
+		return myPlayerInput.isSuccessAttack;
+	}
 
 	public bool CheckSkill()
 	{
@@ -160,9 +171,11 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 
 	public bool CheckHit(out ENUM_DAMAGE_TYPE damageType)
 	{
-		// 당장은 이렇게 넣어두었지만, 이 Func는 Late Update 시점 서버에 Send 할 때 써야 한다
-		// 서버에서 보내준 isHit 값으로 현재 프레임의 히트를 체크해야 함
-		damageType = IsHit();
+		damageType = ENUM_DAMAGE_TYPE.None;
+		if (myPlayerInput == null)
+			return false;
+
+		damageType = (ENUM_DAMAGE_TYPE)myPlayerInput.damageType;
 		return damageType != ENUM_DAMAGE_TYPE.None;
 	}
 

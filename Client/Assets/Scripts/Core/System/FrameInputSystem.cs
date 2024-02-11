@@ -77,6 +77,17 @@ public class JumpInputData : PressInputData
     }
 }
 
+public class PlayerStateInputData : FrameInputData
+{
+	public readonly ENUM_DAMAGE_TYPE damageType = 0;
+	public readonly bool isSuccessAttack = false;
+
+	public PlayerStateInputData(ENUM_DAMAGE_TYPE damageType, bool isSuccessAttack, int frameCount) : base(frameCount)
+	{
+		this.damageType = damageType;
+		this.isSuccessAttack = isSuccessAttack;
+	}
+}
 
 public class FrameInputSystem : SyncSystem
 {
@@ -88,13 +99,13 @@ public class FrameInputSystem : SyncSystem
 
 	public event Action<RES_FRAME_INPUT> onReceiveFrameInput = null;
 
-	private int sendFrameNumber = -1;
+	private int lastReceiveFrameNumber = -1;
 
 	public override void OnEnter(SystemParam param)
 	{
 		base.OnEnter(param);
 
-		sendFrameNumber = -1;
+		lastReceiveFrameNumber = -1;
 		Application.targetFrameRate = targetFrameRate;
 	}
 
@@ -105,27 +116,36 @@ public class FrameInputSystem : SyncSystem
 
 	public void OnMoveInputChanged(Vector2 input)
 	{
-		var inputData = new MoveInputData(input, sendFrameNumber);
+		var inputData = new MoveInputData(input, lastReceiveFrameNumber);
 		inputDataQueue.Enqueue(inputData);
 	}
 
 	public void OnGuardInputChanged(bool isPress)
 	{
-		var inputData = new GuardInputData(isPress, sendFrameNumber);
+		var inputData = new GuardInputData(isPress, lastReceiveFrameNumber);
 		inputDataQueue.Enqueue(inputData);
 	}
 
 	public void OnAttackInputChanged(ENUM_ATTACK_KEY key, bool isAttack)
 	{
-		var inputData = new AttackInputData(key, isAttack, sendFrameNumber);
+		var inputData = new AttackInputData(key, isAttack, lastReceiveFrameNumber);
 		inputDataQueue.Enqueue(inputData);
 	}
 
     public void OnJumpInputChanged(bool isPress)
     {
-        var inputData = new JumpInputData(isPress, sendFrameNumber);
+        var inputData = new JumpInputData(isPress, lastReceiveFrameNumber);
         inputDataQueue.Enqueue(inputData);
     }
+
+	public void OnPlayerInputChanged(int playerId, ENUM_DAMAGE_TYPE damageType, bool isSuccessAttack)
+	{
+		if (this.playerId != playerId)
+			return;
+
+		var inputData = new PlayerStateInputData(damageType, isSuccessAttack, lastReceiveFrameNumber);
+		inputDataQueue.Enqueue(inputData);
+	}
 
     public RES_FRAME_INPUT MakeFakePacket(int frameNumber)
 	{
@@ -143,9 +163,18 @@ public class FrameInputSystem : SyncSystem
 		myPlayerInput.attackKey = sendInput.attackKey;
 		myPlayerInput.isJump = sendInput.isJump;
 		myPlayerInput.isGuard = sendInput.isGuard;
+		myPlayerInput.damageType = sendInput.damageType;
+		myPlayerInput.isSuccessAttack = sendInput.isSuccessAttack;
 
 		var otherPlayerInput = new RES_FRAME_INPUT.PlayerInput();
 		otherPlayerInput.playerId = -1;
+		
+		var controller = FindObjectsOfType<PlayerCharacterController>().FirstOrDefault(c => c.playerId == -1); ;
+		if (controller != null)
+		{
+			otherPlayerInput.damageType = (int)controller.IsHit();
+			otherPlayerInput.isSuccessAttack = controller.CheckSuccessAttack();
+		}
 
 		receiveFrameInput.playerInputs = new List<RES_FRAME_INPUT.PlayerInput>
 		{
@@ -156,26 +185,18 @@ public class FrameInputSystem : SyncSystem
 		return receiveFrameInput;
 	}
 
-	public override void OnPrevUpdate(int deltaFrameCount, float deltaTime)
-	{
-		base.OnPrevUpdate(deltaFrameCount, deltaTime);
-
-#if UNITY_EDITOR
-		if (isOfflineMode)
-		{
-			sendFrameNumber = receiveFrameInput.frameNumber + 1;
-
-			receiveFrameInput = MakeFakePacket(sendFrameNumber);
-			onReceiveFrameInput?.Invoke(receiveFrameInput);
-		}
-#endif
-	}
-
 	public override void OnLateUpdate(int deltaFrameCount, float deltaTime)
 	{
 		base.OnLateUpdate(deltaFrameCount, deltaTime);
 
-		if (IsReceivedPacket())
+		if (isOfflineMode)
+		{
+			lastReceiveFrameNumber = receiveFrameInput.frameNumber + 1;
+
+			receiveFrameInput = MakeFakePacket(lastReceiveFrameNumber);
+			onReceiveFrameInput?.Invoke(receiveFrameInput);
+		}
+		else
 		{
 			SendPacket();
 		}
@@ -183,19 +204,11 @@ public class FrameInputSystem : SyncSystem
 
 	private void SendPacket()
 	{
-		var sendInput = MakeFrameInputPacket(receiveFrameInput.frameNumber);
+		var sendInput = MakeFrameInputPacket(receiveFrameInput.frameNumber + 1);
 		if (sendInput == null)
 			return;
 
-		if (Send(sendInput) == false)
-			return;
-
-		sendFrameNumber = sendInput.frameNumber;
-	}
-
-	private bool IsReceivedPacket()
-	{
-		return isOfflineMode == false && receiveFrameInput.frameNumber == sendFrameNumber + 1;
+		Send(sendInput);
 	}
 
 	public override void OnReceive(IPacket packet)
@@ -205,6 +218,10 @@ public class FrameInputSystem : SyncSystem
 			receiveFrameInput = frameInput;
 			onReceiveFrameInput?.Invoke(frameInput);
 		}
+		else if(packet is RES_PLAYER_LIST playerList)
+		{
+
+		}
 	}
 
 	private REQ_FRAME_INPUT MakeFrameInputPacket(int frameNumber)
@@ -213,6 +230,8 @@ public class FrameInputSystem : SyncSystem
 		ENUM_ATTACK_KEY pressedAttackKey = ENUM_ATTACK_KEY.NONE;
 		bool isJump = false;
 		bool isGuard = false;
+		ENUM_DAMAGE_TYPE damageType = ENUM_DAMAGE_TYPE.None;
+		bool isSuccessAttack = false;
 
 		while (inputDataQueue.TryDequeue(out var result))
 		{
@@ -235,6 +254,11 @@ public class FrameInputSystem : SyncSystem
 			{
 				isGuard = guardInputResult.isPress;
 			}
+			else if(result is PlayerStateInputData playerStateInputData)
+			{
+				damageType = playerStateInputData.damageType;
+				isSuccessAttack = playerStateInputData.isSuccessAttack;
+			}
 		}
 
         var sendInput = new REQ_FRAME_INPUT();
@@ -246,6 +270,8 @@ public class FrameInputSystem : SyncSystem
 		sendInput.attackKey = (int)pressedAttackKey;
 		sendInput.isGuard = isGuard;
 		sendInput.isJump = isJump;
+		sendInput.damageType = (int)damageType;
+		sendInput.isSuccessAttack = isSuccessAttack;
 
 		return sendInput;
     }

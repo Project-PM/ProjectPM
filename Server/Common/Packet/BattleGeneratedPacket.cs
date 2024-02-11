@@ -293,6 +293,8 @@ public class REQ_FRAME_INPUT : IPacket
 	public int attackKey;
 	public bool isJump;
 	public bool isGuard;
+	public int damageType;
+	public bool isSuccessAttack;
 
 	public ushort Protocol { get { return (ushort)BattlePacketID.REQ_FRAME_INPUT; } }
 
@@ -314,6 +316,10 @@ public class REQ_FRAME_INPUT : IPacket
 		this.isJump = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
 		count += sizeof(bool);
 		this.isGuard = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
+		count += sizeof(bool);
+		this.damageType = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+		count += sizeof(int);
+		this.isSuccessAttack = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
 		count += sizeof(bool);
 	}
 
@@ -339,6 +345,10 @@ public class REQ_FRAME_INPUT : IPacket
 		count += sizeof(bool);
 		Array.Copy(BitConverter.GetBytes(this.isGuard), 0, segment.Array, segment.Offset + count, sizeof(bool));
 		count += sizeof(bool);
+		Array.Copy(BitConverter.GetBytes(this.damageType), 0, segment.Array, segment.Offset + count, sizeof(int));
+		count += sizeof(int);
+		Array.Copy(BitConverter.GetBytes(this.isSuccessAttack), 0, segment.Array, segment.Offset + count, sizeof(bool));
+		count += sizeof(bool);
 
 		Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
 
@@ -357,6 +367,8 @@ public class RES_FRAME_INPUT : IPacket
 		public int attackKey;
 		public bool isJump;
 		public bool isGuard;
+		public int damageType;
+		public bool isSuccessAttack;
 	
 		public void Read(ArraySegment<byte> segment, ref ushort count)
 		{
@@ -371,6 +383,10 @@ public class RES_FRAME_INPUT : IPacket
 			this.isJump = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
 			count += sizeof(bool);
 			this.isGuard = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
+			count += sizeof(bool);
+			this.damageType = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+			count += sizeof(int);
+			this.isSuccessAttack = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
 			count += sizeof(bool);
 		}
 	
@@ -388,6 +404,10 @@ public class RES_FRAME_INPUT : IPacket
 			Array.Copy(BitConverter.GetBytes(this.isJump), 0, segment.Array, segment.Offset + count, sizeof(bool));
 			count += sizeof(bool);
 			Array.Copy(BitConverter.GetBytes(this.isGuard), 0, segment.Array, segment.Offset + count, sizeof(bool));
+			count += sizeof(bool);
+			Array.Copy(BitConverter.GetBytes(this.damageType), 0, segment.Array, segment.Offset + count, sizeof(int));
+			count += sizeof(int);
+			Array.Copy(BitConverter.GetBytes(this.isSuccessAttack), 0, segment.Array, segment.Offset + count, sizeof(bool));
 			count += sizeof(bool);
 			return success;
 		}	

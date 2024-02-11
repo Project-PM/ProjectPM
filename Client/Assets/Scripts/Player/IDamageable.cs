@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum ENUM_DAMAGE_TYPE
 {
-    None = -1,
+    None = 0,
     Stand, // 스탠딩 경직 타격
     Airborne, // 공중 타격, 맞으면 뜸
     JustDamage, // 슈퍼아머 등으로 데미지만 들어가는 타격

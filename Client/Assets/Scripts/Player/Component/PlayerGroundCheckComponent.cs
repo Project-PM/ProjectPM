@@ -27,7 +27,7 @@ public class PlayerGroundCheckComponent : PlayerChildComponent
 
 	private void OnEnable()
 	{
-		GroundedOffset = boxCollider.size.y / 2 + Mathf.Abs(boxCollider.offset.y);
+		GroundedOffset = boxCollider.offset.y - boxCollider.size.y / 2;
 
 		controller.IsGrounded += IsGrounded;
 		controller.IsFallTimeout += IsFallTimeout;
@@ -66,7 +66,7 @@ public class PlayerGroundCheckComponent : PlayerChildComponent
 
 	private bool IsGrounded()
 	{
-		Vector2 startPos = new Vector2(transform.position.x, transform.position.y - GroundedOffset);
+		Vector2 startPos = new Vector2(transform.position.x, transform.position.y + GroundedOffset);
 
 		Debug.DrawRay(startPos, Vector2.down * GroundedRadius);
 		return Physics2D.Raycast(startPos, Vector2.down, GroundedRadius, GroundLayers);

@@ -32,6 +32,8 @@
 		<int name="attackKey"/>
 		<bool name="isJump"/>
 		<bool name="isGuard"/>
+		<int name="damageType"/>
+		<bool name="isSuccessAttack"/>
 	</packet>
 	<packet name="RES_FRAME_INPUT">
 		<int name="frameNumber"/>
@@ -42,6 +44,8 @@
 			<int name="attackKey"/>
 			<bool name="isJump"/>
 			<bool name="isGuard"/>
+			<int name="damageType"/>
+			<bool name="isSuccessAttack"/>
 		</list>
 	</packet>
 			

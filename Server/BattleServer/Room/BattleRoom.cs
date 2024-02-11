@@ -89,20 +89,11 @@ namespace BattleServer
 
 		private void OnResponseFrameInput(Session session, REQ_FRAME_INPUT request)
 		{
-			// 현재 프레임 카운트가 아닌 인풋은 무시
-			if (request.frameNumber != currentFrameCount)
-				return;
-
-			// 이미 보낸 유저의 인풋은 무시
-			if (playerFrameInputDictionary.ContainsKey(session.sessionId))
-				return;
-
-			playerFrameInputDictionary.Add(session.sessionId, request);
+			playerFrameInputDictionary[session.sessionId] = request;
 
 			if (playerFrameInputDictionary.Count == roomSessions.Count)
 			{
 				BroadcastFrameInput();
-
 				playerFrameInputDictionary.Clear();
 			}
 		}
@@ -125,6 +116,8 @@ namespace BattleServer
 					playerInput.isJump = frameInput.isJump;
 					playerInput.isGuard = frameInput.isGuard;
 					playerInput.attackKey = frameInput.attackKey;
+					playerInput.damageType = frameInput.damageType;
+					playerInput.isSuccessAttack = frameInput.isSuccessAttack;
 
 					response.playerInputs.Add(playerInput);
 				}

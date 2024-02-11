@@ -153,7 +153,7 @@ public class CharacterFrameAttackState : CharacterFrameActionState
 				myAttackable = controller.GetComponent<IAttackable>();
 			}
 
-			return null;
+			return myAttackable;
 		}
 	}
 

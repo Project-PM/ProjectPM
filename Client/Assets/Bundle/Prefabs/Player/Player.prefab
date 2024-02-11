@@ -393,7 +393,7 @@ MonoBehaviour:
   GroundLayers:
     serializedVersion: 2
     m_Bits: 64
-  GroundedRadius: 0.1
+  GroundedRadius: 0.2
   Gravity: -0.5
   UseGravity: 1
 --- !u!114 &6695545243425594803

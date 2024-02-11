@@ -60,6 +60,7 @@ public class PlayerHitCheckComponent : PlayerChildComponent, IDamageable
         }
     }
 
+    // 애니메이션 업데이트에서 불림
     public bool OnHit(PlayerCharacterController attacker, DamageInfo damageInfo)
     {
         if (isInvinsible)
