@@ -218,10 +218,6 @@ public class FrameInputSystem : SyncSystem
 			receiveFrameInput = frameInput;
 			onReceiveFrameInput?.Invoke(frameInput);
 		}
-		else if(packet is RES_PLAYER_LIST playerList)
-		{
-
-		}
 	}
 
 	private REQ_FRAME_INPUT MakeFrameInputPacket(int frameNumber)
