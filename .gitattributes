@@ -1,2 +1,2 @@
-Client filter=lfs diff=lfs merge=lfs -text
-Server filter=lfs diff=lfs merge=lfs -text
+*.extension filter=lfs diff=lfs merge=lfs -text
+.bundle filter=lfs diff=lfs merge=lfs -text
