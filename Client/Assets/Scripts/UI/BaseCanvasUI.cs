@@ -20,7 +20,7 @@ public class UIActiveEffectParam : UIParam
     }
 }
 
-public class BaseUI : InitBase
+public class BaseCanvasUI : InitBase
 {
     [SerializeField] private Canvas canvas;
     [SerializeField] private CanvasScaler canvasScaler;

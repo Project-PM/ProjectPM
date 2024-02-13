@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BaseMainWindow : BaseUI
+public class BaseMainWindow : BaseCanvasUI
 {
     protected Dictionary<WindowUIType, BaseWindowUI> windowUIDic = new();
 

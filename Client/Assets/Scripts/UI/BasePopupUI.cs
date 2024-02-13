@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasePopupUI : BaseUI
+public class BasePopupUI : BaseCanvasUI
 {
     public bool IsActive { get; private set; } = false;
 

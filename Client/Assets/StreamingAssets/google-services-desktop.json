@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "412243924884",
+    "project_id": "projectpm-da143",
+    "storage_bucket": "projectpm-da143.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:412243924884:android:b4e6f9abd1cdca67546181",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.DrawingBoardMan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEmWeaWSNAPjLK960y6_ciEDE13EX0lOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

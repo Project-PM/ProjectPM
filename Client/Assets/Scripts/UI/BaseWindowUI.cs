@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseWindowUI : BaseUI
+public class BaseWindowUI : BaseCanvasUI
 {
     public WindowUIType WindowUIType { get; protected set; }
 

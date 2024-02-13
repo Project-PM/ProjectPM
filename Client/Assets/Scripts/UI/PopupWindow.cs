@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// BasePopupUI만 관리하는 UIWindow
 /// </summary>
-public class PopupWindow : BaseUI
+public class PopupWindow : BaseCanvasUI
 {
 
 }
