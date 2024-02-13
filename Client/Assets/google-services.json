@@ -2,6 +2,7 @@
   "project_info": {
     "project_number": "412243924884",
     "project_id": "projectpm-da143",
+    "firebase_url": "https://projectpm-da143-default-rtdb.firebaseio.com/",
     "storage_bucket": "projectpm-da143.appspot.com"
   },
   "client": [
