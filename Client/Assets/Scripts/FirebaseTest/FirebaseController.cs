@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Firebase.Extensions;
 using Firebase.Auth;
+using Firebase.Database;
 using UnityEngine;
 using Firebase;
 using System;
@@ -17,6 +18,8 @@ public class FirebaseController : MonoBehaviour
 
     private void Start()
     {
+        auth = FirebaseAuth.DefaultInstance;
+
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             if (task.Result == Firebase.DependencyStatus.Available)
@@ -56,23 +59,107 @@ public class FirebaseController : MonoBehaviour
         }
     }
 
+    public void ReadTestData()
+    {
+        // DB의 시작 위치 세팅
+        DatabaseReference testDB = FirebaseDatabase.DefaultInstance.GetReference("TestData");
+
+        testDB.GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if(task.IsFaulted)
+            {
+                Debug.LogWarning("테스트 데이터 로드 실패");
+                return;
+            }
+            if(task.IsCanceled)
+            {
+                Debug.LogWarning("테스트 데이터 로드 취소");
+                return;
+            }
+
+            DataSnapshot snapshot = task.Result;
+            Debug.Log(snapshot.ChildrenCount);
+
+            foreach(var message in snapshot.Children)
+            {
+                Debug.Log($"{message.Key} : {message.Child("username").Value.ToString()} , {message.Child("value").Value.ToString()}");
+            }
+        });
+    }
+
     public void OnClickGuestLogin()
     {
         GuestLogin();
+    }
+
+    public void OnClikcGuestLogout()
+    {
+        auth.SignOut();
+        Debug.Log("로그아웃");
     }
 
     private Task GuestLogin()
     {
         return auth.SignInAnonymouslyAsync().ContinueWithOnMainThread(task =>
         {
-            if(task.IsCompleted)
+            if (task.IsCanceled)
             {
-                Debug.Log("게스트 로그인 성공");
+                Debug.LogWarning("게스트 로그인 취소");
+                return;
             }
-            else if(task.IsFaulted)
+            if (task.IsFaulted)
             {
-                Debug.LogError("게스트 로그인 실패");
+                Debug.LogWarning("게스트 로그인 실패");
+                return;
             }
+
+            FirebaseUser newUser = task.Result.User;
+            Debug.Log("게스트 로그인 성공");
         });
     }
+
+    #region 이메일 로그인
+    // 이메일 로그인은 테스트도 너무 귀찮은 거 같다 ㅎㅎ;;;
+    public void JoinEmailMembership(string email, string password)
+    {
+        auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task =>
+        {
+            if (task.IsCanceled)
+            {
+                Debug.LogWarning("이메일 회원가입 취소");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+
+                Debug.LogWarning("이메일 회원가입 실패");
+                return;
+            }
+
+            FirebaseUser newUser = task.Result.User;
+            Debug.Log("이메일 회원가입 완료");
+        });
+    }
+
+    private void EmailLogin(string email, string password)
+    {
+        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task =>
+        {
+            if (task.IsCanceled)
+            {
+                Debug.LogWarning("이메일 로그인 취소");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+
+                Debug.LogWarning("이메일 로그인 실패");
+                return;
+            }
+
+            FirebaseUser newUser = task.Result.User;
+            Debug.Log("이메일 로그인 완료");
+        });
+    }
+    #endregion
 }
