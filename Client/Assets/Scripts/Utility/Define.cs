@@ -23,4 +23,17 @@ public enum LayerType
     Ground = 6,
 }
 
-// HARD CODING
+/// <summary>
+/// 파이어베이스에 저장되는 데이터 그룹 타입
+/// </summary>
+public enum FirebaseDataType
+{
+    UserInfo,
+    UserItem,
+}
+
+public enum UserLoginType
+{
+    Guest,
+    Google,
+}
