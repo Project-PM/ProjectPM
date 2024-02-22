@@ -16,10 +16,14 @@ public class FirebaseController : MonoBehaviour
     private FirebaseAuth auth; // 인증정보
     private FirebaseUser user; // 유저정보
 
+    string userToken = "asdf1234";
+
+    FBUserData fbDataInfo = new FBUserData();
+
     private void Start()
     {
         auth = FirebaseAuth.DefaultInstance;
-
+        
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             if (task.Result == Firebase.DependencyStatus.Available)
@@ -99,36 +103,6 @@ public class FirebaseController : MonoBehaviour
         }
     }
 
-    public void WriteTestData(int value)
-    {
-        string userName = user.UserId;
-
-        DatabaseReference testDB = FirebaseDatabase.DefaultInstance.GetReference("TestData");
-        string key = testDB.Push().Key;
-
-        Dictionary<string, string> dict1 = new Dictionary<string, string>();
-        dict1.Add("username", userName);
-        dict1.Add("value", value.ToString());
-
-        Dictionary<string, object> dict2 = new Dictionary<string, object>();
-        dict2.Add(key, dict1);
-
-        testDB.UpdateChildrenAsync(dict2).ContinueWithOnMainThread(task =>
-        {
-            if(task.IsFaulted)
-            {
-                Debug.LogWarning("테스트 데이터 전송 실패");
-                return;
-            }
-            if(task.IsCanceled)
-            {
-                Debug.LogWarning("테스트 데이터 전송 취소");
-                return;
-            }
-
-            Debug.Log("테스트 데이터 업데이트 완료");
-        });
-    }
 
     public void OnClickGuestLogin()
     {
