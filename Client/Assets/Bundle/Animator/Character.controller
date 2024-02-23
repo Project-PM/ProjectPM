@@ -47,7 +47,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: StandHit
+  m_Name: StandHit 1
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -88,7 +88,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AirborneHit
+  m_Name: AirborneHit 1
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -378,6 +378,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSkillTable: {fileID: 11400000, guid: 68b969ccb01ef8440a5a01f7a8024cf2, type: 2}
+--- !u!1102 &-3350636409244043385
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stand Hit 2
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: ca7d9ade7e20a2b4c9453656158c0af2, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &-3214035273299259032
 AnimatorState:
   serializedVersion: 6
@@ -652,7 +678,7 @@ AnimatorStateMachine:
     m_Position: {x: 410, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7405234807362327398}
-    m_Position: {x: 150, y: 190, z: 0}
+    m_Position: {x: 150, y: 140, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3843617946116690632}
     m_Position: {x: 410, y: 260, z: 0}
@@ -701,6 +727,12 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 733278451467462070}
     m_Position: {x: 410, y: 650, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 6618355162158844178}
+    m_Position: {x: 150, y: 80, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -3350636409244043385}
+    m_Position: {x: 150, y: 200, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -1013,6 +1045,32 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 6283b9d2a7522704d87b0c155096e787, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &6618355162158844178
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AirborneHit 2
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 5f53f3ee30d8ed144b19c1fbdcd60594, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
