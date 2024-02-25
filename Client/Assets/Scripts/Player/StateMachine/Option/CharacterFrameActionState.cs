@@ -183,7 +183,7 @@ public class CharacterFrameAttackState : CharacterFrameActionState
 	{
 		Vector2 centerPos = centerObj.position;
 
-		DrawHelper.DrawOverlapBox(centerPos + attackOffset, attackBox);
+		DrawHelper.DrawOverlapBox(centerPos + attackOffset, attackBox, Color.green);
 
         return Physics2D.OverlapBoxAll(centerPos + attackOffset, attackBox, 0)
             .Where(c => c.transform != centerObj)
