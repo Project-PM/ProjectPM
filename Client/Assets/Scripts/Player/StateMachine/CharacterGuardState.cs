@@ -49,7 +49,7 @@ public class CharacterGuardState : CharacterControllerState
         {
             if (damageType != ENUM_DAMAGE_TYPE.GuardDamage)
             {
-                animator.Play(ENUM_CHARACTER_STATE.StandHit);
+                animator.Play(ENUM_CHARACTER_STATE.StandHit1);
             }
         }
         else if(controller.CheckGuard() == false)

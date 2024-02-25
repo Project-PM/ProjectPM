@@ -43,7 +43,7 @@ public class CharacterAirborneHitState : CharacterControllerState
         {
             if (damageType == ENUM_DAMAGE_TYPE.Airborne)
             {
-                animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
+                animator.Play(ENUM_CHARACTER_STATE.AirborneHit1);
             }
         }
         else if (controller.CheckGrounded())

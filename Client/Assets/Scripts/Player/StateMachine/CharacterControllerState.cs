@@ -11,8 +11,8 @@ public enum ENUM_CHARACTER_STATE
 	Fall,
 	Jump,
 	Land,
-	AirborneHit,
-	StandHit,
+	AirborneHit1,
+	StandHit1,
 	Down,
 	Recovery,
 	Attack1,
@@ -119,11 +119,11 @@ public class CharacterControllerState : StateMachineBehaviour
 		{
 			if (damageType == ENUM_DAMAGE_TYPE.Stand)
 			{
-				animator.Play(ENUM_CHARACTER_STATE.StandHit);
+				animator.Play(ENUM_CHARACTER_STATE.StandHit1);
 			}
 			else if (damageType == ENUM_DAMAGE_TYPE.Airborne)
 			{
-				animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
+				animator.Play(ENUM_CHARACTER_STATE.AirborneHit1);
 			}
 		}
 		else if (controller.CheckUltimate())

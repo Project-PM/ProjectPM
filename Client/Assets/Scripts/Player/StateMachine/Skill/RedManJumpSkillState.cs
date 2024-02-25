@@ -50,7 +50,7 @@ public class RedManJumpSkillState : CharacterSkillState
     {
         if (controller.CheckHit(out var damageType))
         {
-            animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
+            animator.Play(ENUM_CHARACTER_STATE.AirborneHit1);
         }
         else if (controller.CheckGrounded())
         {

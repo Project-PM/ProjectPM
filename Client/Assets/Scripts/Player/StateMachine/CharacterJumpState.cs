@@ -31,7 +31,7 @@ public class CharacterJumpState : CharacterControllerState
 		// 뭘 맞아도 이 때는 공중 피격
 		if (controller.CheckHit(out ENUM_DAMAGE_TYPE damageType))
 		{
-			animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
+			animator.Play(ENUM_CHARACTER_STATE.AirborneHit1);
 		}
 		else if (controller.CheckAttack())
 		{

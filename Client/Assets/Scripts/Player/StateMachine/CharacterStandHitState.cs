@@ -36,11 +36,11 @@ public class CharacterStandHitState : CharacterControllerState
         {
             if (damageType == ENUM_DAMAGE_TYPE.Stand)
             {
-                animator.Play(ENUM_CHARACTER_STATE.StandHit);
+                animator.Play(ENUM_CHARACTER_STATE.StandHit1);
             }
             else if (damageType == ENUM_DAMAGE_TYPE.Airborne)
             {
-                animator.Play(ENUM_CHARACTER_STATE.AirborneHit);
+                animator.Play(ENUM_CHARACTER_STATE.AirborneHit1);
             }
         }
         else if(IsEndState(animatorStateInfo))
