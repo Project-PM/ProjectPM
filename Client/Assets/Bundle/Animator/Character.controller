@@ -47,7 +47,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: StandHit 1
+  m_Name: StandHit1
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -88,7 +88,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AirborneHit 1
+  m_Name: AirborneHit1
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -385,7 +385,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Stand Hit 2
+  m_Name: StandHit2
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -1057,7 +1057,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AirborneHit 2
+  m_Name: AirborneHit2
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
