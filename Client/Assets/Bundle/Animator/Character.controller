@@ -329,7 +329,7 @@ MonoBehaviour:
   applyCharacterType: 0
   deltaFrameCount: 3
   triggers:
-  - startFrameIndex: 2
+  - startFrameIndex: 4
   attackInfoList:
   - attackBox: {x: 2, y: 2}
     attackOffset: {x: 2, y: 1}
