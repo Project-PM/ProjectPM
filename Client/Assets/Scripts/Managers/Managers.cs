@@ -9,15 +9,15 @@ public class Managers : MonoBehaviour
 
     #region Managers
     private DataManager _data = new DataManager();
-    private FBDataManager _fbData = new FBDataManager();
     private GameManager _game = new GameManager();
+    private PlatformManager _platform = new PlatformManager();
     private ResourceManager _resource = new ResourceManager();
     private SceneManagerEx _scene = new SceneManagerEx();
     private UIManager _ui = new UIManager();
 
     public static DataManager Data { get { return Instance?._data; } }
-    public static FBDataManager FBData { get { return Instance?._fbData; } }
     public static GameManager Game { get { return Instance?._game; } }
+    public static PlatformManager Platform { get { return Instance?._platform; } }
     public static ResourceManager Resource { get { return Instance?._resource; } }
     public static SceneManagerEx Scene { get { return Instance?._scene; } }
     public static UIManager UI { get { return Instance?._ui; } }

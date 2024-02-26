@@ -9,36 +9,24 @@ public interface IPlatformDB
 {
     public bool InitDB();
     public void SaveDB(FBUserData saveData);
-    public void UpdateDB(BaseFBData updateData);
+    public void UpdateDB(FBDataBase updateData);
     public FBUserData LoadDB(); // 로드는 무조건 한번에
 }
 
 public class FirebaseDB : IPlatformDB
 {
-    DatabaseReference firebaseRootDB = null;
-    DatabaseReference firebaseLogRootDB = null;
-
     private Dictionary<FirebaseDataType, DatabaseReference> DBReferenceDict = new Dictionary<FirebaseDataType, DatabaseReference>();
 
     public bool InitDB()
     {
-        firebaseRootDB = FirebaseDatabase.DefaultInstance.RootReference;
+        DatabaseReference dbRootReference = FirebaseDatabase.DefaultInstance.RootReference;
 
         for (int i = 0; i < (int)FirebaseDataType.Max; i++)
         {
             DBReferenceDict[(FirebaseDataType)i] = FirebaseDatabase.DefaultInstance.RootReference.Child(((FirebaseDataType)i).ToString()).
-                Child(Managers.FBData.UserIDToken);
+                Child(Managers.Platform.GetUserID());
         }
 
-        //로그용 DB 세팅해야 함
-        AppOptions options = new AppOptions();
-        options.AppId = ("");
-        options.ApiKey = ("");
-        options.DatabaseUrl = new System.Uri("https://projectpm-da143-default-rtdb.firebaseio.com/");
-
-        FirebaseApp debugApp = FirebaseApp.Create(options);
-        FirebaseDatabase secondaryDatabase = FirebaseDatabase.GetInstance(debugApp);
-        firebaseLogRootDB = secondaryDatabase.RootReference;
         return true;
     }
 
@@ -54,7 +42,7 @@ public class FirebaseDB : IPlatformDB
     /// <summary>
     /// 데이터 부분 업데이트(세이브)
     /// </summary>
-    public void UpdateDB(BaseFBData updateData)
+    public void UpdateDB(FBDataBase updateData)
     {
         if (updateData is FBUserInfo)
         {
