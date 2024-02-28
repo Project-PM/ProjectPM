@@ -1067,7 +1067,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 235788722}
         m_TargetAssemblyTypeName: DebugCanvas, Assembly-CSharp
-        m_MethodName: OnClickGuestLogin
+        m_MethodName: OnClickGuestLogout
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

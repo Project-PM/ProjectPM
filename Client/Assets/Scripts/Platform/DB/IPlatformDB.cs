@@ -4,13 +4,16 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Firebase.Extensions;
+using System.Threading.Tasks;
+using System;
 
 public interface IPlatformDB
 {
     public bool InitDB();
     public void SaveDB(FBUserData saveData);
     public void UpdateDB(FBDataBase updateData);
-    public FBUserData LoadDB(); // 로드는 무조건 한번에
+    public FBUserData LoadDB(Action<FBUserData> OnSuccess = null, Action OnFailed = null, Action OnCanceled = null);
 }
 
 public class FirebaseDB : IPlatformDB
@@ -53,7 +56,7 @@ public class FirebaseDB : IPlatformDB
     {
         if (DBReferenceDict.Count == 0)
         {
-            Debug.LogWarning("Firebase Database is not initialized properly.");
+            Debug.LogWarning("InitDB 호출 전에 SaveDB 호출");
             return;
         }
 
@@ -99,7 +102,7 @@ public class FirebaseDB : IPlatformDB
         }
         else
         {
-            Debug.LogWarning("userItemRef is NUll!");
+            Debug.LogWarning("userItemRef is Null!");
         }
     }
 
@@ -122,16 +125,16 @@ public class FirebaseDB : IPlatformDB
     /// <summary>
     /// 데이터 전체를 로드한다
     /// </summary>
-    public FBUserData LoadDB()
+    public FBUserData LoadDB(Action<FBUserData> OnSuccess = null, Action OnFailed = null, Action OnCanceled = null)
     {
         Debug.Log("DB 로드");
         FBUserData dataInfo = new FBUserData();
 
-        DBReferenceDict[FirebaseDataType.UserInfo].GetValueAsync().ContinueWith(task =>
+        DBReferenceDict[FirebaseDataType.UserInfo].GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsFaulted)
             {
-                Debug.LogError("데이터 로드 실패");
+
             }
             else if (task.IsCompleted)
             {
@@ -141,11 +144,11 @@ public class FirebaseDB : IPlatformDB
             }
         });
 
-        DBReferenceDict[FirebaseDataType.UserItem].GetValueAsync().ContinueWith(task =>
+        DBReferenceDict[FirebaseDataType.UserItem].GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsFaulted)
             {
-                Debug.LogError("데이터 로드 실패");
+
             }
             else if (task.IsCompleted)
             {

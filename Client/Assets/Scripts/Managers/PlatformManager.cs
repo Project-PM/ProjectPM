@@ -44,7 +44,7 @@ public class FBUserInfo : FBDataBase
 [Serializable]
 public class FBUserItem : FBDataBase
 {
-    public Dictionary<int, int> itemDict = new Dictionary<int, int>(); // <아이템 고유 번호, 개수>
+    public Dictionary<int, int> itemDict = new Dictionary<int, int>() { { 0, 0 } }; // <아이템 고유 번호, 개수>
 }
 #endregion
 
@@ -109,21 +109,14 @@ public class PlatformManager
 
             if (dataInfo == null || string.IsNullOrEmpty(dataInfo.userInfo.userKey))
             {
-                // 최초 로그인인 경우 유저 고유 키 생성
+                // 최초 로그인인 경우
+                Debug.Log("최초 로그인");
                 fbDataInfo.userInfo.userKey = "userKey";
                 fbDataInfo.userInfo.userNickName = fbDataInfo.userInfo.userKey;
                 DB.SaveDB(fbDataInfo);
-
-                Debug.Log($"유저 고유 키 : {fbDataInfo.userInfo.userKey}");
             }
             else
                 fbDataInfo = dataInfo;
-
-            _OnCheckFirstUser += (bool b) => // 체크 및 Initialize 먼저 하고, 
-            {
-                _OnSignInSuccess?.Invoke(); // 성공 콜백을 호출해야 서순이 맞음
-            };
-
         },
         _OnSignInFailed, _OnSignCanceled);
     }
@@ -132,19 +125,5 @@ public class PlatformManager
     {
         if (Auth.IsLogin)
             Auth.SignOut();
-    }
-
-    private void InitializeCurrentUserDB(Action<FBUserInfo> OnCompleted = null)
-    {
-        var loginType = Auth.CurrentLoginType;
-        var userId = GetUserID();
-
-        if (Auth.IsLogin == false)
-        {
-            Debug.LogError("로그인 상태가 아닙니다.");
-            return;
-        }
-
-
     }
 }
