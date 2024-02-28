@@ -37,16 +37,14 @@ public class FBDataBase { }
 public class FBUserInfo : FBDataBase
 {
     public string userKey = string.Empty; // 유저에게 공개되는 유저 고유 키
-    public string lastLoginTime = string.Empty; // 마지막 접속 시간
     public string userNickName = string.Empty; // 유저 닉네임 (설정 전엔 유저키로 세팅)
-    public bool isLogined = false; // 현재 로그인 상태 (중복 로그인 관련 처리?)
     public UserLoginType userLoginType = UserLoginType.Guest; // 계정 동기화 정보
 }
 
 [Serializable]
 public class FBUserItem : FBDataBase
 {
-    public Dictionary<int, int> itemDict = new Dictionary<int, int>(); // <아이템 고유 번호, 개수>?
+    public Dictionary<int, int> itemDict = new Dictionary<int, int>(); // <아이템 고유 번호, 개수>
 }
 #endregion
 
@@ -76,12 +74,10 @@ public class PlatformManager
                    if (task.Result == DependencyStatus.Available)
                    {
                        Auth.TryConnectAuth();
-                       DB.InitDB();
-                       DB.LoadDB();
-
+                       
                        Debug.Log("파이어베이스 인증 성공");
                    }
-                   else // 호출 시도 아직 안 해봄
+                   else
                    {
                        Debug.LogError("파이어베이스 인증 실패");
                    }
@@ -108,12 +104,26 @@ public class PlatformManager
     {
         Auth.SignIn(OnSignInSuccess: () => // 로그인 성공 시 
         {
+            DB.InitDB();
+            FBUserData dataInfo = DB.LoadDB();
+
+            if (dataInfo == null || string.IsNullOrEmpty(dataInfo.userInfo.userKey))
+            {
+                // 최초 로그인인 경우 유저 고유 키 생성
+                fbDataInfo.userInfo.userKey = "userKey";
+                fbDataInfo.userInfo.userNickName = fbDataInfo.userInfo.userKey;
+                DB.SaveDB(fbDataInfo);
+
+                Debug.Log($"유저 고유 키 : {fbDataInfo.userInfo.userKey}");
+            }
+            else
+                fbDataInfo = dataInfo;
+
             _OnCheckFirstUser += (bool b) => // 체크 및 Initialize 먼저 하고, 
             {
                 _OnSignInSuccess?.Invoke(); // 성공 콜백을 호출해야 서순이 맞음
             };
 
-            CheckFirstUserOrInitialize(_OnCheckFirstUser);
         },
         _OnSignInFailed, _OnSignCanceled);
     }
@@ -122,14 +132,6 @@ public class PlatformManager
     {
         if (Auth.IsLogin)
             Auth.SignOut();
-    }
-
-    private void CheckFirstUserOrInitialize(Action<bool> checkRoutine)
-    {
-        InitializeCurrentUserDB(OnCompleted: (data) =>
-        {
-            checkRoutine?.Invoke(data == null || string.IsNullOrEmpty(data.userNickName));
-        });
     }
 
     private void InitializeCurrentUserDB(Action<FBUserInfo> OnCompleted = null)

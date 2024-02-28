@@ -17,6 +17,14 @@ public class DebugCanvas : MonoBehaviour
             string id = Managers.Platform.GetUserID();
             Debug.Log($"회원번호 : {id} 으로 로그인 완료");
 
-        }, null, null);
+        }, () =>
+        {
+            Debug.Log($"로그인 실패...");
+        }, null);
+    }
+
+    public void OnClickGuestLogout()
+    {
+        Managers.Platform.Logout();
     }
 }
