@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using JetBrains.Annotations;
 using Firebase.Extensions;
+using Unity.VisualScripting;
 
 #region FBUserDatas
 /// <summary>
@@ -60,9 +61,7 @@ public class PlatformManager
     }
     private IPlatformAuth auth = null;
 
-    IPlatformDB DB = new FirebaseDB();
-
-    public FBUserData fbDataInfo { get; private set; } = new FBUserData();
+    FirebaseDB DB = new FirebaseDB();
 
     public void Initialize()
     {
@@ -89,6 +88,43 @@ public class PlatformManager
         auth = new PlatformGuestAuth();
     }
 
+    // 테스트용
+    public void RegisterFBUserInfoCallback(IFBUserInfoPostProcess mono)
+    {
+        Debug.Log("음?;");
+        DB.RegisterIFBUserInfoPostProcess(mono);
+    }
+
+    public void UnregisterFBUserInfoCallback(IFBUserInfoPostProcess mono)
+    { 
+        Debug.Log("음?;");
+        DB.UnregisterIFBUserInfoPostProcess(mono);
+    }
+
+    public void RegisterFBUserItemCallback(IFBUserItemPostProcess mono)
+    {
+        Debug.Log("음?;");
+        DB.RegisterIFBUserItemPostProcess(mono);
+    }
+
+    public void UnregisterFBUserItemCallback(IFBUserItemPostProcess mono)
+    {
+        Debug.Log("음?;");
+        DB.UnregisterIFBUserItemPostProcess(mono);
+    }
+
+    public bool UpdateDB(FirebaseDataType type, FBDataBase data, Action OnSuccess = null, Action OnFailed = null, Action OnCanceled = null)
+    {
+        if(data == null || GetUserID() == string.Empty)
+        {
+            OnCanceled?.Invoke();
+            return false;
+        }
+
+        DB.UpdateDB(data);
+        return true;
+    }
+
     public string GetUserID()
     {
         if (!Auth.IsAuthValid)
@@ -105,18 +141,12 @@ public class PlatformManager
         Auth.SignIn(OnSignInSuccess: () => // 로그인 성공 시 
         {
             DB.InitDB();
-            FBUserData dataInfo = DB.LoadDB();
 
-            if (dataInfo == null || string.IsNullOrEmpty(dataInfo.userInfo.userKey))
-            {
-                // 최초 로그인인 경우
-                Debug.Log("최초 로그인");
-                fbDataInfo.userInfo.userKey = "userKey";
-                fbDataInfo.userInfo.userNickName = fbDataInfo.userInfo.userKey;
-                DB.SaveDB(fbDataInfo);
-            }
-            else
-                fbDataInfo = dataInfo;
+            // 최초 로그인 판단해서 무언가 해야 됨니다.
+            // 다른 유저의 DB도 가져올 일이 생길 수도 있기 때문에
+            // 그냥 나도 SelectDB 같은거 하나 추가해서 없으면 내부적으로 알아서 생성하게 하자
+
+            // 즉, LoadDB -> SelectDB 변경하고 최초로그인 처리 ㄱㄱ
         },
         _OnSignInFailed, _OnSignCanceled);
     }

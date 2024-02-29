@@ -7,18 +7,26 @@ using UnityEngine;
 using Firebase.Extensions;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
 
-public interface IPlatformDB
+public interface IFBUserInfoPostProcess
 {
-    public bool InitDB();
-    public void SaveDB(FBUserData saveData);
-    public void UpdateDB(FBDataBase updateData);
-    public FBUserData LoadDB(Action<FBUserData> OnSuccess = null, Action OnFailed = null, Action OnCanceled = null);
+    void OnUpdateFBUserInfoProperty(FBUserInfo property);
 }
 
-public class FirebaseDB : IPlatformDB
+public interface IFBUserItemPostProcess
+{
+    void OnUpdateFBUserItemProperty(FBUserItem property);
+}
+
+public class FirebaseDB
 {
     private Dictionary<FirebaseDataType, DatabaseReference> DBReferenceDict = new Dictionary<FirebaseDataType, DatabaseReference>();
+
+    private List<IFBUserInfoPostProcess> userInfoProcessList = new List<IFBUserInfoPostProcess>();
+    private List<IFBUserItemPostProcess> userItemProcessList = new List<IFBUserItemPostProcess>();
+
+    FBUserData userData = null;
 
     public bool InitDB()
     {
@@ -46,17 +54,89 @@ public class FirebaseDB : IPlatformDB
                 .Child(userID);
         }
 
+        SetUpdateCallBack();
+
         return true;
     }
 
+    private void SetUpdateCallBack()
+    {
+        DBReferenceDict[FirebaseDataType.UserInfo].Reference.ChildChanged -= OnUserInfoPropertiesUpdate;
+        DBReferenceDict[FirebaseDataType.UserInfo].Reference.ChildChanged += OnUserInfoPropertiesUpdate;
+
+        DBReferenceDict[FirebaseDataType.UserItem].Reference.ChildChanged -= OnUserItemPropertiesUpdate;
+        DBReferenceDict[FirebaseDataType.UserItem].Reference.ChildChanged += OnUserItemPropertiesUpdate;
+    }
+
+    private void OnUserInfoPropertiesUpdate(object sender, ChildChangedEventArgs e)
+    {
+        Debug.Log($"userInfo 데이터 갱신 감지");
+
+        FBUserInfo userInfo = JsonConvert.DeserializeObject<FBUserInfo>(e.Snapshot.GetRawJsonValue());
+
+        foreach (var process in userInfoProcessList)
+        {
+            process?.OnUpdateFBUserInfoProperty(userInfo);
+        }
+    }
+    private void OnUserItemPropertiesUpdate(object sender, ChildChangedEventArgs e)
+    {
+        Debug.Log($"userItem 데이터 갱신 감지");
+
+        foreach(var s in e.Snapshot.Children)
+        {
+            Debug.Log($"{s.Value}, {s.Key}");
+        }
+
+        // 여기서 Newtonsoft.Json.JsonSerializationException
+        FBUserItem userItem = JsonConvert.DeserializeObject<FBUserItem>(e.Snapshot.GetRawJsonValue());
+
+        foreach (var process in userItemProcessList)
+        {
+            process?.OnUpdateFBUserItemProperty(userItem);
+        }
+    }
+
+    public void RegisterIFBUserInfoPostProcess(IFBUserInfoPostProcess userInfoPostProcess)
+    {
+        if (!userInfoProcessList.Contains(userInfoPostProcess))
+        {
+            userInfoProcessList.Add(userInfoPostProcess);
+        }
+    }
+
+    public void UnregisterIFBUserInfoPostProcess(IFBUserInfoPostProcess userInfoPostProcess)
+    {
+        if (userInfoProcessList.Contains(userInfoPostProcess))
+        {
+            userInfoProcessList.Remove(userInfoPostProcess);
+        }
+    }
+
+    public void RegisterIFBUserItemPostProcess(IFBUserItemPostProcess userItemPostProcess)
+    {
+        if (!userItemProcessList.Contains(userItemPostProcess))
+        {
+            userItemProcessList.Add(userItemPostProcess);
+        }
+    }
+
+    public void UnregisterIFBUserItemPostProcess(IFBUserItemPostProcess userItemPostProcess)
+    {
+        if (userItemProcessList.Contains(userItemPostProcess))
+        {
+            userItemProcessList.Remove(userItemPostProcess);
+        }
+    }
+
     /// <summary>
-    /// 데이터 전체 세이브
+    /// 데이터 추가
     /// </summary>
-    public void SaveDB(FBUserData saveData)
+    public void InsertDB(FBUserData saveData)
     {
         if (DBReferenceDict.Count == 0)
         {
-            Debug.LogWarning("InitDB 호출 전에 SaveDB 호출");
+            Debug.LogWarning("InitDB 호출 전에 InserDB가 호출 됨");
             return;
         }
 
@@ -140,7 +220,6 @@ public class FirebaseDB : IPlatformDB
             {
                 DataSnapshot snapShot = task.Result;
                 dataInfo.userInfo = JsonConvert.DeserializeObject<FBUserInfo>(snapShot.GetRawJsonValue());
-
             }
         });
 
@@ -160,4 +239,6 @@ public class FirebaseDB : IPlatformDB
 
         return dataInfo;
     }
+
+    
 }
