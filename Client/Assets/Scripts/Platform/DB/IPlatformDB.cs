@@ -63,68 +63,45 @@ public class FirebaseDB
 
     private void SetUpdateCallBack()
     {
-        DBReferenceDict[FirebaseDataType.UserInfo].Reference.ChildChanged -= OnUserInfoPropertiesUpdate;
-        DBReferenceDict[FirebaseDataType.UserInfo].Reference.ChildChanged += OnUserInfoPropertiesUpdate;
+        DBReferenceDict[FirebaseDataType.UserInfo].Reference.ValueChanged -= OnUserInfoPropertiesUpdate;
+        DBReferenceDict[FirebaseDataType.UserInfo].Reference.ValueChanged += OnUserInfoPropertiesUpdate;
 
-        DBReferenceDict[FirebaseDataType.UserItem].Reference.ChildChanged -= OnUserItemPropertiesUpdate;
-        DBReferenceDict[FirebaseDataType.UserItem].Reference.ChildChanged += OnUserItemPropertiesUpdate;
+        DBReferenceDict[FirebaseDataType.UserItem].Reference.ValueChanged -= OnUserItemPropertiesUpdate;
+        DBReferenceDict[FirebaseDataType.UserItem].Reference.ValueChanged += OnUserItemPropertiesUpdate;
     }
 
-    private void OnUserInfoPropertiesUpdate(object sender, ChildChangedEventArgs e)
+    private void OnUserInfoPropertiesUpdate(object sender, ValueChangedEventArgs e)
     {
-        Debug.Log("FB UserInfo 데이터 변경 감지");
+        Debug.Log($"FB UserInfo 데이터 변경 감지 {userInfoProcessList.Count}");
 
-        DBReferenceDict[FirebaseDataType.UserInfo].GetValueAsync().ContinueWith(task =>
+        FBUserInfo userInfo = new FBUserInfo();
+        userInfo.userKey = e.Snapshot.Child("userKey").Value.ToString();
+        userInfo.userNickName = e.Snapshot.Child("userNickName").Value.ToString();
+
+        foreach (var process in userInfoProcessList)
         {
-            if(task.IsFaulted || task.IsCanceled)
-            {
-                Debug.Log("캔슬캔슬");
-            }
-            else if (task.IsCompleted)
-            {
-                Debug.Log("FB UserInfo 데이터 변경 처리");
-                DataSnapshot snapshot = task.Result;
-
-                // 안됨
-                Dictionary<string, object> dictUser = (Dictionary<string, object>)snapshot.Value; //스냅샷을 가져옴.
-                
-                // 실행 안됨
-                FBUserInfo userInfo = dictUser.ToObject<FBUserInfo>();
-
-                foreach (var process in userInfoProcessList)
-                {
-                    process?.OnUpdateFBUserInfoProperty(userInfo);
-                }
-            }
-        });
+            process?.OnUpdateFBUserInfoProperty(userInfo);
+        }
     }
 
-    private void OnUserItemPropertiesUpdate(object sender, ChildChangedEventArgs e)
+    private void OnUserItemPropertiesUpdate(object sender, ValueChangedEventArgs e)
     {
-        Debug.Log("FB UserItem 데이터 변경 감지");
+        Debug.Log($"FB UserItem 데이터 변경 감지 {userItemProcessList.Count}");
 
-        DBReferenceDict[FirebaseDataType.UserItem].GetValueAsync().ContinueWith(task =>
+        FBUserItem userItem = new FBUserItem();
+        userItem.item = int.Parse(e.Snapshot.Child("item").Value.ToString());
+
+        // 딕셔너리로 변환해서 사용해야되는거면 그냥 리스트로 두는 게 좋아보이긴 함
+        List<object> list = e.Snapshot.Child("itemDict").Value as List<object>;
+
+        userItem.itemDict.Clear();
+        for (int i = 0; i < list.Count; i++)
+            userItem.itemDict.Add(i, int.Parse(list[i].ToString()));
+
+        foreach (var process in userItemProcessList)
         {
-            if (task.IsFaulted || task.IsCanceled)
-            {
-                Debug.Log("캔슬캔슬");
-            }
-            else if (task.IsCompleted)
-            {
-                Debug.Log($"FB UserItem 데이터 변경 처리 : {userItemProcessList.Count}개로 전송");
-                DataSnapshot snapshot = task.Result;
-
-                FBUserItem userItem = new FBUserItem();
-
-                // 실행안됨
-                userItem.item = (int)snapshot.Child("item").GetValue(true);
-
-                foreach (var process in userItemProcessList)
-                {
-                    process?.OnUpdateFBUserItemProperty(userItem);
-                }
-            }
-        });
+            process?.OnUpdateFBUserItemProperty(userItem);
+        }
     }
 
     public void RegisterIFBUserInfoPostProcess(IFBUserInfoPostProcess userInfoPostProcess)
