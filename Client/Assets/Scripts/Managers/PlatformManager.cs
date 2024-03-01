@@ -45,7 +45,8 @@ public class FBUserInfo : FBDataBase
 [Serializable]
 public class FBUserItem : FBDataBase
 {
-    public Dictionary<int, int> itemDict = new Dictionary<int, int>() { { 0, 0 } }; // <아이템 고유 번호, 개수>
+    public Dictionary<int, int> itemDict = new Dictionary<int, int>(); // <아이템 고유 번호, 개수>
+    public int item = 0;
 }
 #endregion
 
@@ -91,25 +92,21 @@ public class PlatformManager
     // 테스트용
     public void RegisterFBUserInfoCallback(IFBUserInfoPostProcess mono)
     {
-        Debug.Log("음?;");
         DB.RegisterIFBUserInfoPostProcess(mono);
     }
 
     public void UnregisterFBUserInfoCallback(IFBUserInfoPostProcess mono)
-    { 
-        Debug.Log("음?;");
+    {
         DB.UnregisterIFBUserInfoPostProcess(mono);
     }
 
     public void RegisterFBUserItemCallback(IFBUserItemPostProcess mono)
     {
-        Debug.Log("음?;");
         DB.RegisterIFBUserItemPostProcess(mono);
     }
 
     public void UnregisterFBUserItemCallback(IFBUserItemPostProcess mono)
     {
-        Debug.Log("음?;");
         DB.UnregisterIFBUserItemPostProcess(mono);
     }
 

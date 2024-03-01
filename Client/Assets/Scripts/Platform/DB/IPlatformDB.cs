@@ -8,6 +8,8 @@ using Firebase.Extensions;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using System.ComponentModel;
+using Unity.VisualScripting;
 
 public interface IFBUserInfoPostProcess
 {
@@ -70,31 +72,59 @@ public class FirebaseDB
 
     private void OnUserInfoPropertiesUpdate(object sender, ChildChangedEventArgs e)
     {
-        Debug.Log($"userInfo 데이터 갱신 감지");
+        Debug.Log("FB UserInfo 데이터 변경 감지");
 
-        FBUserInfo userInfo = JsonConvert.DeserializeObject<FBUserInfo>(e.Snapshot.GetRawJsonValue());
-
-        foreach (var process in userInfoProcessList)
+        DBReferenceDict[FirebaseDataType.UserInfo].GetValueAsync().ContinueWith(task =>
         {
-            process?.OnUpdateFBUserInfoProperty(userInfo);
-        }
+            if(task.IsFaulted || task.IsCanceled)
+            {
+                Debug.Log("캔슬캔슬");
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("FB UserInfo 데이터 변경 처리");
+                DataSnapshot snapshot = task.Result;
+
+                // 안됨
+                Dictionary<string, object> dictUser = (Dictionary<string, object>)snapshot.Value; //스냅샷을 가져옴.
+                
+                // 실행 안됨
+                FBUserInfo userInfo = dictUser.ToObject<FBUserInfo>();
+
+                foreach (var process in userInfoProcessList)
+                {
+                    process?.OnUpdateFBUserInfoProperty(userInfo);
+                }
+            }
+        });
     }
+
     private void OnUserItemPropertiesUpdate(object sender, ChildChangedEventArgs e)
     {
-        Debug.Log($"userItem 데이터 갱신 감지");
+        Debug.Log("FB UserItem 데이터 변경 감지");
 
-        foreach(var s in e.Snapshot.Children)
+        DBReferenceDict[FirebaseDataType.UserItem].GetValueAsync().ContinueWith(task =>
         {
-            Debug.Log($"{s.Value}, {s.Key}");
-        }
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                Debug.Log("캔슬캔슬");
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log($"FB UserItem 데이터 변경 처리 : {userItemProcessList.Count}개로 전송");
+                DataSnapshot snapshot = task.Result;
 
-        // 여기서 Newtonsoft.Json.JsonSerializationException
-        FBUserItem userItem = JsonConvert.DeserializeObject<FBUserItem>(e.Snapshot.GetRawJsonValue());
+                FBUserItem userItem = new FBUserItem();
 
-        foreach (var process in userItemProcessList)
-        {
-            process?.OnUpdateFBUserItemProperty(userItem);
-        }
+                // 실행안됨
+                userItem.item = (int)snapshot.Child("item").GetValue(true);
+
+                foreach (var process in userItemProcessList)
+                {
+                    process?.OnUpdateFBUserItemProperty(userItem);
+                }
+            }
+        });
     }
 
     public void RegisterIFBUserInfoPostProcess(IFBUserInfoPostProcess userInfoPostProcess)

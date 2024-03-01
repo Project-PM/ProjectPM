@@ -46,13 +46,14 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
     public void OnUpdateFBUserInfoProperty(FBUserInfo property)
     {
         Debug.Log($"UserInfo 갱신 - UserKey : {property.userKey}");
+
+        Debug.Log(property);
+        Debug.Log(property.userKey);
+        
     }
 
     public void OnUpdateFBUserItemProperty(FBUserItem property)
     {
-        foreach(var item in property.itemDict)
-        {
-            Debug.Log($"{item.Key}, {item.Value}");
-        }
+        Debug.Log($"UserItem 갱신 {property.item}");
     }
 }
