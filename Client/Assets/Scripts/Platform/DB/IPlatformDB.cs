@@ -72,8 +72,37 @@ public class FirebaseDB
             {
                 if (task.IsCompleted)
                 {
+                    Debug.Log(category);
+
                     DataSnapshot snapshot = task.Result;
-                    SaveDB(category, snapshot);
+                    FBDataBase fbData = null;
+
+                    switch (category)
+                    {
+                        case FirebaseDataCategory.UserInfo:
+                            fbData = new FBUserInfo();
+                            break;
+                        case FirebaseDataCategory.UserItem:
+                            fbData = new FBUserItem();
+                            break;
+                    }
+
+                    FieldInfo[] fieldInfos = fbData.GetType().GetFields();
+
+                    IDictionary dict = (IDictionary)snapshot.Value;
+
+                    // 데이터 받아오기
+                    for(int j = 0; j < fieldInfos.Length; j++)
+                    {
+                        if (dict.Contains(fieldInfos[j].Name))
+                        {
+                            object obj = dict[fieldInfos[j].Name];
+                            fieldInfos[j].SetValue(fbData, obj);
+                        }
+                    }
+
+                    // 데이터 갱신
+                    DBReferenceDict[category].SetRawJsonValueAsync(JsonConvert.SerializeObject(fbData));
                 }
                 else
                 {
@@ -87,45 +116,7 @@ public class FirebaseDB
 
     private void SaveDB(FirebaseDataCategory dataType, DataSnapshot snapshot)
     {
-        Debug.Log(dataType);
-
-        FBDataBase fbData = null;
         
-        switch(dataType)
-        {
-            case FirebaseDataCategory.UserInfo:
-                fbData = new FBUserInfo();
-                break;
-            case FirebaseDataCategory.UserItem:
-                fbData = new FBUserItem();
-                break;
-        }
-
-        if (fbData is FBUserItem)
-        {
-            FBUserItem fBUserItem = (FBUserItem)fbData;
-            Debug.Log($"{fBUserItem.testNum}");
-        }
-
-        FieldInfo[] fieldInfos = fbData.GetType().GetFields();
-
-        for (int i = 0; i < fieldInfos.Length; i++)
-        {
-            if (snapshot.Child(fieldInfos[i].Name) != null)
-            {
-                object value = snapshot.Child(fieldInfos[i].Name).Value;
-
-                fieldInfos[i].SetValue(fbData, value);
-            }
-        }
-
-        if(fbData is FBUserItem)
-        {
-            FBUserItem fBUserItem = (FBUserItem)fbData;
-            Debug.Log($"{fBUserItem.testNum}");
-        }
-
-        DBReferenceDict[dataType].SetRawJsonValueAsync(JsonConvert.SerializeObject(fbData));
     }
     
     private async UniTask UniWaitFBDataInit(Action<bool> OnSuccess)
