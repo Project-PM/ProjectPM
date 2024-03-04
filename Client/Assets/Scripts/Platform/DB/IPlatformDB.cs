@@ -10,6 +10,12 @@ using System;
 using System.Linq;
 using System.ComponentModel;
 using Unity.VisualScripting;
+using System.Linq.Expressions;
+using Cysharp.Threading.Tasks;
+using static UnityEditor.LightingExplorerTableColumn;
+using System.Reflection;
+using System.IO;
+using static UnityEngine.Rendering.DebugUI;
 
 public interface IFBUserInfoPostProcess
 {
@@ -23,14 +29,15 @@ public interface IFBUserItemPostProcess
 
 public class FirebaseDB
 {
-    private Dictionary<FirebaseDataType, DatabaseReference> DBReferenceDict = new Dictionary<FirebaseDataType, DatabaseReference>();
+    private Dictionary<FirebaseDataCategory, DatabaseReference> DBReferenceDict = new Dictionary<FirebaseDataCategory, DatabaseReference>();
 
     private List<IFBUserInfoPostProcess> userInfoProcessList = new List<IFBUserInfoPostProcess>();
     private List<IFBUserItemPostProcess> userItemProcessList = new List<IFBUserItemPostProcess>();
 
-    FBUserData userData = null;
-
-    public bool InitDB()
+    /// <summary>
+    /// 로그인 성공 시 최초 1번만 실행
+    /// </summary>
+    public bool InitDB(Action OnSuccess)
     {
         if (FirebaseApp.DefaultInstance == null)
         {
@@ -46,28 +53,102 @@ public class FirebaseDB
             return false;
         }
 
+        // UniWaitFBDataInit(OnSuccess).Forget();
+
         string userID = Managers.Platform.GetUserID();
 
-        for (int i = 0; i < (int)FirebaseDataType.Max; i++)
+        for (int i = 0; i < (int)FirebaseDataCategory.Max; i++)
         {
-            FirebaseDataType dataType = (FirebaseDataType)i;
+            FirebaseDataCategory dataType = (FirebaseDataCategory)i;
             DBReferenceDict[dataType] = FirebaseDatabase.DefaultInstance
                 .GetReference(dataType.ToString())
                 .Child(userID);
         }
 
+        for (int i = 0; i < (int)FirebaseDataCategory.Max; i++)
+        {
+            FirebaseDataCategory category = (FirebaseDataCategory)i;
+            dbRootReference.Child(category.ToString()).GetValueAsync().ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCompleted)
+                {
+                    DataSnapshot snapshot = task.Result;
+                    SaveDB(category, snapshot);
+                }
+                else
+                {
+                    Debug.LogError("task is not Completed !");
+                }
+            });
+        }
+        
+        return true;
+    }
+
+    private void SaveDB(FirebaseDataCategory dataType, DataSnapshot snapshot)
+    {
+        Debug.Log(dataType);
+
+        FBDataBase fbData = null;
+        
+        switch(dataType)
+        {
+            case FirebaseDataCategory.UserInfo:
+                fbData = new FBUserInfo();
+                break;
+            case FirebaseDataCategory.UserItem:
+                fbData = new FBUserItem();
+                break;
+        }
+
+        if (fbData is FBUserItem)
+        {
+            FBUserItem fBUserItem = (FBUserItem)fbData;
+            Debug.Log($"{fBUserItem.testNum}");
+        }
+
+        FieldInfo[] fieldInfos = fbData.GetType().GetFields();
+
+        for (int i = 0; i < fieldInfos.Length; i++)
+        {
+            if (snapshot.Child(fieldInfos[i].Name) != null)
+            {
+                object value = snapshot.Child(fieldInfos[i].Name).Value;
+
+                fieldInfos[i].SetValue(fbData, value);
+            }
+        }
+
+        if(fbData is FBUserItem)
+        {
+            FBUserItem fBUserItem = (FBUserItem)fbData;
+            Debug.Log($"{fBUserItem.testNum}");
+        }
+
+        DBReferenceDict[dataType].SetRawJsonValueAsync(JsonConvert.SerializeObject(fbData));
+    }
+    
+    private async UniTask UniWaitFBDataInit(Action<bool> OnSuccess)
+    {
+        // 각 데이터 카테고리마다 
+        await UniTask.WaitUntil(() => DBReferenceDict.Count == (int)FirebaseDataCategory.Max);
+
+        
+
+        
+
         SetUpdateCallBack();
 
-        return true;
+        OnSuccess?.Invoke(true);
     }
 
     private void SetUpdateCallBack()
     {
-        DBReferenceDict[FirebaseDataType.UserInfo].Reference.ValueChanged -= OnUserInfoPropertiesUpdate;
-        DBReferenceDict[FirebaseDataType.UserInfo].Reference.ValueChanged += OnUserInfoPropertiesUpdate;
+        DBReferenceDict[FirebaseDataCategory.UserInfo].Reference.ValueChanged -= OnUserInfoPropertiesUpdate;
+        DBReferenceDict[FirebaseDataCategory.UserInfo].Reference.ValueChanged += OnUserInfoPropertiesUpdate;
 
-        DBReferenceDict[FirebaseDataType.UserItem].Reference.ValueChanged -= OnUserItemPropertiesUpdate;
-        DBReferenceDict[FirebaseDataType.UserItem].Reference.ValueChanged += OnUserItemPropertiesUpdate;
+        DBReferenceDict[FirebaseDataCategory.UserItem].Reference.ValueChanged -= OnUserItemPropertiesUpdate;
+        DBReferenceDict[FirebaseDataCategory.UserItem].Reference.ValueChanged += OnUserItemPropertiesUpdate;
     }
 
     private void OnUserInfoPropertiesUpdate(object sender, ValueChangedEventArgs e)
@@ -89,14 +170,6 @@ public class FirebaseDB
         Debug.Log($"FB UserItem 데이터 변경 감지 {userItemProcessList.Count}");
 
         FBUserItem userItem = new FBUserItem();
-        userItem.item = int.Parse(e.Snapshot.Child("item").Value.ToString());
-
-        // 딕셔너리로 변환해서 사용해야되는거면 그냥 리스트로 두는 게 좋아보이긴 함
-        List<object> list = e.Snapshot.Child("itemDict").Value as List<object>;
-
-        userItem.itemDict.Clear();
-        for (int i = 0; i < list.Count; i++)
-            userItem.itemDict.Add(i, int.Parse(list[i].ToString()));
 
         foreach (var process in userItemProcessList)
         {
@@ -137,60 +210,11 @@ public class FirebaseDB
     }
 
     /// <summary>
-    /// 데이터 추가
+    /// 비어있는 데이터를 초기 값으로 만들어 줌
     /// </summary>
-    public void InsertDB(FBUserData saveData)
+    public void SaveDB()
     {
-        if (DBReferenceDict.Count == 0)
-        {
-            Debug.LogWarning("InitDB 호출 전에 InserDB가 호출 됨");
-            return;
-        }
 
-        DatabaseReference userInfoRef = DBReferenceDict[FirebaseDataType.UserInfo];
-        DatabaseReference userItemRef = DBReferenceDict[FirebaseDataType.UserItem];
-
-        if (userInfoRef != null)
-        {
-            string userInfoJson = JsonConvert.SerializeObject(saveData.userInfo);
-            userInfoRef.SetRawJsonValueAsync(userInfoJson)
-                .ContinueWith(task =>
-                {
-                    if (task.IsFaulted)
-                    {
-                        Debug.LogError("userInfo 저장 실패 : " + task.Exception);
-                    }
-                    else
-                    {
-
-                    }
-                });
-        }
-        else
-        {
-            Debug.LogWarning("userInfoRef is Null!");
-        }
-
-        if (userItemRef != null)
-        {
-            string userItemJson = JsonConvert.SerializeObject(saveData.userItem);
-            userItemRef.SetRawJsonValueAsync(userItemJson)
-                .ContinueWith(task =>
-                {
-                    if (task.IsFaulted)
-                    {
-                        Debug.LogError("userItem 저장 실패 : " + task.Exception);
-                    }
-                    else
-                    {
-
-                    }
-                });
-        }
-        else
-        {
-            Debug.LogWarning("userItemRef is Null!");
-        }
     }
 
     /// <summary>
@@ -201,27 +225,27 @@ public class FirebaseDB
         Debug.Log("DB 업데이트");
         if (updateData is FBUserInfo)
         {
-            DBReferenceDict[FirebaseDataType.UserInfo].SetRawJsonValueAsync(JsonConvert.SerializeObject(updateData));
+            DBReferenceDict[FirebaseDataCategory.UserInfo].SetRawJsonValueAsync(JsonConvert.SerializeObject(updateData));
         }
         else if (updateData is FBUserItem)
         {
-            DBReferenceDict[FirebaseDataType.UserItem].SetRawJsonValueAsync(JsonConvert.SerializeObject(updateData));
+            DBReferenceDict[FirebaseDataCategory.UserItem].SetRawJsonValueAsync(JsonConvert.SerializeObject(updateData));
         }
     }
 
     /// <summary>
     /// 데이터 전체를 로드한다
     /// </summary>
-    public FBUserData LoadDB(Action<FBUserData> OnSuccess = null, Action OnFailed = null, Action OnCanceled = null)
+    public bool LoadDB(Action<FBUserData> OnSuccess = null, Action OnFailed = null, Action OnCanceled = null)
     {
         Debug.Log("DB 로드");
         FBUserData dataInfo = new FBUserData();
 
-        DBReferenceDict[FirebaseDataType.UserInfo].GetValueAsync().ContinueWithOnMainThread(task =>
+        DBReferenceDict[FirebaseDataCategory.UserInfo].GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsFaulted)
             {
-
+                Debug.Log("dataInfo 로드 실패");
             }
             else if (task.IsCompleted)
             {
@@ -230,11 +254,11 @@ public class FirebaseDB
             }
         });
 
-        DBReferenceDict[FirebaseDataType.UserItem].GetValueAsync().ContinueWithOnMainThread(task =>
+        DBReferenceDict[FirebaseDataCategory.UserItem].GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsFaulted)
             {
-
+                Debug.Log("dataInfo 로드 실패");
             }
             else if (task.IsCompleted)
             {
@@ -244,7 +268,7 @@ public class FirebaseDB
             }
         });
 
-        return dataInfo;
+        return true;
     }
 
     

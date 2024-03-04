@@ -8,18 +8,9 @@ using System;
 using JetBrains.Annotations;
 using Firebase.Extensions;
 using Unity.VisualScripting;
+using UnityEngine.Rendering;
 
 #region FBUserDatas
-/// <summary>
-/// 파이어베이스에 저장되는 데이터 그룹 타입
-/// </summary>
-public enum FirebaseDataType
-{
-    UserInfo,
-    UserItem,
-    Max,
-}
-
 /// <summary>
 /// 유저 데이터 베이스 저장용 구조,
 /// 필요한 경우에는 UserData 클래스 종류를 늘려줄 것
@@ -37,17 +28,31 @@ public class FBDataBase { }
 [Serializable]
 public class FBUserInfo : FBDataBase
 {
-    public string userKey = string.Empty; // 유저에게 공개되는 유저 고유 키
-    public string userNickName = string.Empty; // 유저 닉네임 (설정 전엔 유저키로 세팅)
-    public UserLoginType userLoginType = UserLoginType.Guest; // 계정 동기화 정보
+    public string userKey = Managers.Platform.GetUserID(); // 유저에게 공개되는 유저 고유 키
+    public string userNickName = "Guest"; // 유저 닉네임 (설정 전엔 유저키로 세팅)
+    public int userLoginType = (int)UserLoginType.Guest; // 계정 동기화 정보
+    public int useCharacterType = (int)CharacterType.Red;
+    
 }
-
+                                           
 [Serializable]
 public class FBUserItem : FBDataBase
 {
-    public Dictionary<int, int> itemDict = new Dictionary<int, int>(); // <아이템 고유 번호, 개수>
-    public int item = 0;
+    public int coin = 0;
+    public int characterPiece = 0;
+    public int testNum = 15;
+    public bool isCheck = true;
+    // public List<FBChracterGear> equipmentList = new List<FBChracterGear>();
 }
+
+[Serializable]
+public class FBChracterGear
+{
+
+}
+
+[Serializable]
+
 #endregion
 
 public class PlatformManager
@@ -110,7 +115,7 @@ public class PlatformManager
         DB.UnregisterIFBUserItemPostProcess(mono);
     }
 
-    public bool UpdateDB(FirebaseDataType type, FBDataBase data, Action OnSuccess = null, Action OnFailed = null, Action OnCanceled = null)
+    public bool UpdateDB(FirebaseDataCategory type, FBDataBase data, Action OnSuccess = null, Action OnFailed = null, Action OnCanceled = null)
     {
         if(data == null || GetUserID() == string.Empty)
         {
@@ -135,18 +140,69 @@ public class PlatformManager
 
     public void Login(Action _OnSignInSuccess = null, Action _OnSignInFailed = null, Action _OnSignCanceled = null, Action<bool> _OnCheckFirstUser = null)
     {
-        Auth.SignIn(OnSignInSuccess: () => // 로그인 성공 시 
-        {
-            DB.InitDB();
+        Auth.SignIn(
+            OnSignInSuccess: () => // 로그인 성공 시 
+            {
+                DB.InitDB(_OnSignInSuccess);
 
-            // 최초 로그인 판단해서 무언가 해야 됨니다.
-            // 다른 유저의 DB도 가져올 일이 생길 수도 있기 때문에
-            // 그냥 나도 SelectDB 같은거 하나 추가해서 없으면 내부적으로 알아서 생성하게 하자
+                _OnSignInSuccess?.Invoke();
 
-            // 즉, LoadDB -> SelectDB 변경하고 최초로그인 처리 ㄱㄱ
-        },
-        _OnSignInFailed, _OnSignCanceled);
+                /*
+                _OnCheckFirstUser += (bool b) => // 체크 및 Initialize 먼저 하고, 
+                {
+                    _OnSignInSuccess?.Invoke(); // 성공 콜백을 호출해야 서순이 맞음
+                };
+
+                CheckFirstUserOrInitialize(_OnCheckFirstUser);
+                */
+            },
+            OnSignInFailed: () =>
+            {
+                _OnSignInFailed?.Invoke();
+            },
+            OnSignCanceled: () =>
+            {
+                _OnSignCanceled?.Invoke();
+            }
+        );
     }
+
+    /*
+    private void CheckFirstUserOrInitialize(Action<bool> checkRoutine)
+    {
+        InitializeCurrentUserDB(OnCompleted: (data) =>
+        {
+            checkRoutine?.Invoke(data == null || data.nickname.IsNullOrEmpty());
+
+            if (data != null)
+            {
+                MyCashPoint = data.purchaseCoffeeCount;
+            }
+        });
+    }
+
+    private void InitializeCurrentUserDB(Action<FBUserInfo> OnCompleted = null)
+    {
+        var loginType = Auth.CurrentLoginType;
+        var userId = GetUserID();
+
+        if (Auth.IsLogin == false)
+        {
+            Debug.LogError("로그인 상태가 아닙니다.");
+            return;
+        }
+
+        DB.SelectDB(hierachyPath, true, (data) =>
+        {
+            if (data == null)
+            {
+                DB.InsertDB(hierachyPath, userId);
+            }
+
+            OnCompleted?.Invoke(data);
+        });
+    }
+    */
 
     public void Logout()
     {

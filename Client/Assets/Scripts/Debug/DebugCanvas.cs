@@ -39,21 +39,16 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
     public void OnClickTestItemCount()
     {
         FBUserItem fBUserItem = new FBUserItem();
-        fBUserItem.itemDict.Add(1, 5);
-        Managers.Platform.UpdateDB(FirebaseDataType.UserItem, fBUserItem);
+        Managers.Platform.UpdateDB(FirebaseDataCategory.UserItem, fBUserItem);
     }
 
     public void OnUpdateFBUserInfoProperty(FBUserInfo property)
     {
-        Debug.Log($"UserInfo 갱신 - UserKey : {property.userKey}");
-
-        Debug.Log(property);
-        Debug.Log(property.userKey);
-        
+        Debug.Log($"UserInfo 갱신 {property.userKey}, {property.userNickName}");        
     }
 
     public void OnUpdateFBUserItemProperty(FBUserItem property)
     {
-        Debug.Log($"UserItem 갱신 {property.item}");
+        Debug.Log($"UserItem 갱신 {property.coin}, {property.characterPiece}");
     }
 }
