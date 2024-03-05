@@ -44,11 +44,11 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
 
     public void OnUpdateFBUserInfoProperty(FBUserInfo property)
     {
-        Debug.Log($"UserInfo 갱신 {property.userKey}, {property.userNickName}");        
+        Debug.Log($"UserInfo 갱신 콜백");        
     }
 
     public void OnUpdateFBUserItemProperty(FBUserItem property)
     {
-        Debug.Log($"UserItem 갱신 {property.coin}, {property.characterPiece}");
+        Debug.Log($"UserItem 갱신 콜백");
     }
 }

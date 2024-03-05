@@ -53,8 +53,6 @@ public class FirebaseDB
             return false;
         }
 
-        // UniWaitFBDataInit(OnSuccess).Forget();
-
         string userID = Managers.Platform.GetUserID();
 
         for (int i = 0; i < (int)FirebaseDataCategory.Max; i++)
@@ -65,6 +63,8 @@ public class FirebaseDB
                 .Child(userID);
         }
 
+        SetUpdateCallBack();
+
         for (int i = 0; i < (int)FirebaseDataCategory.Max; i++)
         {
             FirebaseDataCategory category = (FirebaseDataCategory)i;
@@ -72,8 +72,6 @@ public class FirebaseDB
             {
                 if (task.IsCompleted)
                 {
-                    Debug.Log(category);
-
                     DataSnapshot snapshot = task.Result;
                     FBDataBase fbData = null;
 
@@ -91,18 +89,17 @@ public class FirebaseDB
 
                     IDictionary dict = (IDictionary)snapshot.Value;
 
-                    // 데이터 받아오기
-                    for(int j = 0; j < fieldInfos.Length; j++)
+                    for (int j = 0; j < fieldInfos.Length; j++)
                     {
                         if (dict.Contains(fieldInfos[j].Name))
                         {
-                            object obj = dict[fieldInfos[j].Name];
+                            object obj = Convert.ChangeType(dict[fieldInfos[j].Name], fieldInfos[j].FieldType);
                             fieldInfos[j].SetValue(fbData, obj);
                         }
                     }
 
-                    // 데이터 갱신
                     DBReferenceDict[category].SetRawJsonValueAsync(JsonConvert.SerializeObject(fbData));
+                    Debug.Log($"{category} Data 갱신 완료");
                 }
                 else
                 {
@@ -110,7 +107,8 @@ public class FirebaseDB
                 }
             });
         }
-        
+
+
         return true;
     }
 
@@ -119,20 +117,6 @@ public class FirebaseDB
         
     }
     
-    private async UniTask UniWaitFBDataInit(Action<bool> OnSuccess)
-    {
-        // 각 데이터 카테고리마다 
-        await UniTask.WaitUntil(() => DBReferenceDict.Count == (int)FirebaseDataCategory.Max);
-
-        
-
-        
-
-        SetUpdateCallBack();
-
-        OnSuccess?.Invoke(true);
-    }
-
     private void SetUpdateCallBack()
     {
         DBReferenceDict[FirebaseDataCategory.UserInfo].Reference.ValueChanged -= OnUserInfoPropertiesUpdate;
@@ -147,8 +131,17 @@ public class FirebaseDB
         Debug.Log($"FB UserInfo 데이터 변경 감지 {userInfoProcessList.Count}");
 
         FBUserInfo userInfo = new FBUserInfo();
-        userInfo.userKey = e.Snapshot.Child("userKey").Value.ToString();
-        userInfo.userNickName = e.Snapshot.Child("userNickName").Value.ToString();
+        FieldInfo[] fieldInfos = userInfo.GetType().GetFields();
+        IDictionary dict = (IDictionary)e.Snapshot.Value;
+
+        for (int j = 0; j < fieldInfos.Length; j++)
+        {
+            if (dict.Contains(fieldInfos[j].Name))
+            {
+                object obj = Convert.ChangeType(dict[fieldInfos[j].Name], fieldInfos[j].FieldType);
+                fieldInfos[j].SetValue(userInfo, obj);
+            }
+        }
 
         foreach (var process in userInfoProcessList)
         {

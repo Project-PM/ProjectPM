@@ -28,7 +28,6 @@ public class FBDataBase { }
 [Serializable]
 public class FBUserInfo : FBDataBase
 {
-    public string userKey = Managers.Platform.GetUserID(); // 유저에게 공개되는 유저 고유 키
     public string userNickName = "Guest"; // 유저 닉네임 (설정 전엔 유저키로 세팅)
     public int userLoginType = (int)UserLoginType.Guest; // 계정 동기화 정보
     public int useCharacterType = (int)CharacterType.Red;
@@ -40,8 +39,6 @@ public class FBUserItem : FBDataBase
 {
     public int coin = 0;
     public int characterPiece = 0;
-    public int testNum = 15;
-    public bool isCheck = true;
     // public List<FBChracterGear> equipmentList = new List<FBChracterGear>();
 }
 
