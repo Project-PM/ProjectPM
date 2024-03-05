@@ -37,7 +37,7 @@ public class FirebaseDB
     /// <summary>
     /// 로그인 성공 시 최초 1번만 실행
     /// </summary>
-    public bool InitDB(Action OnSuccess)
+    public bool InitDB()
     {
         if (FirebaseApp.DefaultInstance == null)
         {
@@ -110,11 +110,6 @@ public class FirebaseDB
 
 
         return true;
-    }
-
-    private void SaveDB(FirebaseDataCategory dataType, DataSnapshot snapshot)
-    {
-        
     }
     
     private void SetUpdateCallBack()

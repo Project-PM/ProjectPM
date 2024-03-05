@@ -28,10 +28,9 @@ public class FBDataBase { }
 [Serializable]
 public class FBUserInfo : FBDataBase
 {
-    public string userNickName = "Guest"; // 유저 닉네임 (설정 전엔 유저키로 세팅)
-    public int userLoginType = (int)UserLoginType.Guest; // 계정 동기화 정보
+    public string userNickName = "Guest";
+    public int userLoginType = (int)UserLoginType.Guest;
     public int useCharacterType = (int)CharacterType.Red;
-    
 }
                                            
 [Serializable]
@@ -43,13 +42,10 @@ public class FBUserItem : FBDataBase
 }
 
 [Serializable]
-public class FBChracterGear
+public class FBChracterGearItem
 {
-
+    
 }
-
-[Serializable]
-
 #endregion
 
 public class PlatformManager
@@ -140,18 +136,8 @@ public class PlatformManager
         Auth.SignIn(
             OnSignInSuccess: () => // 로그인 성공 시 
             {
-                DB.InitDB(_OnSignInSuccess);
-
+                DB.InitDB();
                 _OnSignInSuccess?.Invoke();
-
-                /*
-                _OnCheckFirstUser += (bool b) => // 체크 및 Initialize 먼저 하고, 
-                {
-                    _OnSignInSuccess?.Invoke(); // 성공 콜백을 호출해야 서순이 맞음
-                };
-
-                CheckFirstUserOrInitialize(_OnCheckFirstUser);
-                */
             },
             OnSignInFailed: () =>
             {
@@ -163,43 +149,6 @@ public class PlatformManager
             }
         );
     }
-
-    /*
-    private void CheckFirstUserOrInitialize(Action<bool> checkRoutine)
-    {
-        InitializeCurrentUserDB(OnCompleted: (data) =>
-        {
-            checkRoutine?.Invoke(data == null || data.nickname.IsNullOrEmpty());
-
-            if (data != null)
-            {
-                MyCashPoint = data.purchaseCoffeeCount;
-            }
-        });
-    }
-
-    private void InitializeCurrentUserDB(Action<FBUserInfo> OnCompleted = null)
-    {
-        var loginType = Auth.CurrentLoginType;
-        var userId = GetUserID();
-
-        if (Auth.IsLogin == false)
-        {
-            Debug.LogError("로그인 상태가 아닙니다.");
-            return;
-        }
-
-        DB.SelectDB(hierachyPath, true, (data) =>
-        {
-            if (data == null)
-            {
-                DB.InsertDB(hierachyPath, userId);
-            }
-
-            OnCompleted?.Invoke(data);
-        });
-    }
-    */
 
     public void Logout()
     {

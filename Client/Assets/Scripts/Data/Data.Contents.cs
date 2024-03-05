@@ -27,4 +27,29 @@ namespace Data
         }
     }
     #endregion
+
+    #region CharacterGearData
+    [Serializable]
+    public class CharacterGearData
+    {
+        public string Name; // Key
+        
+        // 어떤 스탯에 영향을 미칠 것인지
+        // 얼마나 영향을 미칠 것인지
+        // 어떤 캐릭터가 장착할 수 있는 장비인지
+    }
+
+    [Serializable]
+    public class CharacterGearDataaLoader : ILoader<string,  CharacterGearData>
+    {
+        public List<CharacterGearData> characterGearDatas = new List<CharacterGearData>();
+        public Dictionary<string,  CharacterGearData> MakeDict()
+        {
+            Dictionary<string, CharacterGearData> dict = new Dictionary<string, CharacterGearData>();
+            foreach (CharacterGearData data in characterGearDatas)
+                dict.Add(data.Name, data);
+            return dict;
+        }
+    }
+    #endregion
 }
