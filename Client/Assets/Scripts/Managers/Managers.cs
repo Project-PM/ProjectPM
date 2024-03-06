@@ -10,6 +10,7 @@ public class Managers : MonoBehaviour
     #region Managers
     private DataManager _data = new DataManager();
     private GameManager _game = new GameManager();
+    private NetworkManager _network = new NetworkManager();
     private PlatformManager _platform = new PlatformManager();
     private ResourceManager _resource = new ResourceManager();
     private SceneManagerEx _scene = new SceneManagerEx();
@@ -17,6 +18,7 @@ public class Managers : MonoBehaviour
 
     public static DataManager Data { get { return Instance?._data; } }
     public static GameManager Game { get { return Instance?._game; } }
+    public static NetworkManager Network { get { return Instance?._network; } }
     public static PlatformManager Platform { get { return Instance?._platform; } }
     public static ResourceManager Resource { get { return Instance?._resource; } }
     public static SceneManagerEx Scene { get { return Instance?._scene; } }
