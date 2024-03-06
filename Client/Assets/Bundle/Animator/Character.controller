@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 847131212a79a404bb40e205f02ea9b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeedVec: {x: 1, y: -1}
+  moveSpeedVec: {x: 0.5, y: -0.5}
 --- !u!114 &-4812336400533664106
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -564,13 +564,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applyCharacterType: 0
-  deltaFrameCount: 1
-  triggers: []
-  attackInfoList: []
+  deltaFrameCount: 3
+  triggers:
+  - startFrameIndex: 10
+  attackInfoList:
+  - attackBox: {x: 1, y: 1}
+    attackOffset: {x: 1, y: 2}
+    attackCount: 1
   damageInfo:
-    type: 0
+    type: 2
     amount: 0
-    knockBackPower: 0
+    knockBackPower: 2
     stiffTime: 0
     upperHeight: 0
 --- !u!1102 &-402689853291514102
