@@ -57,9 +57,9 @@ public class FirebaseDB
 
         for (int i = 0; i < (int)FirebaseDataCategory.Max; i++)
         {
-            FirebaseDataCategory dataType = (FirebaseDataCategory)i;
-            DBReferenceDict[dataType] = FirebaseDatabase.DefaultInstance
-                .GetReference(dataType.ToString())
+            FirebaseDataCategory category = (FirebaseDataCategory)i;
+            DBReferenceDict[category] = FirebaseDatabase.DefaultInstance
+                .GetReference(category.ToString())
                 .Child(userID);
         }
 
@@ -68,7 +68,7 @@ public class FirebaseDB
         for (int i = 0; i < (int)FirebaseDataCategory.Max; i++)
         {
             FirebaseDataCategory category = (FirebaseDataCategory)i;
-            dbRootReference.Child(category.ToString()).GetValueAsync().ContinueWithOnMainThread(task =>
+            dbRootReference.Child(category.ToString()).Child(userID).GetValueAsync().ContinueWithOnMainThread(task =>
             {
                 if (task.IsCompleted)
                 {
@@ -88,14 +88,25 @@ public class FirebaseDB
                     FieldInfo[] fieldInfos = fbData.GetType().GetFields();
 
                     IDictionary dict = (IDictionary)snapshot.Value;
+                    Debug.Log(dict.Count);
 
                     for (int j = 0; j < fieldInfos.Length; j++)
                     {
+                        Debug.Log(fieldInfos[j].Name);
                         if (dict.Contains(fieldInfos[j].Name))
                         {
                             object obj = Convert.ChangeType(dict[fieldInfos[j].Name], fieldInfos[j].FieldType);
+
+                            if (fieldInfos[j].Name == "characterGearList")
+                            {
+                                Debug.Log(fieldInfos[j].FieldType);
+                                Debug.Log(obj);
+                            }
+
                             fieldInfos[j].SetValue(fbData, obj);
                         }
+                        else
+                            Debug.Log($"{fieldInfos[j].Name} ÀÌ ¾øÀ½");
                     }
 
                     DBReferenceDict[category].SetRawJsonValueAsync(JsonConvert.SerializeObject(fbData));

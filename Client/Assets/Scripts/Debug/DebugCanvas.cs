@@ -39,6 +39,7 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
     public void OnClickTestItemCount()
     {
         FBUserItem fBUserItem = new FBUserItem();
+        fBUserItem.characterGearList.Add("¿Â∫Ò1");
         Managers.Platform.UpdateDB(FirebaseDataCategory.UserItem, fBUserItem);
     }
 

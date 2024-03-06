@@ -37,14 +37,10 @@ public class FBUserInfo : FBDataBase
 public class FBUserItem : FBDataBase
 {
     public int coin = 0;
-    public int characterPiece = 0;
-    // public List<FBChracterGear> equipmentList = new List<FBChracterGear>();
-}
-
-[Serializable]
-public class FBChracterGearItem
-{
-    
+    public int characterPiece = 0; // 캐릭터 조각
+    public List<string> characterGearList = new List<string>(); // 보유 캐릭터장비 목록
+    public int testNum = 15;
+    // 캐릭터별 장착상태를 저장해야 함 
 }
 #endregion
 
@@ -134,8 +130,9 @@ public class PlatformManager
     public void Login(Action _OnSignInSuccess = null, Action _OnSignInFailed = null, Action _OnSignCanceled = null, Action<bool> _OnCheckFirstUser = null)
     {
         Auth.SignIn(
-            OnSignInSuccess: () => // 로그인 성공 시 
+            OnSignInSuccess: () =>
             {
+                // 로그인 성공 ( 유저 ID 세팅 ) -> 유저 ID로 DB를 갱신
                 DB.InitDB();
                 _OnSignInSuccess?.Invoke();
             },
