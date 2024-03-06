@@ -6,8 +6,13 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
 {
     private void Start()
     {
+        // 어드레서블 패치, 제이슨 데이터 로드
+        StartLoadAssets();
+
+        // 플랫폼 초기화
         Managers.Platform.Initialize();
 
+        // 데이터 갱신 감지
         Managers.Platform.RegisterFBUserInfoCallback(this);
         Managers.Platform.RegisterFBUserItemCallback(this);
     }
@@ -16,6 +21,19 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
     {
         Managers.Platform.UnregisterFBUserInfoCallback(this);
         Managers.Platform.UnregisterFBUserItemCallback(this);
+    }
+
+    void StartLoadAssets()
+    {
+        Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
+        {
+            Debug.Log($"{key} {count}/{totalCount}");
+
+            if (count == totalCount)
+            {
+                Managers.Data.Init();
+            }
+        });
     }
 
     public void OnClickGuestLogin()

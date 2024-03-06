@@ -119,10 +119,9 @@ public class FirebaseDB
             });
         }
 
-
         return true;
     }
-    
+
     private void SetUpdateCallBack()
     {
         DBReferenceDict[FirebaseDataCategory.UserInfo].Reference.ValueChanged -= OnUserInfoPropertiesUpdate;
@@ -160,6 +159,17 @@ public class FirebaseDB
         Debug.Log($"FB UserItem 데이터 변경 감지 {userItemProcessList.Count}");
 
         FBUserItem userItem = new FBUserItem();
+        FieldInfo[] fieldInfos = userItem.GetType().GetFields();
+        IDictionary dict = (IDictionary)e.Snapshot.Value;
+
+        for (int j = 0; j < fieldInfos.Length; j++)
+        {
+            if (dict.Contains(fieldInfos[j].Name))
+            {
+                object obj = Convert.ChangeType(dict[fieldInfos[j].Name], fieldInfos[j].FieldType);
+                fieldInfos[j].SetValue(userItem, obj);
+            }
+        }
 
         foreach (var process in userItemProcessList)
         {
@@ -200,14 +210,6 @@ public class FirebaseDB
     }
 
     /// <summary>
-    /// 비어있는 데이터를 초기 값으로 만들어 줌
-    /// </summary>
-    public void SaveDB()
-    {
-
-    }
-
-    /// <summary>
     /// 데이터 부분 업데이트(세이브)
     /// </summary>
     public void UpdateDB(FBDataBase updateData)
@@ -228,7 +230,6 @@ public class FirebaseDB
     /// </summary>
     public bool LoadDB(Action<FBUserData> OnSuccess = null, Action OnFailed = null, Action OnCanceled = null)
     {
-        Debug.Log("DB 로드");
         FBUserData dataInfo = new FBUserData();
 
         DBReferenceDict[FirebaseDataCategory.UserInfo].GetValueAsync().ContinueWithOnMainThread(task =>
@@ -260,6 +261,4 @@ public class FirebaseDB
 
         return true;
     }
-
-    
 }
