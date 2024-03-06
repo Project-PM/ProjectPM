@@ -2,15 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class RandomPickerElement
+{
+    public string name;
+    public double weigted;
+
+    public RandomPickerElement(string name, double weigted)
+    {
+        this.name = name;
+        this.weigted = weigted;
+    }
+}
+
 public class WeightedRandomPicker : MonoBehaviour
 {
-    public class RandomPickerElement
-    {
-        public string name;
-        public double weigted;
-    }
-
-    // 테스트 해야 함 아직 안함 ㅋ
     public static string GetRandomPicker(List<RandomPickerElement> list)
     {
         System.Random randomInstance = new System.Random();
@@ -42,7 +47,7 @@ public class WeightedRandomPicker : MonoBehaviour
                 return pair.Key;
         }
 
-        Debug.LogWarning("랜덤 뽑기에 실패함 : 이유는 모름");
+        Debug.LogWarning("랜덤 뽑기에 실패");
         return null;
     }
 }

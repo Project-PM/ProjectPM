@@ -42,6 +42,31 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
         Managers.Platform.UpdateDB(FirebaseDataCategory.UserItem, fBUserItem);
     }
 
+    public void OnClickRandomPicker()
+    {
+        List<RandomPickerElement> list = new List<RandomPickerElement>();
+        
+        list.Add(new RandomPickerElement("0", 10));
+        list.Add(new RandomPickerElement("1", 52));
+        list.Add(new RandomPickerElement("2", 10));
+        list.Add(new RandomPickerElement("3", 113));
+        list.Add(new RandomPickerElement("4", 10));
+
+        int[] intArray = new int[list.Count];
+
+        for (int i = 0; i < 100000; i++)
+        {
+            string str = WeightedRandomPicker.GetRandomPicker(list);
+            int num = int.Parse(str);
+            intArray[num]++;
+        }
+
+        for(int i = 0; i < intArray.Length; i++)
+        {
+            Debug.Log($"{i}번 : {intArray[i]}");
+        }
+    }
+
     public void OnUpdateFBUserInfoProperty(FBUserInfo property)
     {
         Debug.Log($"UserInfo 갱신 콜백");        
