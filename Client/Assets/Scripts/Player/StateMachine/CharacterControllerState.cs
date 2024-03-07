@@ -21,6 +21,7 @@ public enum ENUM_CHARACTER_STATE
 	JumpAttack,
 	Skill,
 	JumpSkill,
+	JumpSkillLand,
 	Ultimate_Start,
 	Ultimate,
 	Guard,

@@ -54,7 +54,7 @@ public class RedManJumpSkillState : CharacterSkillState
         }
         else if (controller.CheckGrounded())
         {
-            animator.Play(ENUM_CHARACTER_STATE.Idle);
+            animator.Play(ENUM_CHARACTER_STATE.JumpSkillLand);
         }
     }
 }

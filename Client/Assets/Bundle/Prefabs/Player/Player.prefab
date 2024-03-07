@@ -137,7 +137,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 478d0f5a59a6473408e801433dc0e39e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ce930455d25c6ef4387a55766b414ca3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -174,10 +174,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CategoryHash: 1.6499403e-11
-  m_labelHash: 0.00000040954276
+  m_CategoryHash: 0.0000000044272253
+  m_labelHash: 1.0416354e-29
   m_SpriteKey: 0
-  m_SpriteHash: 771429782
+  m_SpriteHash: 66417850
 --- !u!1 &6824513443228993302
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,8 +424,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 7442671442867769603}
-  frontCheckOffset: {x: 7, y: 1, z: 0}
-  frontCheckSize: {x: 12, y: 5, z: 0}
+  frontCheckOffset: {x: 6, y: 0, z: 0}
+  frontCheckSize: {x: 12, y: 12, z: 0}
 --- !u!114 &1821194266457588202
 MonoBehaviour:
   m_ObjectHideFlags: 0
