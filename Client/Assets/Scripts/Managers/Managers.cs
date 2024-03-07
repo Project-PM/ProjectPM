@@ -10,6 +10,9 @@ public class Managers : MonoBehaviour
     #region Managers
     private DataManager _data = new DataManager();
     private GameManager _game = new GameManager();
+
+    // NetworkManager MonoBehaviour라서 new 경고 뜨고 있음
+    // 수정되면 주석 삭제좀
     private NetworkManager _network = new NetworkManager();
     private PlatformManager _platform = new PlatformManager();
     private ResourceManager _resource = new ResourceManager();

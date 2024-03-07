@@ -63,6 +63,8 @@ public class CharacterControllerState : StateMachineBehaviour
 	protected PlayerCharacterController controller = null;
 	protected ENUM_CHARACTER_TYPE characterType = ENUM_CHARACTER_TYPE.None;
 
+	protected float stateDeltaTime = 0.0f;
+
 	public void InitializeCharacter(ENUM_CHARACTER_TYPE characterType, PlayerCharacterController controller)
 	{
 		this.characterType = characterType;
@@ -77,6 +79,8 @@ public class CharacterControllerState : StateMachineBehaviour
 	public override void OnStateEnter(UnityEngine.Animator animator, UnityEngine.AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
 		base.OnStateEnter(animator, animatorStateInfo, layerIndex);
+
+		stateDeltaTime = Time.deltaTime;
 	}
 
 	public sealed override void OnStateUpdate(UnityEngine.Animator animator, UnityEngine.AnimatorStateInfo animatorStateInfo, int layerIndex)
@@ -87,6 +91,8 @@ public class CharacterControllerState : StateMachineBehaviour
 		CheckNextState(animator, animatorStateInfo);
 
 		OnStateLateUpdate(animator, animatorStateInfo, layerIndex);
+
+		stateDeltaTime += Time.deltaTime;
 	}
 
 	public virtual void OnStatePrevUpdate(UnityEngine.Animator animator, UnityEngine.AnimatorStateInfo animatorStateInfo, int layerIndex)
@@ -102,6 +108,8 @@ public class CharacterControllerState : StateMachineBehaviour
 	public override void OnStateExit(UnityEngine.Animator animator, UnityEngine.AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
 		base.OnStateExit(animator, animatorStateInfo, layerIndex);
+
+		stateDeltaTime = 0.0f;
 	}
 
 	public sealed override void OnStateMachineEnter(Animator animator, int stateMachinePathHash)

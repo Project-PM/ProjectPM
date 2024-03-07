@@ -46,7 +46,7 @@ public class CharacterAirborneHitState : CharacterControllerState
                 animator.Play(ENUM_CHARACTER_STATE.AirborneHit1);
             }
         }
-        else if (controller.CheckGrounded())
+        else if (controller.CheckGrounded() && stateDeltaTime > 0.1f)
         {
             animator.Play(ENUM_CHARACTER_STATE.Down);
         }

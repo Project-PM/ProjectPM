@@ -47,7 +47,7 @@ public class CharacterDownState : CharacterControllerState
                 animator.Play(ENUM_CHARACTER_STATE.Down);
             }
         }
-        else if (IsEndState(animatorStateInfo))
+        else if (IsEndState(animatorStateInfo) && controller.CheckGrounded())
         {
             animator.Play(ENUM_CHARACTER_STATE.Recovery);
         }
