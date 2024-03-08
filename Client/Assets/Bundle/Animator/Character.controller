@@ -135,7 +135,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   applyCharacterType: 0
   deltaFrameCount: 1
-  triggers: []
+  triggers:
+  - startFrameIndex: 2
   attackInfoList: []
   damageInfo:
     type: 1
@@ -242,7 +243,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Attack3
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -287,8 +288,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c80ba61a69ab83c4da506feb62d571e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.1
-  jumpHeight: 0.3
+  moveSpeed: 0.05
+  jumpHeight: 0.25
 --- !u!114 &-4851378953024053833
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -331,13 +332,13 @@ MonoBehaviour:
   triggers:
   - startFrameIndex: 4
   attackInfoList:
-  - attackBox: {x: 2, y: 2}
-    attackOffset: {x: 2, y: 1}
+  - attackBox: {x: 0.5, y: 1}
+    attackOffset: {x: 0.9, y: 0.7}
     attackCount: 1
   damageInfo:
     type: 1
     amount: 3
-    knockBackPower: 0.1
+    knockBackPower: 0
     stiffTime: 0.3
     upperHeight: 1
 --- !u!114 &-4383703698923201343
@@ -352,7 +353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a94974d994d54ba4fb02ccf545e37875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.05
+  moveSpeed: 0.08
 --- !u!114 &-4109573672171052528
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -835,7 +836,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Attack1
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -916,7 +917,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Attack2
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -1122,14 +1123,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applyCharacterType: 0
-  deltaFrameCount: 1
-  triggers: []
-  attackInfoList: []
+  deltaFrameCount: 4
+  triggers:
+  - startFrameIndex: 3
+  attackInfoList:
+  - attackBox: {x: 2, y: 2}
+    attackOffset: {x: 2, y: 1}
+    attackCount: 1
   damageInfo:
-    type: 0
-    amount: 0
+    type: 1
+    amount: 3
     knockBackPower: 0
-    stiffTime: 0
+    stiffTime: 0.3
     upperHeight: 0
 --- !u!114 &7463789471283171702
 MonoBehaviour:
@@ -1143,7 +1148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b551940b072df047b98143325b73732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.1
+  moveSpeed: 0.25
 --- !u!114 &7483799607486073069
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1209,14 +1214,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applyCharacterType: 0
-  deltaFrameCount: 1
-  triggers: []
-  attackInfoList: []
+  deltaFrameCount: 4
+  triggers:
+  - startFrameIndex: 3
+  attackInfoList:
+  - attackBox: {x: 2, y: 2}
+    attackOffset: {x: 2, y: 1}
+    attackCount: 1
   damageInfo:
-    type: 0
-    amount: 0
+    type: 1
+    amount: 3
     knockBackPower: 0
-    stiffTime: 0
+    stiffTime: 0.3
     upperHeight: 0
 --- !u!114 &8328909030061879130
 MonoBehaviour:
