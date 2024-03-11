@@ -16,6 +16,8 @@ using static UnityEditor.LightingExplorerTableColumn;
 using System.Reflection;
 using System.IO;
 using static UnityEngine.Rendering.DebugUI;
+using UnityEditor.Timeline.Actions;
+using System.Runtime.CompilerServices;
 
 public interface IFBUserInfoPostProcess
 {
@@ -63,8 +65,6 @@ public class FirebaseDB
                 .Child(userID);
         }
 
-        SetUpdateCallBack();
-
         for (int i = 0; i < (int)FirebaseDataCategory.Max; i++)
         {
             FirebaseDataCategory category = (FirebaseDataCategory)i;
@@ -73,8 +73,8 @@ public class FirebaseDB
                 if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
-                    FBDataBase fbData = null;
 
+                    FBDataBase fbData = null;
                     switch (category)
                     {
                         case FirebaseDataCategory.UserInfo:
@@ -85,29 +85,8 @@ public class FirebaseDB
                             break;
                     }
 
-                    FieldInfo[] fieldInfos = fbData.GetType().GetFields();
-
                     IDictionary dict = (IDictionary)snapshot.Value;
-                    Debug.Log(dict.Count);
-
-                    for (int j = 0; j < fieldInfos.Length; j++)
-                    {
-                        Debug.Log(fieldInfos[j].Name);
-                        if (dict.Contains(fieldInfos[j].Name))
-                        {
-                            object obj = Convert.ChangeType(dict[fieldInfos[j].Name], fieldInfos[j].FieldType);
-
-                            if (fieldInfos[j].Name == "characterGearList")
-                            {
-                                Debug.Log(fieldInfos[j].FieldType);
-                                Debug.Log(obj);
-                            }
-
-                            fieldInfos[j].SetValue(fbData, obj);
-                        }
-                        else
-                            Debug.Log($"{fieldInfos[j].Name} 이 없음");
-                    }
+                    FBDataUpdateCheck(fbData, dict);
 
                     DBReferenceDict[category].SetRawJsonValueAsync(JsonConvert.SerializeObject(fbData));
                     Debug.Log($"{category} Data 갱신 완료");
@@ -118,6 +97,8 @@ public class FirebaseDB
                 }
             });
         }
+
+        SetUpdateCallBack();
 
         return true;
     }
@@ -136,17 +117,9 @@ public class FirebaseDB
         Debug.Log($"FB UserInfo 데이터 변경 감지 {userInfoProcessList.Count}");
 
         FBUserInfo userInfo = new FBUserInfo();
-        FieldInfo[] fieldInfos = userInfo.GetType().GetFields();
         IDictionary dict = (IDictionary)e.Snapshot.Value;
 
-        for (int j = 0; j < fieldInfos.Length; j++)
-        {
-            if (dict.Contains(fieldInfos[j].Name))
-            {
-                object obj = Convert.ChangeType(dict[fieldInfos[j].Name], fieldInfos[j].FieldType);
-                fieldInfos[j].SetValue(userInfo, obj);
-            }
-        }
+        FBDataUpdateCheck(userInfo, dict);
 
         foreach (var process in userInfoProcessList)
         {
@@ -159,17 +132,9 @@ public class FirebaseDB
         Debug.Log($"FB UserItem 데이터 변경 감지 {userItemProcessList.Count}");
 
         FBUserItem userItem = new FBUserItem();
-        FieldInfo[] fieldInfos = userItem.GetType().GetFields();
         IDictionary dict = (IDictionary)e.Snapshot.Value;
 
-        for (int j = 0; j < fieldInfos.Length; j++)
-        {
-            if (dict.Contains(fieldInfos[j].Name))
-            {
-                object obj = Convert.ChangeType(dict[fieldInfos[j].Name], fieldInfos[j].FieldType);
-                fieldInfos[j].SetValue(userItem, obj);
-            }
-        }
+        FBDataUpdateCheck(userItem, dict);
 
         foreach (var process in userItemProcessList)
         {
@@ -177,6 +142,34 @@ public class FirebaseDB
         }
     }
 
+    private void FBDataUpdateCheck(FBDataBase fbData, IDictionary dict)
+    {
+        if (dict == null)
+            return;
+
+        FieldInfo[] fieldInfos = fbData.GetType().GetFields();
+
+        for (int j = 0; j < fieldInfos.Length; j++)
+        {
+            if (dict.Contains(fieldInfos[j].Name))
+            {
+                if(fieldInfos[j].FieldType.IsGenericType)
+                {
+                    // 받아온 List의 타입을 확인하여 해당 타입으로 받아와 필드에 세팅해야 함
+
+                    object value = new List<string>(); // 이런 형식으로 들어가야 함
+
+                    fieldInfos[j].SetValue(fbData, value);
+                }
+                else
+                {
+                    object value = Convert.ChangeType(dict[fieldInfos[j].Name], fieldInfos[j].FieldType);
+                    fieldInfos[j].SetValue(fbData, value);
+                }
+            }
+        }
+    }
+    
     public void RegisterIFBUserInfoPostProcess(IFBUserInfoPostProcess userInfoPostProcess)
     {
         if (!userInfoProcessList.Contains(userInfoPostProcess))

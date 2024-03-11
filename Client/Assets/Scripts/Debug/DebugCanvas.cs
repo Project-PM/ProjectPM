@@ -56,9 +56,9 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
 
     public void OnClickTestItemCount()
     {
-        FBUserItem fBUserItem = new FBUserItem();
-        fBUserItem.characterGearList.Add("장비1");
-        Managers.Platform.UpdateDB(FirebaseDataCategory.UserItem, fBUserItem);
+        FBUserItem fbUserItem = Managers.Data.MyUserData.userItem;
+        fbUserItem.characterGearList.Add($"{Random.Range(0, 1000)}번 아이템명");
+        Managers.Platform.UpdateDB(FirebaseDataCategory.UserItem, fbUserItem);
     }
 
     public void OnClickRandomPicker()
@@ -88,11 +88,11 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
 
     public void OnUpdateFBUserInfoProperty(FBUserInfo property)
     {
-        Debug.Log($"UserInfo 갱신 콜백");        
+
     }
 
     public void OnUpdateFBUserItemProperty(FBUserItem property)
     {
-        Debug.Log($"UserItem 갱신 콜백");
+
     }
 }
