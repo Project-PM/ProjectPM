@@ -16,4 +16,14 @@ public class JumpKeyComponent : InputKeyComponent
         base.OnPointerUp(eventData);
         System.OnJumpInputChanged(isPressed);
     }
+
+	protected override void Update()
+	{
+        base.Update();
+
+        if (isKeyboardMode)
+        {
+			System.OnJumpInputChanged(isPressed);
+		}
+	}
 }

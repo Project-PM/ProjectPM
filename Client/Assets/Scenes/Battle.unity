@@ -672,7 +672,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1495706430}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -697,6 +697,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c550df3186b89234abb1514d95ffb6c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isKeyboardMode: 1
+  KeyBoardCode: 117
 --- !u!114 &1495706433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1398,6 +1400,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc55439476af07243869856aa8e6d33d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isKeyboardMode: 1
+  KeyBoardCode: 107
   keyType: 1
 --- !u!222 &3992741900678990428
 CanvasRenderer:
@@ -1493,6 +1497,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc55439476af07243869856aa8e6d33d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isKeyboardMode: 1
+  KeyBoardCode: 105
   keyType: 2
 --- !u!1 &5309009683115469874
 GameObject:
@@ -1525,10 +1531,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7848724736004858315}
-  - {fileID: 6743384609588107824}
+  - {fileID: 1495706431}
   - {fileID: 6457211745377294403}
   - {fileID: 3635601274273698256}
-  - {fileID: 1495706431}
+  - {fileID: 6743384609588107824}
   m_Father: {fileID: 3934098187592108735}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1735,6 +1741,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7fda0f73e3bded4eabe5f3276b44f20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isKeyboardMode: 1
+  KeyBoardCode: 106
 --- !u!1 &7167742508084590912
 GameObject:
   m_ObjectHideFlags: 0
@@ -1809,6 +1817,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42844a4fccbd54746b90cade4ff70f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isKeyboardMode: 1
+  KeyBoardCode: 0
   deadZone: 0
   handleRange: 1
   AxisOptions: 0

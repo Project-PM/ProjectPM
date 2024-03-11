@@ -6,6 +6,9 @@ using UnityEngine.EventSystems;
 
 public class InputKeyComponent : MonoComponent<FrameInputSystem>, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
+	[SerializeField] protected bool isKeyboardMode = false;
+	[SerializeField] private KeyCode KeyBoardCode = KeyCode.None;
+
 	protected bool isPressed = false;
 
     public virtual void OnDrag(PointerEventData eventData)
@@ -21,5 +24,13 @@ public class InputKeyComponent : MonoComponent<FrameInputSystem>, IPointerDownHa
 	public virtual void OnPointerUp(PointerEventData eventData)
 	{
 		isPressed = false;
+	}
+
+	protected virtual void Update()
+	{
+		if (isKeyboardMode)
+		{
+			isPressed = Input.GetKey(KeyBoardCode);
+		}
 	}
 }

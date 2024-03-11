@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -23,7 +24,7 @@ public class Joystick : InputKeyComponent
 	[SerializeField] protected RectTransform background = null;
     [SerializeField] private RectTransform handle = null;
 
-    private RectTransform baseRect = null;
+	private RectTransform baseRect = null;
 
     private Canvas canvas;
     private Camera cam;
@@ -65,10 +66,21 @@ public class Joystick : InputKeyComponent
 		handle.anchoredPosition = input * radius * handleRange;
     }
 
-	private void Update()
+	protected override void Update()
 	{
-		float x = SnapX ? SnapFloat(input, input.x, AxisOptions.Horizontal) : input.x;
-		float y = SnapY ? SnapFloat(input, input.y, AxisOptions.Vertical) : input.y;
+		float x = 0.0f;
+		float y = 0.0f;
+
+		if (isKeyboardMode)
+		{
+			x = Input.GetAxisRaw("Horizontal");
+			y = Input.GetAxisRaw("Vertical");
+		}
+		else
+		{
+			x = SnapX ? SnapFloat(input, input.x, AxisOptions.Horizontal) : input.x;
+			y = SnapY ? SnapFloat(input, input.y, AxisOptions.Vertical) : input.y;
+		}
 
 		System.OnMoveInputChanged(new Vector2(x, y));
 	}

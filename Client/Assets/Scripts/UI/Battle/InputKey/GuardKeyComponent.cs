@@ -3,8 +3,9 @@ using UnityEngine.EventSystems;
 
 public class GuardKeyComponent : InputKeyComponent
 {
-    private void Update()
+    protected override void Update()
     {
-        System.OnGuardInputChanged(isPressed);
+        base.Update();
+	    System.OnGuardInputChanged(isPressed);
     }
 }

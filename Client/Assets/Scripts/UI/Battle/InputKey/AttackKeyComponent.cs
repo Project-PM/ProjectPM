@@ -19,4 +19,14 @@ public class AttackKeyComponent : InputKeyComponent
 		base.OnPointerUp(eventData);
         System.OnAttackInputChanged(keyType, isPressed);
 	}
+
+	protected override void Update()
+	{
+		base.Update();
+
+		if (isKeyboardMode)
+		{
+			System.OnAttackInputChanged(keyType, isPressed);
+		}
+	}
 }
