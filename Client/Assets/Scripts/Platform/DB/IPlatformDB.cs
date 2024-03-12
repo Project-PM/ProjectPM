@@ -155,15 +155,12 @@ public class FirebaseDB
             {
                 if(fieldInfos[j].FieldType.IsGenericType)
                 {
-                    // 받아온 List의 타입을 확인하여 해당 타입으로 받아와 필드에 세팅해야 함
-                    Type[] types = fieldInfos[j].FieldType.GetGenericArguments(); // ??
-                    
+                    // 받아온 List의 타입을 확인하여 해당 타입으로 받아와 필드에 세팅
                     List<object> objList = (List<object>)dict[fieldInfos[j].Name];
 
                     if (fieldInfos[j].FieldType == typeof(List<string>))
                     {
                         List<string> list = new();
-
                         foreach (object obj in objList)
                             list.Add(obj.ToString());
 
@@ -172,7 +169,6 @@ public class FirebaseDB
                     else if (fieldInfos[j].FieldType == typeof(List<int>))
                     {
                         List<int> list = new();
-
                         foreach (object obj in objList)
                             list.Add(int.Parse(obj.ToString()));
 
@@ -181,8 +177,7 @@ public class FirebaseDB
                     else if (fieldInfos[j].FieldType == typeof(List<bool>))
                     {
                         List<bool> list = new();
-
-                        foreach (object obj in objList)
+                        foreach (object obj in objList) 
                             list.Add((bool)obj);
 
                         fieldInfos[j].SetValue(fbData, list);
