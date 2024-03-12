@@ -54,10 +54,18 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
         Managers.Platform.Logout();
     }
 
-    public void OnClickTestItemCount()
+    public void OnClickAddDBData()
     {
         FBUserItem fbUserItem = Managers.Data.MyUserData.userItem;
         fbUserItem.characterGearList.Add($"{Random.Range(0, 1000)}번 아이템명");
+        fbUserItem.testIntList.Add(Random.Range(0, 1000));
+        fbUserItem.testBoolList.Add((Random.value > 0.5f));
+        Managers.Platform.UpdateDB(FirebaseDataCategory.UserItem, fbUserItem);
+    }
+
+    public void OnClickInitDBData()
+    {
+        FBUserItem fbUserItem = new();
         Managers.Platform.UpdateDB(FirebaseDataCategory.UserItem, fbUserItem);
     }
 

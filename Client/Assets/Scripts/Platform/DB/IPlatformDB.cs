@@ -156,10 +156,41 @@ public class FirebaseDB
                 if(fieldInfos[j].FieldType.IsGenericType)
                 {
                     // 받아온 List의 타입을 확인하여 해당 타입으로 받아와 필드에 세팅해야 함
+                    Type[] types = fieldInfos[j].FieldType.GetGenericArguments(); // ??
+                    
+                    List<object> objList = (List<object>)dict[fieldInfos[j].Name];
 
-                    object value = new List<string>(); // 이런 형식으로 들어가야 함
+                    if (fieldInfos[j].FieldType == typeof(List<string>))
+                    {
+                        List<string> list = new();
 
-                    fieldInfos[j].SetValue(fbData, value);
+                        foreach (object obj in objList)
+                            list.Add(obj.ToString());
+
+                        fieldInfos[j].SetValue(fbData, list);
+                    }
+                    else if (fieldInfos[j].FieldType == typeof(List<int>))
+                    {
+                        List<int> list = new();
+
+                        foreach (object obj in objList)
+                            list.Add(int.Parse(obj.ToString()));
+
+                        fieldInfos[j].SetValue(fbData, list);
+                    }
+                    else if (fieldInfos[j].FieldType == typeof(List<bool>))
+                    {
+                        List<bool> list = new();
+
+                        foreach (object obj in objList)
+                            list.Add((bool)obj);
+
+                        fieldInfos[j].SetValue(fbData, list);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"제네릭 타입 '{fieldInfos[j].FieldType}'을 명시적으로 추가해주세요.");
+                    }
                 }
                 else
                 {
@@ -169,7 +200,7 @@ public class FirebaseDB
             }
         }
     }
-    
+
     public void RegisterIFBUserInfoPostProcess(IFBUserInfoPostProcess userInfoPostProcess)
     {
         if (!userInfoProcessList.Contains(userInfoPostProcess))
