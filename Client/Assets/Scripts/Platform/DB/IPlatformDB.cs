@@ -88,8 +88,7 @@ public class FirebaseDB
                             break;
                     }
 
-                    IDictionary dict = (IDictionary)snapshot.Value;
-                    FBDataUpdateCheck(fbData, dict);
+                    FBDataUpdateCheck(fbData, snapshot);
 
                     DBReferenceDict[category].SetRawJsonValueAsync(JsonConvert.SerializeObject(fbData));
                     Debug.Log($"{category} Data 갱신 완료");
@@ -120,9 +119,8 @@ public class FirebaseDB
         Debug.Log($"FB UserInfo 데이터 변경 감지 {userInfoProcessList.Count}");
 
         FBUserInfo userInfo = new FBUserInfo();
-        IDictionary dict = (IDictionary)e.Snapshot.Value;
-
-        FBDataUpdateCheck(userInfo, dict);
+        
+        FBDataUpdateCheck(userInfo, e.Snapshot);
 
         foreach (var process in userInfoProcessList)
         {
@@ -135,9 +133,8 @@ public class FirebaseDB
         Debug.Log($"FB UserItem 데이터 변경 감지 {userItemProcessList.Count}");
 
         FBUserItem userItem = new FBUserItem();
-        IDictionary dict = (IDictionary)e.Snapshot.Value;
-
-        FBDataUpdateCheck(userItem, dict);
+        
+        FBDataUpdateCheck(userItem, e.Snapshot);
 
         foreach (var process in userItemProcessList)
         {
@@ -145,11 +142,68 @@ public class FirebaseDB
         }
     }
 
+    public void Test<T>(FBDataBase fbData, FieldInfo fieldInfo, object obj)
+    {
+        List<T> list = new List<T>();
+
+        fieldInfo.SetValue(fbData, list);
+    }
+
+    private void FBDataUpdateCheck(FBDataBase fbData, DataSnapshot snapshot)
+    {
+        IDictionary dict = (IDictionary)snapshot.Value;
+
+        if (dict == null)
+            return;
+
+        FieldInfo[] fieldInfos = fbData.GetType().GetFields();
+
+        for (int j = 0; j < fieldInfos.Length; j++)
+        {
+            if (dict.Contains(fieldInfos[j].Name))
+            {
+                if(fieldInfos[j].FieldType.IsGenericType)
+                {
+                    // 받아온 List의 타입을 확인하여 해당 타입으로 받아와 필드에 세팅
+                    List<object> objList = (List<object>)dict[fieldInfos[j].Name];
+
+                    if (fieldInfos[j].FieldType == typeof(List<string>))
+                    {
+                        List<string> list = new();
+                        foreach (object obj in objList)
+                            list.Add(obj.ToString());
+                        fieldInfos[j].SetValue(fbData, list);
+                    }
+                    else if (fieldInfos[j].FieldType == typeof(List<int>))
+                    {
+                        List<int> list = new();
+                        foreach (object obj in objList)
+                            list.Add(int.Parse(obj.ToString()));
+                        fieldInfos[j].SetValue(fbData, list);
+                    }
+                    else if (fieldInfos[j].FieldType == typeof(List<bool>))
+                    {
+                        List<bool> list = new();
+                        foreach (object obj in objList) 
+                            list.Add((bool)obj);
+                        fieldInfos[j].SetValue(fbData, list);
+                    }
+                    else
+                        Debug.LogWarning($"제네릭 타입 '{fieldInfos[j].FieldType}' 를 추가해주세요.");
+                }
+                else
+                {
+                    object value = Convert.ChangeType(dict[fieldInfos[j].Name], fieldInfos[j].FieldType);
+                    fieldInfos[j].SetValue(fbData, value);
+                }
+            }
+        }
+    }
     public void GetRankingBoardDatas(Action<List<RankingBoardData>> onRankingBoardData)
     {
         DBReferenceRanking.GetValueAsync().ContinueWithOnMainThread(task =>
         {
-            if(task.IsCompleted)
+            if (task.IsCompleted)
             {
                 List<RankingBoardData> list = new();
 
@@ -178,60 +232,6 @@ public class FirebaseDB
     {
         Debug.Log("랭킹보드 데이터 추가 완료");
         DBReferenceRanking.Child(myUserID).SetRawJsonValueAsync(JsonConvert.SerializeObject(data));
-    }
-
-    private void FBDataUpdateCheck(FBDataBase fbData, IDictionary dict)
-    {
-        if (dict == null)
-            return;
-
-        FieldInfo[] fieldInfos = fbData.GetType().GetFields();
-
-        for (int j = 0; j < fieldInfos.Length; j++)
-        {
-            if (dict.Contains(fieldInfos[j].Name))
-            {
-                if(fieldInfos[j].FieldType.IsGenericType)
-                {
-                    // 받아온 List의 타입을 확인하여 해당 타입으로 받아와 필드에 세팅
-                    List<object> objList = (List<object>)dict[fieldInfos[j].Name];
-
-                    if (fieldInfos[j].FieldType == typeof(List<string>))
-                    {
-                        List<string> list = new();
-                        foreach (object obj in objList)
-                            list.Add(obj.ToString());
-
-                        fieldInfos[j].SetValue(fbData, list);
-                    }
-                    else if (fieldInfos[j].FieldType == typeof(List<int>))
-                    {
-                        List<int> list = new();
-                        foreach (object obj in objList)
-                            list.Add(int.Parse(obj.ToString()));
-
-                        fieldInfos[j].SetValue(fbData, list);
-                    }
-                    else if (fieldInfos[j].FieldType == typeof(List<bool>))
-                    {
-                        List<bool> list = new();
-                        foreach (object obj in objList) 
-                            list.Add((bool)obj);
-
-                        fieldInfos[j].SetValue(fbData, list);
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"제네릭 타입 '{fieldInfos[j].FieldType}'을 명시적으로 추가해주세요.");
-                    }
-                }
-                else
-                {
-                    object value = Convert.ChangeType(dict[fieldInfos[j].Name], fieldInfos[j].FieldType);
-                    fieldInfos[j].SetValue(fbData, value);
-                }
-            }
-        }
     }
 
     public void RegisterIFBUserInfoPostProcess(IFBUserInfoPostProcess userInfoPostProcess)
