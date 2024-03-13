@@ -32,6 +32,7 @@ public interface IFBUserItemPostProcess
 public class FirebaseDB
 {
     private Dictionary<FirebaseDataCategory, DatabaseReference> DBReferenceDict = new Dictionary<FirebaseDataCategory, DatabaseReference>();
+    private DatabaseReference DBReferenceRanking = null;
 
     private List<IFBUserInfoPostProcess> userInfoProcessList = new List<IFBUserInfoPostProcess>();
     private List<IFBUserItemPostProcess> userItemProcessList = new List<IFBUserItemPostProcess>();
@@ -64,6 +65,8 @@ public class FirebaseDB
                 .GetReference(category.ToString())
                 .Child(userID);
         }
+
+        DBReferenceRanking = FirebaseDatabase.DefaultInstance.GetReference("RankingBoard");
 
         for (int i = 0; i < (int)FirebaseDataCategory.Max; i++)
         {
@@ -140,6 +143,41 @@ public class FirebaseDB
         {
             process?.OnUpdateFBUserItemProperty(userItem);
         }
+    }
+
+    public void GetRankingBoardDatas(Action<List<RankingBoardData>> onRankingBoardData)
+    {
+        DBReferenceRanking.GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if(task.IsCompleted)
+            {
+                List<RankingBoardData> list = new();
+
+                DataSnapshot snapshot = task.Result;
+
+                foreach (DataSnapshot childSnapshot in snapshot.Children)
+                {
+                    RankingBoardData info = new RankingBoardData();
+
+                    info.userNickname = childSnapshot.Child("userNickname").Value.ToString();
+                    info.ratingPoint = int.Parse(childSnapshot.Child("ratingPoint").Value.ToString());
+
+                    list.Add(info);
+                }
+
+                onRankingBoardData(list);
+            }
+            else
+            {
+                Debug.LogWarning("데이터 로드 실패");
+            }
+        });
+    }
+
+    public void PushMyRankingBoardData(RankingBoardData data, string myUserID)
+    {
+        Debug.Log("랭킹보드 데이터 추가 완료");
+        DBReferenceRanking.Child(myUserID).SetRawJsonValueAsync(JsonConvert.SerializeObject(data));
     }
 
     private void FBDataUpdateCheck(FBDataBase fbData, IDictionary dict)

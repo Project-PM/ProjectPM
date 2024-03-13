@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPostProcess
@@ -92,6 +93,33 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
         {
             Debug.Log($"{i}번 : {intArray[i]}");
         }
+    }
+
+    public void OnClickAddRankingBoardData()
+    {
+        RankingBoardData data = new RankingBoardData();
+
+        data.userNickname = "닉네임ㅋ";
+        data.ratingPoint = Random.Range(0, 10000);
+
+        Managers.Platform.PushRankingBoardData(data);
+    }
+
+    public void OnClickShowRankingBoardData()
+    {
+        Managers.Platform.GetRakingBoardDatas(RankingBoardCallBack);
+    }
+
+    public void RankingBoardCallBack(List<RankingBoardData> rankingBoardDatas)
+    {
+        string str = "";
+
+        foreach(RankingBoardData rankingBoardData in rankingBoardDatas)
+        {
+            str += $"{rankingBoardData.userNickname}, {rankingBoardData.ratingPoint}\n";
+        }
+
+        Debug.Log(str);
     }
 
     public void OnUpdateFBUserInfoProperty(FBUserInfo property)

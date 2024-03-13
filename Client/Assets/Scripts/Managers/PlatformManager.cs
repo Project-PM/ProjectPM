@@ -9,42 +9,8 @@ using JetBrains.Annotations;
 using Firebase.Extensions;
 using Unity.VisualScripting;
 using UnityEngine.Rendering;
-
-#region FBUserDatas
-/// <summary>
-/// 유저 데이터 베이스 저장용 구조,
-/// 필요한 경우에는 UserData 클래스 종류를 늘려줄 것
-/// </summary>
-[Serializable]
-public class FBUserData
-{
-    public FBUserInfo userInfo = new FBUserInfo();
-    public FBUserItem userItem = new FBUserItem();
-}
-
-[Serializable]
-public class FBDataBase { }
-
-[Serializable]
-public class FBUserInfo : FBDataBase
-{
-    public string userNickName = "Guest";
-    public int userLoginType = (int)UserLoginType.Guest;
-    public int useCharacterType = (int)CharacterType.Red;
-}
-                                           
-[Serializable]
-public class FBUserItem : FBDataBase
-{
-    public int coin = 0;
-    public int characterPiece = 0; // 캐릭터 조각
-    public List<string> characterGearList = new List<string>(); // 보유 캐릭터장비 목록
-    public List<bool> testBoolList = new List<bool>();
-    public List<int> testIntList = new List<int>();
-    public int testNum = 15;
-    // 캐릭터별 장착상태를 저장해야 함 
-}
-#endregion
+using Unity.Mathematics;
+using UnityEngine.UIElements;
 
 public class PlatformManager
 {
@@ -85,7 +51,6 @@ public class PlatformManager
         auth = new PlatformGuestAuth();
     }
 
-    // 테스트용
     public void RegisterFBUserInfoCallback(IFBUserInfoPostProcess mono)
     {
         DB.RegisterIFBUserInfoPostProcess(mono);
@@ -116,6 +81,32 @@ public class PlatformManager
 
         DB.UpdateDB(data);
         return true;
+    }
+
+    public void GetRakingBoardDatas(Action<List<RankingBoardData>> onRankingBoardData)
+    {
+        DB.GetRankingBoardDatas(onRankingBoardData);
+    }
+
+    private System.Random random = new System.Random((int)DateTime.Now.Ticks & 0x0000FFFF); //랜덤 시드값
+
+    public void PushRankingBoardData(RankingBoardData data)
+    {
+        // 테스트용 로직
+        int lenght = 34;
+        string strPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";  //문자 생성 풀
+        char[] chRandom = new char[lenght];
+
+        for (int i = 0; i < lenght; i++)
+        {
+            chRandom[i] = strPool[random.Next(strPool.Length)];
+        }
+        string strRet = new String(chRandom);   // char to string
+
+        DB.PushMyRankingBoardData(data, strRet);
+
+        // 원래는 이렇게만 사용해야 함 - 매개변수 빼고 DB에서 UserID 가져와서 세팅
+        // DB.PushMyRankingBoardData(data, GetUserID());
     }
 
     public string GetUserID()
