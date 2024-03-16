@@ -698,7 +698,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isKeyboardMode: 1
-  KeyBoardCode: 117
+  KeyBoardCode: 99
 --- !u!114 &1495706433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1742,7 +1742,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isKeyboardMode: 1
-  KeyBoardCode: 106
+  KeyBoardCode: 32
 --- !u!1 &7167742508084590912
 GameObject:
   m_ObjectHideFlags: 0

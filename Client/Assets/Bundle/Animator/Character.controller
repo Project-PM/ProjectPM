@@ -134,13 +134,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applyCharacterType: 0
-  deltaFrameCount: 1
+  deltaFrameCount: 3
   triggers:
   - startFrameIndex: 2
-  attackInfoList: []
+  attackInfoList:
+  - attackBox: {x: 1, y: 1}
+    attackOffset: {x: 1, y: 2}
+    attackCount: 1
   damageInfo:
-    type: 1
-    amount: 0
+    type: 2
+    amount: 5
     knockBackPower: 0
     stiffTime: 0
     upperHeight: 0
@@ -586,10 +589,10 @@ MonoBehaviour:
     attackCount: 1
   damageInfo:
     type: 2
-    amount: 0
-    knockBackPower: 0
+    amount: 3
+    knockBackPower: 0.1
     stiffTime: 0
-    upperHeight: 0.5
+    upperHeight: 0.05
 --- !u!1102 &-402689853291514102
 AnimatorState:
   serializedVersion: 6
@@ -698,7 +701,7 @@ AnimatorStateMachine:
     m_Position: {x: 150, y: 140, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3843617946116690632}
-    m_Position: {x: 410, y: 260, z: 0}
+    m_Position: {x: 410, y: 270, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5620844730651163936}
     m_Position: {x: 410, y: 330, z: 0}
@@ -752,7 +755,7 @@ AnimatorStateMachine:
     m_Position: {x: 150, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7816761617528882498}
-    m_Position: {x: 670, y: 520, z: 0}
+    m_Position: {x: 650, y: 520, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -1108,7 +1111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aa571e6aec01e344b5b9a172a35346c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  comboNormalizeTime: 0.9
+  comboNormalizeTime: 0.7
   nextComboState: 12
 --- !u!114 &7208850586138354219
 MonoBehaviour:
@@ -1182,7 +1185,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: JumpSkillLand
-  m_Speed: 1
+  m_Speed: 0.5
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -1195,7 +1198,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 0}
+  m_Motion: {fileID: 7400000, guid: ac3f4965d5d5995418abea08e1755456, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -1262,7 +1265,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Skill
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -1322,14 +1325,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applyCharacterType: 0
-  deltaFrameCount: 1
-  triggers: []
-  attackInfoList: []
+  deltaFrameCount: 11
+  triggers:
+  - startFrameIndex: 2
+  attackInfoList:
+  - attackBox: {x: 1, y: 1}
+    attackOffset: {x: 1, y: 1}
+    attackCount: 1
   damageInfo:
-    type: 0
-    amount: 0
+    type: 1
+    amount: 3
     knockBackPower: 0
-    stiffTime: 0
+    stiffTime: 0.2
     upperHeight: 0
 --- !u!114 &8734513833417263306
 MonoBehaviour:
