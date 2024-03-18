@@ -26,10 +26,11 @@ public class DrawHelper
 public class TriggerInfo
 {
 	[SerializeField] private int startFrameIndex;
+	[SerializeField] public int endFrameIndex;
 
-	public bool Equals(int startFrameCount)
+	public bool IsValid(int frameIndex)
 	{
-		return this.startFrameIndex == startFrameCount;
+		return startFrameIndex == frameIndex && endFrameIndex >= frameIndex;
 	}
 }
 
@@ -39,6 +40,7 @@ public class AttackInfo
 	[SerializeField] public Vector2 attackBox;
 	[SerializeField] public Vector2 attackOffset;
 	[SerializeField] public int attackCount;
+	[SerializeField] public DamageInfo damageInfo;
 }
 
 public abstract class CharacterFrameActionState : CharacterControllerState
@@ -46,36 +48,36 @@ public abstract class CharacterFrameActionState : CharacterControllerState
     [Header("[적용할 캐릭터 타입]")]
     [SerializeField] private ENUM_CHARACTER_TYPE applyCharacterType = ENUM_CHARACTER_TYPE.Red;
 
-    [Header("[지속 프레임 수]")]
-    [SerializeField] private int deltaFrameCount = 1;
-    
-	[Header("[적용할 시작 프레임]")]
-    [SerializeField] private List<TriggerInfo> triggers = new List<TriggerInfo>();
+	[Header("[적용할 시작, 끝 프레임]")]
+    [SerializeField] protected List<TriggerInfo> triggers = new List<TriggerInfo>();
 
     private AnimationFrameReceiver receiver;
-    private int remainFrameCount = 0;
 
+    private int currentFrameIndex = -1;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
 		receiver = animator.GetComponent<AnimationFrameReceiver>();
-		
+		receiver.Reset();
+
+		currentFrameIndex = -1;
 		CheckFrame();
-        ProgressAction();
-    }
+		OnProgressAction(currentFrameIndex);
+	}
 
     public override void OnStatePrevUpdate(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
 		CheckFrame();
-        ProgressAction();
-    }
+		OnProgressAction(currentFrameIndex);
+	}
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
 		CheckFrame();
-        ProgressAction();
+		OnProgressAction(currentFrameIndex);
 
-        receiver = null;
+		currentFrameIndex = -1;
+		receiver = null;
 	}
 
     protected sealed override void CheckNextState(Animator animator, AnimatorStateInfo animatorStateInfo)
@@ -83,53 +85,39 @@ public abstract class CharacterFrameActionState : CharacterControllerState
 		
 	}
 
-    private void ProgressAction()
-    {
-        if (characterType != applyCharacterType)
-            return;
-
-        if (ProgressFrameCount() == false)
-            return;
-
-		OnProgressAction();
-    }
-
-	protected virtual void OnProgressAction()
+	protected virtual void OnProgressAction(int frameIndex)
 	{
 
 	}
 
-    private bool ProgressFrameCount()
-    {
-        if (remainFrameCount == 0)
-            return false;
+	protected virtual void StartAction(int triggerIndex, int endFrameIndex)
+	{
 
-        remainFrameCount--;
-        return true;
-    }
+	}
 
     private void CheckFrame()
 	{
 		if (receiver == null)
 			return;
 
-		for(int triggerIndex = 0; triggerIndex < triggers.Count; triggerIndex++)
+		if (characterType != applyCharacterType)
+			return;
+
+		if (currentFrameIndex >= receiver.frameIndex)
+			return;
+
+		currentFrameIndex = receiver.frameIndex;
+
+		for (int triggerIndex = 0; triggerIndex < triggers.Count; triggerIndex++)
 		{
 			var trigger = triggers[triggerIndex];
-			int frameIndex = receiver.frameIndex;
-
-			if (trigger.Equals(frameIndex))
+			if (trigger.IsValid(currentFrameIndex))
 			{
-				StartFrameAction(triggerIndex);
+				StartAction(triggerIndex, trigger.endFrameIndex);
 				break;
 			}
 		}
 	}
-
-	protected virtual void StartFrameAction(int triggerIndex)
-	{
-        remainFrameCount = deltaFrameCount;
-    }
 }
 
 public class CharacterFrameAttackState : CharacterFrameActionState
@@ -137,11 +125,11 @@ public class CharacterFrameAttackState : CharacterFrameActionState
 	[Header("[공격할 시작 프레임에 연결되는 공격 정보]")]
 	[SerializeField] List<AttackInfo> attackInfoList = new List<AttackInfo>();
 
-    [Header("[데미지 정보]")]
-    [SerializeField] private DamageInfo damageInfo;
-
     private Vector2 attackOffset;
 	private Vector2 attackBox;
+	private DamageInfo damageInfo;
+
+	private int endFrameIndex = 0;
 
 	private IAttackable myAttackable = null;
 	protected IAttackable MyAttackable
@@ -159,10 +147,8 @@ public class CharacterFrameAttackState : CharacterFrameActionState
 
 	private int remainAttackCount = 0;
 
-	protected override void StartFrameAction(int triggerIndex)
-	{
-		base.StartFrameAction(triggerIndex);
-
+    protected override void StartAction(int triggerIndex, int endFrameIndex)
+    {
 		if (attackInfoList.Count > triggerIndex)
 		{
 			var info = attackInfoList[triggerIndex];
@@ -170,14 +156,21 @@ public class CharacterFrameAttackState : CharacterFrameActionState
 			remainAttackCount = info.attackCount;
 			attackBox = info.attackBox;
 			attackOffset = info.attackOffset;
+			damageInfo = info.damageInfo;
 		}
 
-	}
-
-    protected override void OnProgressAction()
-    {
-		ProgressAttackCount();
+		this.endFrameIndex = endFrameIndex;
     }
+
+	protected override void OnProgressAction(int frameIndex)
+	{
+		base.OnProgressAction(frameIndex);
+
+		if (frameIndex <= endFrameIndex)
+		{
+			ProgressAttackCount();
+		}
+	}
 
 	protected IEnumerable<Collider2D> GetOverlapBoxAll(Transform centerObj)
 	{
@@ -198,11 +191,6 @@ public class CharacterFrameAttackState : CharacterFrameActionState
         return GetOverlapBoxAll(controller.transform)
 			.Where(c => c.GetComponent<IDamageable>() != null)
 			.Select(c => c.GetComponent<IDamageable>());
-	}
-
-	protected IAttackable GetMyAttackable()
-	{
-		return controller.GetComponent<IAttackable>();
 	}
 
 	private void ProgressAttackCount()

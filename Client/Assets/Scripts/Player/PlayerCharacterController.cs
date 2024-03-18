@@ -15,6 +15,7 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	public event Func<bool> IsGrounded;
 	public event Func<bool> IsFrontRight;
 	public event Func<bool> IsSuccessAttack;
+	public event Func<float> OnGetHeightFromGround;
 
 	public Func<ENUM_DAMAGE_TYPE> IsHit;
 	public event Func<DamageInfo> GetDamageInfo;
@@ -116,6 +117,11 @@ public class PlayerCharacterController : MonoComponent<FrameInputSystem>
 	public bool CheckGrounded()
 	{
 		return IsGrounded();
+	}
+
+	public float GetHeightFromGround()
+	{
+		return OnGetHeightFromGround();
 	}
 
 	public bool CheckFall()

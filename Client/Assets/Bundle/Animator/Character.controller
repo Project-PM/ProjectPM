@@ -134,19 +134,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applyCharacterType: 0
-  deltaFrameCount: 3
   triggers:
   - startFrameIndex: 2
+    endFrameIndex: 0
   attackInfoList:
   - attackBox: {x: 1, y: 1}
     attackOffset: {x: 1, y: 2}
     attackCount: 1
-  damageInfo:
-    type: 2
-    amount: 5
-    knockBackPower: 0
-    stiffTime: 0
-    upperHeight: 0
+    damageInfo:
+      type: 0
+      amount: 0
+      knockBackPower: 0
+      stiffTime: 0
+      upperHeight: 0
 --- !u!114 &-6238785035421609186
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -160,6 +160,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSkillTable: {fileID: 11400000, guid: 68b969ccb01ef8440a5a01f7a8024cf2, type: 2}
+--- !u!114 &-6185951184726055766
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb3570657cbcf647b73831f3a5aed60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterState: 20
 --- !u!114 &-6106889926464275310
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -293,6 +306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 0.05
   jumpHeight: 0.25
+  attackableHeight: 3
 --- !u!114 &-4851378953024053833
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -318,6 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ce8c3b8f0ee9da4faebacd8a4b1cf84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterState: 7
 --- !u!114 &-4586743673135329841
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -331,19 +346,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applyCharacterType: 0
-  deltaFrameCount: 3
   triggers:
   - startFrameIndex: 4
+    endFrameIndex: 6
   attackInfoList:
   - attackBox: {x: 0.5, y: 1}
     attackOffset: {x: 0.9, y: 0.7}
     attackCount: 1
-  damageInfo:
-    type: 1
-    amount: 3
-    knockBackPower: 0
-    stiffTime: 0.3
-    upperHeight: 1
+    damageInfo:
+      type: 0
+      amount: 0
+      knockBackPower: 0
+      stiffTime: 0
+      upperHeight: 0
 --- !u!114 &-4383703698923201343
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -393,7 +408,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 5513573957293084345}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -580,19 +596,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applyCharacterType: 0
-  deltaFrameCount: 5
   triggers:
   - startFrameIndex: 0
+    endFrameIndex: 0
   attackInfoList:
   - attackBox: {x: 2, y: 2}
     attackOffset: {x: 0, y: 0}
     attackCount: 1
-  damageInfo:
-    type: 2
-    amount: 3
-    knockBackPower: 0.1
-    stiffTime: 0
-    upperHeight: 0.05
+    damageInfo:
+      type: 0
+      amount: 0
+      knockBackPower: 0
+      stiffTime: 0
+      upperHeight: 0
 --- !u!1102 &-402689853291514102
 AnimatorState:
   serializedVersion: 6
@@ -805,6 +821,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.1
+  attackableHeight: 0.1
 --- !u!114 &2703227517164048681
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -964,6 +981,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eb3570657cbcf647b73831f3a5aed60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterState: 6
 --- !u!114 &4872987816524236532
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1046,6 +1064,19 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &5513573957293084345
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ce8c3b8f0ee9da4faebacd8a4b1cf84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterState: 21
 --- !u!1102 &6149549090079741922
 AnimatorState:
   serializedVersion: 6
@@ -1084,7 +1115,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -6185951184726055766}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1126,19 +1158,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applyCharacterType: 0
-  deltaFrameCount: 4
   triggers:
   - startFrameIndex: 3
+    endFrameIndex: 6
   attackInfoList:
   - attackBox: {x: 2, y: 2}
     attackOffset: {x: 2, y: 1}
     attackCount: 1
-  damageInfo:
-    type: 1
-    amount: 3
-    knockBackPower: 0
-    stiffTime: 0.3
-    upperHeight: 0
+    damageInfo:
+      type: 0
+      amount: 0
+      knockBackPower: 0
+      stiffTime: 0
+      upperHeight: 0
 --- !u!114 &7463789471283171702
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1152,6 +1184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.25
+  attackableHeight: 3
 --- !u!114 &7483799607486073069
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1217,19 +1250,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applyCharacterType: 0
-  deltaFrameCount: 4
   triggers:
   - startFrameIndex: 3
+    endFrameIndex: 6
   attackInfoList:
   - attackBox: {x: 2, y: 2}
     attackOffset: {x: 2, y: 1}
     attackCount: 1
-  damageInfo:
-    type: 1
-    amount: 3
-    knockBackPower: 0
-    stiffTime: 0.3
-    upperHeight: 0
+    damageInfo:
+      type: 0
+      amount: 0
+      knockBackPower: 0
+      stiffTime: 0
+      upperHeight: 0
 --- !u!114 &8328909030061879130
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1325,19 +1358,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applyCharacterType: 0
-  deltaFrameCount: 9
   triggers:
   - startFrameIndex: 2
+    endFrameIndex: 0
   attackInfoList:
   - attackBox: {x: 1, y: 1}
     attackOffset: {x: 1, y: 1}
     attackCount: 1
-  damageInfo:
-    type: 1
-    amount: 3
-    knockBackPower: 0
-    stiffTime: 0.2
-    upperHeight: 0
+    damageInfo:
+      type: 0
+      amount: 0
+      knockBackPower: 0
+      stiffTime: 0
+      upperHeight: 0
 --- !u!114 &8734513833417263306
 MonoBehaviour:
   m_ObjectHideFlags: 1

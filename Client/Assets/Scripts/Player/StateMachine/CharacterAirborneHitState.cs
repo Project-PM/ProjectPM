@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class CharacterAirborneHitState : CharacterControllerState
 {
-    public override void OnStateEnter(UnityEngine.Animator animator, UnityEngine.AnimatorStateInfo animatorStateInfo, int layerIndex)
+    [SerializeField] private ENUM_CHARACTER_STATE characterState = ENUM_CHARACTER_STATE.AirborneHit1;
+
+	public override void OnStateEnter(UnityEngine.Animator animator, UnityEngine.AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
         base.OnStateEnter(animator, animatorStateInfo, layerIndex);
         OnAirborneHit();
@@ -43,8 +45,15 @@ public class CharacterAirborneHitState : CharacterControllerState
         {
             if (damageType == ENUM_DAMAGE_TYPE.Airborne)
             {
-                animator.Play(ENUM_CHARACTER_STATE.AirborneHit1);
-            }
+                if(characterState == ENUM_CHARACTER_STATE.AirborneHit1)
+                {
+					animator.Play(ENUM_CHARACTER_STATE.AirborneHit2);
+				}
+                else if(characterState == ENUM_CHARACTER_STATE.AirborneHit2)
+                {
+					animator.Play(ENUM_CHARACTER_STATE.AirborneHit1);
+				}
+			}
         }
         else if (controller.CheckGrounded() && stateDeltaTime > 0.1f)
         {

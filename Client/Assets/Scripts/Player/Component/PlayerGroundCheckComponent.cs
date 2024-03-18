@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerGroundCheckComponent : PlayerChildComponent
@@ -33,6 +34,7 @@ public class PlayerGroundCheckComponent : PlayerChildComponent
 		controller.IsFallTimeout += IsFallTimeout;
 		controller.IsNotYetJump += IsFirstJumpTrigger;
 		controller.onJump += OnJump;
+		controller.OnGetHeightFromGround += GetHeightFromGround;
 	}
 
 	private void OnDisable()
@@ -41,9 +43,10 @@ public class PlayerGroundCheckComponent : PlayerChildComponent
 		controller.IsFallTimeout -= IsFallTimeout;
 		controller.IsNotYetJump -= IsFirstJumpTrigger;
 		controller.onJump -= OnJump;
+		controller.OnGetHeightFromGround -= GetHeightFromGround;
 	}
 
-    private void OnCollisionEnter2D(Collision2D collision)
+	private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
 		{
@@ -70,6 +73,18 @@ public class PlayerGroundCheckComponent : PlayerChildComponent
 
 		Debug.DrawRay(startPos, Vector2.down * GroundedRadius);
 		return Physics2D.Raycast(startPos, Vector2.down, GroundedRadius, GroundLayers);
+	}
+
+	private float GetHeightFromGround()
+	{
+		Vector2 startPos = new Vector2(transform.position.x, transform.position.y + GroundedOffset);
+
+		RaycastHit2D[] hits = Physics2D.RaycastAll(startPos, Vector2.down, 1000.0f, GroundLayers);
+		if (hits.Any() == false)
+			return 0.0f;
+
+		RaycastHit2D groundHit = hits.FirstOrDefault();
+		return groundHit.distance;
 	}
 
 	private bool IsFirstJumpTrigger()

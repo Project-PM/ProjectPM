@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterFallState : CharacterControllerState
 {
 	[SerializeField] private float moveSpeed = 0.1f;
+	[SerializeField] private float attackableHeight = 0.1f;
 
 	public override void OnStateEnter(UnityEngine.Animator animator, UnityEngine.AnimatorStateInfo animatorStateInfo, int layerIndex)
 	{
@@ -24,6 +25,12 @@ public class CharacterFallState : CharacterControllerState
 		base.OnStateExit(animator, animatorStateInfo, layerIndex);
 	}
 
+	private bool IsAttackableHeight()
+	{
+		return attackableHeight <= controller.GetHeightFromGround();
+	}
+
+
 	protected override void CheckNextState(Animator animator, AnimatorStateInfo animatorStateInfo)
 	{
 		// 뭘 맞아도 이 때는 공중 피격
@@ -31,11 +38,11 @@ public class CharacterFallState : CharacterControllerState
 		{
 			animator.Play(ENUM_CHARACTER_STATE.AirborneHit1);
 		}
-		else if (controller.CheckAttack())
+		else if (controller.CheckAttack() && IsAttackableHeight())
 		{
 			animator.Play(ENUM_CHARACTER_STATE.JumpAttack);
 		}
-		else if (controller.CheckSkill())
+		else if (controller.CheckSkill() && IsAttackableHeight())
 		{
 			animator.Play(ENUM_CHARACTER_STATE.JumpSkill);
 		}

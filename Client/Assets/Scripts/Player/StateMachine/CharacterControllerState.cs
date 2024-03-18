@@ -3,28 +3,33 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// ENUM 사이에 추가하지 말 것
+/// </summary>
 public enum ENUM_CHARACTER_STATE
 {
-	Idle,
-	FrontMove,
-	BackMove,
-	Fall,
-	Jump,
-	Land,
-	AirborneHit1,
-	StandHit1,
-	Down,
-	Recovery,
-	Attack1,
-	Attack2,
-	Attack3,
-	JumpAttack,
-	Skill,
-	JumpSkill,
-	JumpSkillLand,
-	Ultimate_Start,
-	Ultimate,
-	Guard,
+	Idle = 0,
+	FrontMove = 1,
+	BackMove = 2,
+	Fall = 3,
+	Jump = 4,
+	Land = 5,
+	AirborneHit1 = 6,
+	StandHit1 = 7,
+	Down = 8,
+	Recovery = 9,
+	Attack1 = 10,
+	Attack2 = 11,
+	Attack3 = 12,
+	JumpAttack = 13,
+	Skill = 14,
+	JumpSkill = 15,
+	JumpSkillLand = 16,
+	Ultimate_Start = 17,
+	Ultimate = 18,
+	Guard = 19,
+	AirborneHit2 = 20,
+	StandHit2 = 21,
 }
 
 public static class AnimatorHelper
@@ -32,6 +37,16 @@ public static class AnimatorHelper
 	public static void Play(this Animator animator, ENUM_CHARACTER_STATE characterState)
 	{
 		animator.Play(characterState.ToString());
+	}
+
+	public static void Play(this Animator animator, ENUM_CHARACTER_STATE characterState, float normalizedTime)
+	{
+		animator.Play(characterState.ToString(), 0, normalizedTime);
+	}
+
+	public static bool IsState(this Animator animator, ENUM_CHARACTER_STATE characterState)
+	{
+		return IsState(animator.GetCurrentAnimatorStateInfo(0), characterState);
 	}
 
 	public static bool IsState(this AnimatorStateInfo stateInfo,  ENUM_CHARACTER_STATE characterState)
