@@ -26,6 +26,8 @@ public class PlatformManager
 
     FirebaseDB DB = new FirebaseDB();
 
+    public string MyUserID { get; private set; } = null;
+
     public void Initialize()
     {
         Clear();
@@ -45,7 +47,7 @@ public class PlatformManager
                    }
                });
     }
-
+    
     public void Clear()
     {
         auth = new PlatformGuestAuth();

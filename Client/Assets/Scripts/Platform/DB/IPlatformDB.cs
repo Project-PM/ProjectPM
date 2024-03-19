@@ -18,6 +18,8 @@ using System.IO;
 using static UnityEngine.Rendering.DebugUI;
 using UnityEditor.Timeline.Actions;
 using System.Runtime.CompilerServices;
+using UnityEditor.Experimental.GraphView;
+using System.Runtime.Serialization.Formatters;
 
 public interface IFBUserInfoPostProcess
 {
@@ -142,13 +144,6 @@ public class FirebaseDB
         }
     }
 
-    public void Test<T>(FBDataBase fbData, FieldInfo fieldInfo, object obj)
-    {
-        List<T> list = new List<T>();
-
-        fieldInfo.SetValue(fbData, list);
-    }
-
     private void FBDataUpdateCheck(FBDataBase fbData, DataSnapshot snapshot)
     {
         IDictionary dict = (IDictionary)snapshot.Value;
@@ -160,45 +155,46 @@ public class FirebaseDB
 
         for (int j = 0; j < fieldInfos.Length; j++)
         {
-            if (dict.Contains(fieldInfos[j].Name))
-            {
-                if(fieldInfos[j].FieldType.IsGenericType)
-                {
-                    // 받아온 List의 타입을 확인하여 해당 타입으로 받아와 필드에 세팅
-                    List<object> objList = (List<object>)dict[fieldInfos[j].Name];
+            if (dict.Contains(fieldInfos[j].Name) == false)
+                continue;
 
-                    if (fieldInfos[j].FieldType == typeof(List<string>))
-                    {
-                        List<string> list = new();
-                        foreach (object obj in objList)
-                            list.Add(obj.ToString());
-                        fieldInfos[j].SetValue(fbData, list);
-                    }
-                    else if (fieldInfos[j].FieldType == typeof(List<int>))
-                    {
-                        List<int> list = new();
-                        foreach (object obj in objList)
-                            list.Add(int.Parse(obj.ToString()));
-                        fieldInfos[j].SetValue(fbData, list);
-                    }
-                    else if (fieldInfos[j].FieldType == typeof(List<bool>))
-                    {
-                        List<bool> list = new();
-                        foreach (object obj in objList) 
-                            list.Add((bool)obj);
-                        fieldInfos[j].SetValue(fbData, list);
-                    }
-                    else
-                        Debug.LogWarning($"제네릭 타입 '{fieldInfos[j].FieldType}' 를 추가해주세요.");
+            if (fieldInfos[j].FieldType.IsGenericType && fieldInfos[j].FieldType.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                // 받아온 List의 타입을 확인하여 해당 타입으로 받아와 필드에 세팅
+                List<object> objList = (List<object>)dict[fieldInfos[j].Name];
+
+                if (fieldInfos[j].FieldType == typeof(List<string>))
+                {
+                    List<string> list = objList.ConvertAll(x => x.ToString());
+                    fieldInfos[j].SetValue(fbData, list);
+                }
+                else if (fieldInfos[j].FieldType == typeof(List<int>))
+                {
+                    List<int> list = objList.ConvertAll(x => int.Parse(x.ToString()));
+                    fieldInfos[j].SetValue(fbData, list);
+                }
+                else if (fieldInfos[j].FieldType == typeof(List<bool>))
+                {
+                    List<bool> list = objList.ConvertAll(x => (bool)x);
+                    fieldInfos[j].SetValue(fbData, list);
                 }
                 else
                 {
-                    object value = Convert.ChangeType(dict[fieldInfos[j].Name], fieldInfos[j].FieldType);
-                    fieldInfos[j].SetValue(fbData, value);
+                    Debug.LogWarning($"제네릭 타입 '{fieldInfos[j].FieldType}' 를 추가해주세요.");
                 }
+            }
+            else if (fieldInfos[j].FieldType.IsGenericType)
+            {
+                Debug.LogWarning($"List가 아닌 제네릭 타입이 존재 : {fieldInfos[j].FieldType}");
+            }
+            else
+            {
+                object value = Convert.ChangeType(dict[fieldInfos[j].Name], fieldInfos[j].FieldType);
+                fieldInfos[j].SetValue(fbData, value);
             }
         }
     }
+
     public void GetRankingBoardDatas(Action<List<RankingBoardData>> onRankingBoardData)
     {
         DBReferenceRanking.GetValueAsync().ContinueWithOnMainThread(task =>

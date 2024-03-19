@@ -2,11 +2,21 @@
   "tests": [
     {
       "DataId": 1,
-      "Name": "qwer"
+      "TestString": "qwer",
+      "TestFloat": 1.1,
+      "TestBool": false
     },
     {
       "DataId": 2,
-      "Name": "asdf"
+      "TestString": null,
+      "TestFloat": 0.0,
+      "TestBool": false
+    },
+    {
+      "DataId": 3,
+      "TestString": "asdf",
+      "TestFloat": 1.2,
+      "TestBool": true
     }
   ]
 }
