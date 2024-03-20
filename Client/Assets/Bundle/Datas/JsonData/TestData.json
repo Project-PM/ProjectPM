@@ -17,6 +17,18 @@
       "TestString": "asdf",
       "TestFloat": 1.2,
       "TestBool": true
+    },
+    {
+      "DataId": 4,
+      "TestString": null,
+      "TestFloat": 0.0,
+      "TestBool": false
+    },
+    {
+      "DataId": 5,
+      "TestString": null,
+      "TestFloat": 0.0,
+      "TestBool": false
     }
   ]
 }

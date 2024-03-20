@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: TestTextTable Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: TestTextTable
+  m_TableCollectionNameGuidString: eb86e999ede4f1e48bcddf99db65f8dd
+  m_Entries:
+  - m_Id: 33623298048
+    m_Key: GuestLogin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67974647808
+    m_Key: GuestLogout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 88971333632
+    m_Key: AddDBData
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128766889984
+    m_Key: InitDBData
+    m_Metadata:
+      m_Items: []
+  - m_Id: 174824542208
+    m_Key: RandomPicker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 208383168512
+    m_Key: AddRankingBoard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 270899269632
+    m_Key: ShowRankingBoard
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 8268026634696392733
+  references:
+    version: 2
+    RefIds:
+    - rid: 8268026634696392733
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1710921698710

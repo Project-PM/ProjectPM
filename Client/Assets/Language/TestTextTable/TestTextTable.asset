@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be51871efa6c3e4eae1703925c8f5ac, type: 3}
+  m_Name: TestTextTable
+  m_EditorClassIdentifier: 
+  m_SharedTableData: {fileID: 11400000, guid: eb86e999ede4f1e48bcddf99db65f8dd, type: 2}
+  m_Tables:
+  - {fileID: 11400000, guid: 22f950d541917ab40a4cc7355b06d534, type: 2}
+  - {fileID: 11400000, guid: 3036d9ce4b0545e448e7e2cafa60dbe6, type: 2}
+  m_Extensions:
+  - rid: 8268026634696392734
+  m_Group: String Table
+  references:
+    version: 2
+    RefIds:
+    - rid: 8268026634696392734
+      type: {class: CsvExtension, ns: UnityEditor.Localization.Plugins.CSV, asm: Unity.Localization.Editor}
+      data:
+        m_Collection: {fileID: 11400000}
+        m_ColumnsList:
+        - rid: 8268026634696392735
+        - rid: 8268026634696392736
+        - rid: 8268026634696392737
+        m_ConnectedFile: C:/Users/HJH/Desktop/TestTextTable.csv
+    - rid: 8268026634696392735
+      type: {class: KeyIdColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns, asm: Unity.Localization.Editor}
+      data:
+        m_IncludeId: 1
+        m_IncludeSharedComments: 1
+        m_KeyFieldName: Key
+        m_IdFieldName: Id
+        m_CommentFieldName: Shared Comments
+    - rid: 8268026634696392736
+      type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns, asm: Unity.Localization.Editor}
+      data:
+        m_LocaleIdentifier:
+          m_Code: en-JM
+        m_FieldName: English (Jamaica)(en-JM)
+        m_CommentFieldName: English (Jamaica)(en-JM) Comments
+        m_IncludeComments: 1
+    - rid: 8268026634696392737
+      type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns, asm: Unity.Localization.Editor}
+      data:
+        m_LocaleIdentifier:
+          m_Code: ko
+        m_FieldName: Korean(ko)
+        m_CommentFieldName: Korean(ko) Comments
+        m_IncludeComments: 1
