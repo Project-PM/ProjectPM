@@ -18,6 +18,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3036d9ce4b0545e448e7e2cafa60dbe6, type: 2}
   m_Extensions:
   - rid: 8268026634696392734
+  - rid: 8268026657494269954
   m_Group: String Table
   references:
     version: 2
@@ -55,3 +56,12 @@ MonoBehaviour:
         m_FieldName: Korean(ko)
         m_CommentFieldName: Korean(ko) Comments
         m_IncludeComments: 1
+    - rid: 8268026657494269954
+      type: {class: GoogleSheetsExtension, ns: UnityEditor.Localization.Plugins.Google, asm: Unity.Localization.Editor}
+      data:
+        m_Collection: {fileID: 11400000}
+        m_SheetsServiceProvider: {fileID: 0}
+        m_SpreadsheetId: 
+        m_SheetId: 0
+        m_Columns: []
+        m_RemoveMissingPulledKeys: 1

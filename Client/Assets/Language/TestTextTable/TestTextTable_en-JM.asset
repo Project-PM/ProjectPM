@@ -46,6 +46,14 @@ MonoBehaviour:
     m_Localized: ShowRankingBoard
     m_Metadata:
       m_Items: []
+  - m_Id: 356519352389632
+    m_Localized: GoogleLogin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 399993632116736
+    m_Localized: GoogleLogout
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

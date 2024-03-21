@@ -122,6 +122,16 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
         Debug.Log(str);
     }
 
+    public void OnClickGoogleLogin()
+    {
+        Debug.Log("구글 로그인 미구현");
+    }
+
+    public void OnClickGoogleLogout()
+    {
+        Debug.Log("구글 로그아웃 미구현");
+    }
+
     public void OnUpdateFBUserInfoProperty(FBUserInfo property)
     {
 
