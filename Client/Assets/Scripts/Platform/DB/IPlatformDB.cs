@@ -20,6 +20,7 @@ using UnityEditor.Timeline.Actions;
 using System.Runtime.CompilerServices;
 using UnityEditor.Experimental.GraphView;
 using System.Runtime.Serialization.Formatters;
+using System.Data.Common;
 
 public interface IFBUserInfoPostProcess
 {
@@ -73,6 +74,7 @@ public class FirebaseDB
         for (int i = 0; i < (int)FirebaseDataCategory.Max; i++)
         {
             FirebaseDataCategory category = (FirebaseDataCategory)i;
+
             dbRootReference.Child(category.ToString()).Child(userID).GetValueAsync().ContinueWithOnMainThread(task =>
             {
                 if (task.IsCompleted)
@@ -160,7 +162,6 @@ public class FirebaseDB
 
             if (fieldInfos[j].FieldType.IsGenericType && fieldInfos[j].FieldType.GetGenericTypeDefinition() == typeof(List<>))
             {
-                // 받아온 List의 타입을 확인하여 해당 타입으로 받아와 필드에 세팅
                 List<object> objList = (List<object>)dict[fieldInfos[j].Name];
 
                 if (fieldInfos[j].FieldType == typeof(List<string>))
@@ -179,13 +180,33 @@ public class FirebaseDB
                     fieldInfos[j].SetValue(fbData, list);
                 }
                 else
-                {
                     Debug.LogWarning($"제네릭 타입 '{fieldInfos[j].FieldType}' 를 추가해주세요.");
-                }
             }
             else if (fieldInfos[j].FieldType.IsGenericType)
             {
-                Debug.LogWarning($"List가 아닌 제네릭 타입이 존재 : {fieldInfos[j].FieldType}");
+                Debug.LogWarning($"제네릭 타입 '{fieldInfos[j].FieldType}' 를 추가해주세요.");
+            }
+            else if (fieldInfos[j].FieldType.IsArray)
+            {
+                List<object> objList = (List<object>)dict[fieldInfos[j].Name];
+
+                if (fieldInfos[j].FieldType == typeof(string[]))
+                {
+                    string[] array = objList.Select(x => x.ToString()).ToArray();
+                    fieldInfos[j].SetValue(fbData, array);
+                }
+                else if (fieldInfos[j].FieldType == typeof(int[]))
+                {
+                    int[] array = objList.Select(x => int.Parse(x.ToString())).ToArray();
+                    fieldInfos[j].SetValue(fbData, array);
+                }
+                else if (fieldInfos[j].FieldType == typeof(bool[]))
+                {
+                    bool[] array = objList.Select(x => (bool)x).ToArray();
+                    fieldInfos[j].SetValue(fbData, array);
+                }
+                else
+                    Debug.LogWarning($"제네릭 타입 '{fieldInfos[j].FieldType}' 를 추가해주세요.");
             }
             else
             {

@@ -54,14 +54,6 @@ MonoBehaviour:
     m_Localized: GoogleLogout
     m_Metadata:
       m_Items: []
-  - m_Id: 1163595490185216
-    m_Localized: aa
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1163599579631616
-    m_Localized: aa
-    m_Metadata:
-      m_Items: []
   references:
     version: 2
     RefIds: []
