@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Localization-Asset-Tables-English (Jamaica) (en-JM)
+  m_Name: Localization-Assets-English (Jamaica) (en-JM)
   m_EditorClassIdentifier: 
-  m_GroupName: Localization-Asset-Tables-English (Jamaica) (en-JM)
+  m_GroupName: Localization-Assets-English (Jamaica) (en-JM)
   m_Data:
     m_SerializedData: []
-  m_GUID: d3c13dd6371dc35459ff16aba560763d
+  m_GUID: 65753816c32c8e94b84e31c94607228f
   m_SerializeEntries:
-  - m_GUID: 14fe76dd3b12d074db5764a28d6d5346
-    m_Address: TestAssetTable_en-JM
+  - m_GUID: 7c3408493f9f8934e9e6ab582f02bcdb
+    m_Address: 1
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en-JM
@@ -27,5 +27,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: 2fbff68df76c9b84baff54fbac5ef644, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 53bfb359e074b8e4b858b81a592d502b, type: 2}
-    - {fileID: 11400000, guid: 43f8ae7b6d0625240b59521f355fae4e, type: 2}
+    - {fileID: 11400000, guid: fa7a977c188e0a345b2224a3a49e7457, type: 2}
+    - {fileID: 11400000, guid: 0c147e6e7cc212646907a0599229ed9f, type: 2}
