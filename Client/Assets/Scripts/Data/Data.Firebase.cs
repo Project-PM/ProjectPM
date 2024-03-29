@@ -32,9 +32,6 @@ public class FBUserItem : FBDataBase
     public List<string> characterGearList = new List<string>(); // 보유 캐릭터장비 목록
     public List<bool> testBoolList = new List<bool>();
     public List<int> testIntList = new List<int>();
-
-    public int[] testIntArray = new int[3]; 
-    // 캐릭터별 장착상태를 저장해야 함 
 }
 
 [Serializable]

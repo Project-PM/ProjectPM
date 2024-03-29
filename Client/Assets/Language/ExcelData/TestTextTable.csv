@@ -1,8 +1,12 @@
-Key,English (Jamaica)(en-JM),Korean (South Korea)(ko-KR)
-GuestLogin,Guest Login,ê²ŒìŠ¤íŠ¸ ë¡œê·¸ì¸
-GuestLogout,Guest Logout,ê²ŒìŠ¤íŠ¸ ë¡œê·¸ì•„ì›ƒ
-AddDBData,AddDBData,DBë°ì´í„° ì¶”ê°€
-InitDBData,InitDBData,DBë°ì´í„° ì´ˆê¸°í™”
-RandomPicker,RandomPicker,ëœë¤ë½‘ê¸°
-AddRankingBoard,AddRankingBoard,ë­í‚¹ë³´ë“œ ì •ë³´ì¶”ê°€
-ShowRankingBoard,ShowRankingBoard,ë­í‚¹ë³´ë“œ ì •ë³´í™•ì¸
+Key,Id,Shared Comments,English (Jamaica)(en-JM),English (Jamaica)(en-JM) Comments,Korean(ko),Korean(ko) Comments
+"GuestLogin",33623298048,"","GuestLogin","","°Ô½ºÆ®·Î±×ÀÎ",""
+"GuestLogout",67974647808,"","GuestLogout","","°Ô½ºÆ®·Î±×¾Æ¿ô",""
+"AddDBData",88971333632,"","AddDBData","","DBµ¥ÀÌÅÍÃß°¡",""
+"InitDBData",128766889984,"","InitDBData","","DBµ¥ÀÌÅÍÃÊ±âÈ­",""
+"RandomPicker",174824542208,"","RandomPicker","","·£´ı»Ì±â",""
+"AddRankingBoard",208383168512,"","AddRankingBoard","","·©Å·º¸µåÁ¤º¸Ãß°¡",""
+"ShowRankingBoard",270899269632,"","ShowRankingBoard","","·©Å·º¸µåÁ¤º¸È®ÀÎ","ingBoard"""
+"GoogleLogin",356519352389632,"","GoogleLogin","","±¸±Û·Î±×ÀÎ",""
+"GoogleLogout",399993632116736,"","GoogleLogout","","±¸±Û·Î±×¾Æ¿ô",""
+"ChangeToKorean",3217185432064000,"","ChangeToKorean","","¾ğ¾îº¯°æ-ÇÑ±¹¾î",""
+"ChangeToEnglish",3217474360889344,"","ChangeToEnglish","","¾ğ¾îº¯°æ-¿µ¾î",""

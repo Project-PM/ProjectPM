@@ -16,7 +16,13 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 63fdc5d2421d6f1418a169b22be78620
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: a905a560677408446902f7a73568fe9f
+    m_Address: TestAssetTable_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 2fbff68df76c9b84baff54fbac5ef644, type: 2}
   m_SchemaSet:

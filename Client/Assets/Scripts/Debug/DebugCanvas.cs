@@ -1,7 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPostProcess
 {
@@ -26,7 +30,7 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
 
     void StartLoadAssets()
     {
-        Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
+        Managers.Resource.LoadAllAsync<UnityEngine.Object>("PreLoad", (key, count, totalCount) =>
         {
             Debug.Log($"{key} {count}/{totalCount}");
 
@@ -58,9 +62,9 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
     public void OnClickAddDBData()
     {
         FBUserItem fbUserItem = Managers.Data.MyUserData.userItem;
-        fbUserItem.characterGearList.Add($"{Random.Range(0, 1000)}번 아이템명");
-        fbUserItem.testIntList.Add(Random.Range(0, 1000));
-        fbUserItem.testBoolList.Add((Random.value > 0.5f));
+        fbUserItem.characterGearList.Add($"{UnityEngine.Random.Range(0, 1000)}번 아이템명");
+        fbUserItem.testIntList.Add(UnityEngine.Random.Range(0, 1000));
+        fbUserItem.testBoolList.Add((UnityEngine.Random.value > 0.5f));
         Managers.Platform.UpdateDB(FirebaseDataCategory.UserItem, fbUserItem);
     }
 
@@ -100,7 +104,7 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
         RankingBoardData data = new RankingBoardData();
 
         data.userNickname = "닉네임ㅋ";
-        data.ratingPoint = Random.Range(0, 10000);
+        data.ratingPoint = UnityEngine.Random.Range(0, 10000);
 
         Managers.Platform.PushRankingBoardData(data);
     }
@@ -132,6 +136,44 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
         Debug.Log("구글 로그아웃 미구현");
     }
 
+    public void OnClickChangeToKorean()
+    {
+        // 언어 변경 - 한국어 (두 메서드는 같은 역할을 함)
+        ChangeLanguage(LocalizationType.Korean);
+        ChangeLanguage("en-KR");
+    }
+
+    public void OnClickChangeToEnglish()
+    {
+        // 언어 변경 - 영어 (두 메서드는 같은 역할을 함)
+        ChangeLanguage(LocalizationType.English);
+        ChangeLanguage("en-US");
+    }
+
+    // 언어 변경 - Index로 접근
+    private void ChangeLanguage(LocalizationType languageType)
+    {
+        LocalizationSettings.SelectedLocale = 
+            LocalizationSettings.AvailableLocales.Locales[(int)languageType];
+    }
+
+    // 언어 변경 - 언어 코드로 접근
+    private void ChangeLanguage(string code)
+    {
+        LocaleIdentifier localeCode = new LocaleIdentifier(code);
+        for (int i = 0; i < LocalizationSettings.AvailableLocales.Locales.Count; i++)
+        {
+            Locale aLocale = LocalizationSettings.AvailableLocales.Locales[i];
+            LocaleIdentifier anIdentifier = aLocale.Identifier;
+            if (anIdentifier == localeCode)
+            {
+                LocalizationSettings.SelectedLocale = aLocale;
+            }
+        }
+
+        Debug.LogWarning($"지원하지 않는 언어 코드 : {code}");
+    }
+
     public void OnUpdateFBUserInfoProperty(FBUserInfo property)
     {
 
@@ -141,4 +183,10 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
     {
 
     }
+}
+
+public enum LocalizationType
+{
+    English = 0,
+    Korean = 1,
 }

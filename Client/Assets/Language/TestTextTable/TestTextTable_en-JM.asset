@@ -54,6 +54,14 @@ MonoBehaviour:
     m_Localized: GoogleLogout
     m_Metadata:
       m_Items: []
+  - m_Id: 3217185432064000
+    m_Localized: ChangeToKorean
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3217474360889344
+    m_Localized: ChangeToEnglish
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

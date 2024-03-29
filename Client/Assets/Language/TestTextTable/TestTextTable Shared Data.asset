@@ -51,6 +51,14 @@ MonoBehaviour:
     m_Key: GoogleLogout
     m_Metadata:
       m_Items: []
+  - m_Id: 3217185432064000
+    m_Key: ChangeToKorean
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3217474360889344
+    m_Key: ChangeToEnglish
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
