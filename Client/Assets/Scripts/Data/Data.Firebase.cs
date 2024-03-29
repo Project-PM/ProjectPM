@@ -3,10 +3,6 @@ using System;
 using System.Collections.Generic;
 using UnityEditor.AddressableAssets.HostingServices;
 
-/// <summary>
-/// 유저 데이터 베이스 저장용 구조,
-/// 필요한 경우에는 UserData 클래스 종류를 늘려줄 것
-/// </summary>
 [Serializable]
 public class FBUserData
 {
@@ -23,7 +19,6 @@ public class FBUserInfo : FBDataBase
     public string userNickName = "Guest";
     public int userLoginType = (int)UserLoginType.Guest;
 }
-
 [Serializable]
 public class FBUserItem : FBDataBase
 {
@@ -32,6 +27,12 @@ public class FBUserItem : FBDataBase
     public List<string> characterGearList = new List<string>(); // 보유 캐릭터장비 목록
     public List<bool> testBoolList = new List<bool>();
     public List<int> testIntList = new List<int>();
+}
+public enum FirebaseDataCategory
+{
+    UserInfo = 0,
+    UserItem = 1,
+    Max = 2,
 }
 
 [Serializable]

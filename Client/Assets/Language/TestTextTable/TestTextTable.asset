@@ -31,7 +31,7 @@ MonoBehaviour:
         - rid: 8268026634696392735
         - rid: 8268026634696392736
         - rid: 8268026634696392737
-        m_ConnectedFile: C:/Users/HJH/Desktop/TestTextTable.csv
+        m_ConnectedFile: Assets/Language/ExcelData/TestTextTable.csv
     - rid: 8268026634696392735
       type: {class: KeyIdColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns, asm: Unity.Localization.Editor}
       data:

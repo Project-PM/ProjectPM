@@ -23,16 +23,6 @@ public enum LayerType
     Ground = 6,
 }
 
-/// <summary>
-/// 파이어베이스에 저장되는 데이터 그룹 타입
-/// </summary>
-public enum FirebaseDataCategory
-{
-    UserInfo = 0,
-    UserItem = 1,
-    Max = 2,
-}
-
 public enum CharacterType
 {
     Red = 0,

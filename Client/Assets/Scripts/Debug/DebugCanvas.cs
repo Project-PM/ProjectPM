@@ -21,7 +21,7 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
         Managers.Platform.RegisterFBUserInfoCallback(this);
         Managers.Platform.RegisterFBUserItemCallback(this);
     }
-
+    
     private void OnDestroy()
     {
         Managers.Platform.UnregisterFBUserInfoCallback(this);
@@ -138,40 +138,38 @@ public class DebugCanvas : MonoBehaviour, IFBUserInfoPostProcess, IFBUserItemPos
 
     public void OnClickChangeToKorean()
     {
-        // 언어 변경 - 한국어 (두 메서드는 같은 역할을 함)
         ChangeLanguage(LocalizationType.Korean);
-        ChangeLanguage("en-KR");
     }
 
     public void OnClickChangeToEnglish()
     {
-        // 언어 변경 - 영어 (두 메서드는 같은 역할을 함)
         ChangeLanguage(LocalizationType.English);
-        ChangeLanguage("en-US");
     }
 
-    // 언어 변경 - Index로 접근
     private void ChangeLanguage(LocalizationType languageType)
     {
         LocalizationSettings.SelectedLocale = 
             LocalizationSettings.AvailableLocales.Locales[(int)languageType];
     }
 
-    // 언어 변경 - 언어 코드로 접근
-    private void ChangeLanguage(string code)
+    public void Test()
     {
-        LocaleIdentifier localeCode = new LocaleIdentifier(code);
-        for (int i = 0; i < LocalizationSettings.AvailableLocales.Locales.Count; i++)
-        {
-            Locale aLocale = LocalizationSettings.AvailableLocales.Locales[i];
-            LocaleIdentifier anIdentifier = aLocale.Identifier;
-            if (anIdentifier == localeCode)
-            {
-                LocalizationSettings.SelectedLocale = aLocale;
-            }
-        }
+        string str = GetLocalizedString("TestTextTable", "GuestLogin");
 
-        Debug.LogWarning($"지원하지 않는 언어 코드 : {code}");
+        Debug.Log(str);
+    }
+
+    public string GetLocalizedString(string tableName, string keyName)
+    {
+        LocalizedString localizeString = new LocalizedString()
+        {
+            TableReference = tableName,
+            TableEntryReference = keyName
+        };
+        var stringOperation = localizeString.GetLocalizedStringAsync();
+
+        // 
+        return stringOperation.Result;
     }
 
     public void OnUpdateFBUserInfoProperty(FBUserInfo property)
